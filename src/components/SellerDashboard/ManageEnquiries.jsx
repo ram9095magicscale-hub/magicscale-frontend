@@ -12,7 +12,7 @@ const ManageEnquiries = () => {
   const fetchEnquiries = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:3000/api/contact", {
+      const res = await axios.get("https://magicscale-backend.vercel.app/api/contact", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEnquiries(res.data);

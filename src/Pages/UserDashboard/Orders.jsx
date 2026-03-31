@@ -18,7 +18,7 @@ const Orders = () => {
       try {
         setLoading(true);
         // Placeholder API endpoint - handle 404 cleanly if not implemented
-        const res = await axios.get("http://localhost:3000/api/user/orders", {
+        const res = await axios.get("https://magicscale-backend.vercel.app/api/user/orders", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data || []);

@@ -16,14 +16,14 @@ const BlogDetailsPage = () => {
     window.scrollTo(0, 0);
     const fetchPost = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/blogs");
+        const res = await axios.get("https://magicscale-backend.vercel.app/api/blogs");
         let foundPost = res.data.find((p) => p._id === id || p.id === id);
         
         if (foundPost) {
           foundPost = {
             ...foundPost,
             date: foundPost.createdAt ? new Date(foundPost.createdAt).toLocaleDateString() : foundPost.date,
-            image: foundPost.coverImage ? (foundPost.coverImage.startsWith('http') ? foundPost.coverImage : `http://localhost:3000${foundPost.coverImage}`) : foundPost.image || "https://via.placeholder.com/1200x600?text=Blog",
+            image: foundPost.coverImage ? (foundPost.coverImage.startsWith('http') ? foundPost.coverImage : `https://magicscale-backend.vercel.app${foundPost.coverImage}`) : foundPost.image || "https://via.placeholder.com/1200x600?text=Blog",
             author: foundPost.author || "Admin",
             category: foundPost.category || "General"
           };

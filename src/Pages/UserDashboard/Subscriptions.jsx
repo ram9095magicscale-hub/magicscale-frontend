@@ -18,7 +18,7 @@ const Subscriptions = () => {
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/user/subscriptions", {
+        const res = await axios.get("https://magicscale-backend.vercel.app/api/user/subscriptions", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setSubscriptions(res.data);

@@ -3,7 +3,7 @@
 //  * This centralizes all API calls and handles token management
 //  */
 
-// const API_URL = 'http://localhost:3000/api';
+// const API_URL = 'https://magicscale-backend.vercel.app/api';
 
 // /**
 //  * Make an authenticated API request
@@ -166,7 +166,7 @@
  * This centralizes all API calls and handles token management
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_API_URL || 'https://magicscale-backend.vercel.app/api';
 
 /**
  * Make an authenticated API request
@@ -195,20 +195,37 @@ export const apiRequest = async (endpoint, options = {}) => {
       headers,
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login';
-        }
+    // 1. If response is OK, try to parse JSON
+    if (response.ok) {
+      try {
+        return await response.json();
+      } catch (err) {
+        // Successful status but invalid JSON (rare)
+        return { message: 'Success (Response body empty or not JSON)' };
       }
-      throw new Error(data.message || 'API error');
     }
 
-    return data;
+    // 2. Handle errors (non-ok responses)
+    let errorMessage = `API Error (${response.status})`;
+    
+    try {
+      // Try to parse detailed error message if provided as JSON
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch (e) {
+      // Fallback if error is not JSON (e.g. 500 HTML error page)
+      console.warn('Non-JSON error response received from API');
+    }
+
+    if (response.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    }
+
+    throw new Error(errorMessage);
   } catch (error) {
     console.error('API request error:', error);
     throw error;
@@ -236,9 +253,15 @@ export const authAPI = {
       body: JSON.stringify(credentials),
     });
 
-    const data = await res.json();
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      // Handle empty/HTML response for 500 errors
+      throw new Error(`Server Error (${res.status || 'Unknown'})`);
+    }
 
-    if (!res.ok) throw new Error(data.message || 'Login failed');
+    if (!res.ok) throw new Error(data.message || `Login failed (${res.status})`);
 
     if (data.token) localStorage.setItem('token', data.token);
     if (data.user) localStorage.setItem('user', JSON.stringify(data.user));

@@ -14,7 +14,7 @@ const ManageBlogs = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/blogs");
+      const res = await axios.get("https://magicscale-backend.vercel.app/api/blogs");
       setBlogs(res.data);
     } catch (err) {
       console.error("Failed to fetch blogs", err);
@@ -45,7 +45,7 @@ const ManageBlogs = () => {
     }
 
     try {
-      await axios.post("http://localhost:3000/api/blogs", data, {
+      await axios.post("https://magicscale-backend.vercel.app/api/blogs", data, {
         headers: { 
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data" 
@@ -63,7 +63,7 @@ const ManageBlogs = () => {
   const handleDelete = async (id) => {
     if(!window.confirm("Are you sure you want to delete this blog?")) return;
     try {
-      await axios.delete(`http://localhost:3000/api/blogs/${id}`, {
+      await axios.delete(`https://magicscale-backend.vercel.app/api/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchBlogs();
@@ -109,7 +109,7 @@ const ManageBlogs = () => {
                 <tr key={blog._id} className="border-t border-gray-100 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50">
                   <td className="p-3">
                     {blog.coverImage ? (
-                      <img src={`http://localhost:3000${blog.coverImage}`} alt="Cover" className="h-12 w-16 object-cover rounded shadow-sm" />
+                      <img src={`https://magicscale-backend.vercel.app${blog.coverImage}`} alt="Cover" className="h-12 w-16 object-cover rounded shadow-sm" />
                     ) : (
                       <div className="h-12 w-16 bg-gray-200 dark:bg-slate-700 rounded flex items-center justify-center text-xs">No Img</div>
                     )}

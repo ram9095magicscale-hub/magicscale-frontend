@@ -28,7 +28,7 @@ const Sidebar = ({ closeSidebar }) => {
 
       <div className="flex items-center gap-4 mb-8 pb-6 border-b dark:border-slate-800">
         <img
-          src={user?.profilePhoto ? `http://localhost:3000${user.profilePhoto}` : "https://cdn-icons-png.flaticon.com/512/1144/1144760.png"}
+          src={user?.profilePhoto ? `https://magicscale-backend.vercel.app${user.profilePhoto}` : "https://cdn-icons-png.flaticon.com/512/1144/1144760.png"}
           alt="Avatar"
           className="h-14 w-14 rounded-full border-2 border-red-500 object-cover shadow-sm"
         />

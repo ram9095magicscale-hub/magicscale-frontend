@@ -28,7 +28,7 @@ const JobDetailsPage = () => {
     window.scrollTo(0, 0);
     const fetchJob = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/jobs");
+        const res = await axios.get("https://magicscale-backend.vercel.app/api/jobs");
         const foundJob = res.data.find((p) => p._id === id || p.id === id);
         // Fallback to local data if backend doesn't have it (for demo data)
         setJob(foundJob || jobPosts.find((p) => p.id === id));
@@ -74,7 +74,7 @@ const JobDetailsPage = () => {
     try {
       // Using the local backend or the production one
       const apiURL = window.location.hostname === "localhost" 
-        ? "http://localhost:3000/api/careers/apply"
+        ? "https://magicscale-backend.vercel.app/api/careers/apply"
         : "https://magicscale-backend.onrender.com/api/careers/apply";
 
       await axios.post(apiURL, data, {

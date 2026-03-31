@@ -18,7 +18,7 @@ const UnsubscribePage = () => {
       }
 
       try {
-        const res = await axios.get(`http://localhost:3000/api/newsletter?email=${email}`);
+        const res = await axios.get(`https://magicscale-backend.vercel.app/api/newsletter?email=${email}`);
         setStatus({ loading: false, success: true, message: res.data.message });
       } catch (err) {
         setStatus({ 

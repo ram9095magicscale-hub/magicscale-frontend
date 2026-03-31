@@ -14,7 +14,7 @@ const CareersPage = () => {
     window.scrollTo(0, 0);
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/jobs");
+        const res = await axios.get("https://magicscale-backend.vercel.app/api/jobs");
         setJobPosts(res.data);
       } catch (err) {
         console.error("Failed to fetch jobs", err);

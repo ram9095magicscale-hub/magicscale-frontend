@@ -15,7 +15,7 @@ const Topbar = ({ toggleSidebar, title = "Welcome Back!" }) => {
         <Bell className="h-5 w-5 text-gray-600 dark:text-gray-400 cursor-pointer hover:text-red-500 transition-colors" />
         <button onClick={toggleSidebar} title="Open Profile Menu" className="focus:outline-none">
           <img
-            src={user?.profilePhoto ? `http://localhost:3000${user.profilePhoto}` : "https://cdn-icons-png.flaticon.com/512/1144/1144760.png"}
+            src={user?.profilePhoto ? `https://magicscale-backend.vercel.app${user.profilePhoto}` : "https://cdn-icons-png.flaticon.com/512/1144/1144760.png"}
             alt="Profile Avatar"
             className="h-10 w-10 rounded-full border-2 border-transparent hover:border-red-500 dark:border-slate-700 object-cover transition-all shadow-sm"
           />

@@ -14,7 +14,7 @@ const ManageJobs = () => {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/jobs");
+      const res = await axios.get("https://magicscale-backend.vercel.app/api/jobs");
       setJobs(res.data);
     } catch (err) {
       console.error("Failed to fetch jobs", err);
@@ -32,7 +32,7 @@ const ManageJobs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/jobs", formData, {
+      await axios.post("https://magicscale-backend.vercel.app/api/jobs", formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setFormData({ title: "", location: "", type: "Full-time", description: "", requirements: "" });
@@ -45,7 +45,7 @@ const ManageJobs = () => {
   const handleDelete = async (id) => {
     if(!window.confirm("Are you sure you want to delete this job?")) return;
     try {
-      await axios.delete(`http://localhost:3000/api/jobs/${id}`, {
+      await axios.delete(`https://magicscale-backend.vercel.app/api/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchJobs();

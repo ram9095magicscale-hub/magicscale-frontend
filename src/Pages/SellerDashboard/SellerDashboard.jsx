@@ -15,7 +15,7 @@
 //   useEffect(() => {
 //     const fetchUsers = async () => {
 //       try {
-//         const res = await axios.get("http://localhost:3000/api/admin/users", {
+//         const res = await axios.get("https://magicscale-backend.vercel.app/api/admin/users", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUsers(res.data);
@@ -53,7 +53,7 @@
 //                     <td className="p-3">
 //                       {user.profilePhoto && (
 //                         <img
-//                           src={`http://localhost:3000${user.profilePhoto}`}
+//                           src={`https://magicscale-backend.vercel.app${user.profilePhoto}`}
 //                           alt="Profile"
 //                           className="h-12 w-12 rounded-full"
 //                         />
@@ -62,7 +62,7 @@
 //                     <td className="p-3">
 //                       {user.aadharCard ? (
 //                         <a
-//                           href={`http://localhost:3000${user.aadharCard}`}
+//                           href={`https://magicscale-backend.vercel.app${user.aadharCard}`}
 //                           target="_blank"
 //                           rel="noopener noreferrer"
 //                           className="text-blue-500 underline"
@@ -76,7 +76,7 @@
 //                     <td className="p-3">
 //                       {user.panCard ? (
 //                         <a
-//                           href={`http://localhost:3000${user.panCard}`}
+//                           href={`https://magicscale-backend.vercel.app${user.panCard}`}
 //                           target="_blank"
 //                           rel="noopener noreferrer"
 //                           className="text-blue-500 underline"
@@ -122,7 +122,7 @@
 //   useEffect(() => {
 //     const fetchUsers = async () => {
 //       try {
-//         const res = await axios.get("http://localhost:3000/api/admin/users", {
+//         const res = await axios.get("https://magicscale-backend.vercel.app/api/admin/users", {
 //           headers: { Authorization: `Bearer ${token}` },
 //         });
 //         setUsers(res.data);
@@ -166,7 +166,7 @@
 //                     <td className="p-3">
 //                       {user.profilePhoto ? (
 //                         <img
-//                           src={`http://localhost:3000${user.profilePhoto}`}
+//                           src={`https://magicscale-backend.vercel.app${user.profilePhoto}`}
 //                           alt="Profile"
 //                           className="h-12 w-12 rounded-full object-cover"
 //                         />
@@ -178,7 +178,7 @@
 //                     <td className="p-3">
 //                       {user.aadharCard ? (
 //                         <a
-//                           href={`http://localhost:3000${user.aadharCard}`}
+//                           href={`https://magicscale-backend.vercel.app${user.aadharCard}`}
 //                            download 
 //                           target="_blank"
 //                           rel="noopener noreferrer"
@@ -194,7 +194,7 @@
 //                     <td className="p-3">
 //                       {user.panCard ? (
 //                         <a
-//                           href={`http://localhost:3000${user.panCard}`}
+//                           href={`https://magicscale-backend.vercel.app${user.panCard}`}
 //                           download
 //                           target="_blank"
 //                           rel="noopener noreferrer"
@@ -248,7 +248,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/admin/users", {
+        const res = await axios.get("https://magicscale-backend.vercel.app/api/admin/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);
@@ -259,7 +259,7 @@ const SellerDashboard = () => {
 
     const fetchApplications = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/careers/applications");
+        const res = await axios.get("https://magicscale-backend.vercel.app/api/careers/applications");
         setApplications(res.data);
       } catch (err) {
         console.error("Failed to fetch applications", err);
@@ -274,10 +274,10 @@ const SellerDashboard = () => {
     // If it's a resume path, it might be different or use the same download helper
     if (filePath.startsWith("/uploads/resumes/")) {
       const cleanPath = filePath.replace("/uploads/resumes/", "resumes/");
-      return `http://localhost:3000/api/download?path=${cleanPath}`;
+      return `https://magicscale-backend.vercel.app/api/download?path=${cleanPath}`;
     }
     const cleanPath = filePath.replace("/uploads/", "");
-    return `http://localhost:3000/api/download?path=${cleanPath}`;
+    return `https://magicscale-backend.vercel.app/api/download?path=${cleanPath}`;
   };
 
   return (
@@ -371,7 +371,7 @@ const SellerDashboard = () => {
                         <td className="p-3">
                           {user.profilePhoto ? (
                             <img
-                              src={`http://localhost:3000${user.profilePhoto}`}
+                              src={`https://magicscale-backend.vercel.app${user.profilePhoto}`}
                               alt="Profile"
                               className="h-12 w-12 rounded-full object-cover border dark:border-slate-700"
                             />
@@ -426,7 +426,7 @@ const SellerDashboard = () => {
                         <td className="p-3 text-sm">{new Date(app.appliedAt).toLocaleDateString()}</td>
                         <td className="p-3">
                           <a 
-                            href={`http://localhost:3000/api/download?path=${app.resumePath.replace("/uploads/", "")}`}
+                            href={`https://magicscale-backend.vercel.app/api/download?path=${app.resumePath.replace("/uploads/", "")}`}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-bold hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors border dark:border-slate-700"
                           >
                             View CV

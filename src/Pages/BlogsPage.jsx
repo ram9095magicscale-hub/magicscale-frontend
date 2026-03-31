@@ -15,7 +15,7 @@ const BlogsPage = () => {
     window.scrollTo(0, 0);
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/blogs");
+        const res = await axios.get("https://magicscale-backend.vercel.app/api/blogs");
         setBlogPosts(res.data);
       } catch (err) {
         console.error("Failed to fetch blogs", err);
@@ -32,7 +32,7 @@ const BlogsPage = () => {
     setStatus({ type: "", message: "" });
 
     try {
-      const res = await axios.post("http://localhost:3000/api/newsletter", { email });
+      const res = await axios.post("https://magicscale-backend.vercel.app/api/newsletter", { email });
       setStatus({ type: "success", message: res.data.message });
       setEmail("");
     } catch (err) {
@@ -104,7 +104,7 @@ const BlogsPage = () => {
                     summary={post.summary}
                     excerpt={post.excerpt || post.content?.substring(0, 100) + '...'}
                     date={new Date(post.createdAt).toLocaleDateString()}
-                    image={post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : `http://localhost:3000${post.coverImage}`) : "https://via.placeholder.com/400x250?text=Blog"}
+                    image={post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : `https://magicscale-backend.vercel.app${post.coverImage}`) : "https://via.placeholder.com/400x250?text=Blog"}
                     author={post.author || "Admin"}
                     category={post.category || "General"}
                   />
