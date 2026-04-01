@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../services/api";
 import Sidebar from "../../components/userDashboard/Sidebar";
 import Topbar from "../../components/userDashboard/Topbar";
 
@@ -17,8 +18,7 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         setLoading(true);
-        // Placeholder API endpoint - handle 404 cleanly if not implemented
-        const res = await axios.get("https://magicscale-backend.vercel.app/api/user/orders", {
+        const res = await axios.get(`${API_URL}/user/orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setOrders(res.data || []);

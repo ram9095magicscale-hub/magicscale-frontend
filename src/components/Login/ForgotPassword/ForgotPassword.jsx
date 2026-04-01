@@ -1,8 +1,6 @@
-
-
-
 // src/pages/ForgotPassword.jsx
 import React, { useState } from 'react';
+import { API_URL } from '../../../services/api';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
@@ -15,7 +13,7 @@ const ForgotPassword = () => {
         setError('');
 
         try {
-            const res = await fetch('https://magicscale-backend.vercel.app/api/auth/forgot-password', {
+            const res = await fetch(`${API_URL}/auth/forgot-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/userDashboard/Sidebar";
 import Topbar from "../../components/userDashboard/Topbar";
 import axios from "axios";
+import { API_URL } from "../../services/api";
 import BannerImg from "../../assets/Banner2.png";
 
 const Profile = () => {
@@ -19,7 +20,7 @@ const Profile = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("https://magicscale-backend.vercel.app/api/user/profile", {
+      const res = await axios.get(`${API_URL}/user/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProfile(res.data);
@@ -69,7 +70,7 @@ const Profile = () => {
     if (files.panCard) data.append("panCard", files.panCard);
 
     try {
-      await axios.put("https://magicscale-backend.vercel.app/api/user/profile", data, {
+      await axios.put(`${API_URL}/user/profile`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -105,7 +106,7 @@ const Profile = () => {
                 <img
                   src={
                     profile?.profilePhoto
-                      ? `https://magicscale-backend.vercel.app${profile.profilePhoto}`
+                      ? `${API_URL.replace('/api', '')}${profile.profilePhoto}`
                       : "https://cdn-icons-png.flaticon.com/512/1144/1144760.png"
                   }
                   alt="Profile"
@@ -157,7 +158,7 @@ const Profile = () => {
                   <div className="bg-gray-50 dark:bg-slate-800/50 p-4 rounded-2xl">
                     <p className="text-sm text-gray-400 dark:text-gray-500 font-medium mb-1">Aadhar Card</p>
                     {profile.aadharCard ? (
-                      <a href={`https://magicscale-backend.vercel.app${profile.aadharCard}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 dark:text-red-400 dark:hover:text-red-300 font-semibold flex items-center gap-1 group">
+                      <a href={`${API_URL.replace('/api', '')}${profile.aadharCard}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 dark:text-red-400 dark:hover:text-red-300 font-semibold flex items-center gap-1 group">
                         View Document
                         <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                       </a>

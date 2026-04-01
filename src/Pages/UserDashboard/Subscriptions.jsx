@@ -1,6 +1,7 @@
 // File: /pages/UserDashboard/Subscriptions.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../services/api";
 import Sidebar from "../../components/userDashboard/Sidebar";
 import Topbar from "../../components/userDashboard/Topbar";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,7 @@ const Subscriptions = () => {
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {
-        const res = await axios.get("https://magicscale-backend.vercel.app/api/user/subscriptions", {
+        const res = await axios.get(`${API_URL}/user/subscriptions`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setSubscriptions(res.data);

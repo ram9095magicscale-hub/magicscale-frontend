@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../../services/api";
 
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -14,7 +15,7 @@ const ManageBlogs = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get("https://magicscale-backend.vercel.app/api/blogs");
+      const res = await axios.get(`${API_URL}/blogs`);
       setBlogs(res.data);
     } catch (err) {
       console.error("Failed to fetch blogs", err);
@@ -45,7 +46,7 @@ const ManageBlogs = () => {
     }
 
     try {
-      await axios.post("https://magicscale-backend.vercel.app/api/blogs", data, {
+      await axios.post(`${API_URL}/blogs`, data, {
         headers: { 
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data" 
@@ -61,14 +62,14 @@ const ManageBlogs = () => {
   };
 
   const handleDelete = async (id) => {
-    if(!window.confirm("Are you sure you want to delete this blog?")) return;
+    if(!window.confirm('Are you sure you want to delete this blog?')) return;
     try {
-      await axios.delete(`https://magicscale-backend.vercel.app/api/blogs/${id}`, {
+      await axios.delete(`${API_URL}/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchBlogs();
     } catch (err) {
-      console.error("Failed to delete blog", err);
+      console.error('Failed to delete blog', err);
     }
   };
 
@@ -109,7 +110,7 @@ const ManageBlogs = () => {
                 <tr key={blog._id} className="border-t border-gray-100 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50">
                   <td className="p-3">
                     {blog.coverImage ? (
-                      <img src={`https://magicscale-backend.vercel.app${blog.coverImage}`} alt="Cover" className="h-12 w-16 object-cover rounded shadow-sm" />
+                      <img src={`${API_URL.replace('/api', '')}${blog.coverImage}`} alt="Cover" className="h-12 w-16 object-cover rounded shadow-sm" />
                     ) : (
                       <div className="h-12 w-16 bg-gray-200 dark:bg-slate-700 rounded flex items-center justify-center text-xs">No Img</div>
                     )}

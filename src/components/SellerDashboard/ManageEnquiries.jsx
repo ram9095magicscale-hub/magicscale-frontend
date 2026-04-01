@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../../services/api";
 import { Download, Search, Filter, Calendar, User, Phone, Mail, Tag, Info } from "lucide-react";
 
 const ManageEnquiries = () => {
@@ -12,7 +13,7 @@ const ManageEnquiries = () => {
   const fetchEnquiries = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("https://magicscale-backend.vercel.app/api/contact", {
+      const res = await axios.get(`${API_URL}/contact`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEnquiries(res.data);

@@ -229,6 +229,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_URL } from "../../services/api";
 import Sidebar from "../../components/userDashboard/Sidebar";
 import Topbar from "../../components/userDashboard/Topbar";
 import ManageJobs from "../../components/SellerDashboard/ManageJobs";
@@ -248,7 +249,7 @@ const SellerDashboard = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("https://magicscale-backend.vercel.app/api/admin/users", {
+        const res = await axios.get(`${API_URL}/admin/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(res.data);
@@ -259,7 +260,7 @@ const SellerDashboard = () => {
 
     const fetchApplications = async () => {
       try {
-        const res = await axios.get("https://magicscale-backend.vercel.app/api/careers/applications");
+        const res = await axios.get(`${API_URL}/careers/applications`);
         setApplications(res.data);
       } catch (err) {
         console.error("Failed to fetch applications", err);
@@ -272,17 +273,17 @@ const SellerDashboard = () => {
 
   const getDownloadUrl = (filePath) => {
     // If it's a resume path, it might be different or use the same download helper
-    if (filePath.startsWith("/uploads/resumes/")) {
-      const cleanPath = filePath.replace("/uploads/resumes/", "resumes/");
-      return `https://magicscale-backend.vercel.app/api/download?path=${cleanPath}`;
+    if (filePath.startsWith('/uploads/resumes/')) {
+      const cleanPath = filePath.replace('/uploads/resumes/', 'resumes/');
+      return `${API_URL}/download?path=${cleanPath}`;
     }
-    const cleanPath = filePath.replace("/uploads/", "");
-    return `https://magicscale-backend.vercel.app/api/download?path=${cleanPath}`;
+    const cleanPath = filePath.replace('/uploads/', '');
+    return `${API_URL}/download?path=${cleanPath}`;
   };
 
   return (
     <div className="flex h-screen pt-[72px] overflow-hidden bg-gray-50 dark:bg-slate-950 transition-colors duration-500">
-      <div className={`fixed top-[72px] bottom-0 right-0 z-50 w-72 transition-transform transform bg-white dark:bg-slate-900 shadow-2xl ${sidebarOpen ? "translate-x-0" : "translate-x-full"}`}>
+      <div className={`fixed top-[72px] bottom-0 right-0 z-50 w-72 transition-transform transform bg-white dark:bg-slate-900 shadow-2xl ${sidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <Sidebar closeSidebar={closeSidebar} />
       </div>
       {sidebarOpen && <div className="fixed inset-0 bg-black opacity-30 z-30" onClick={closeSidebar} />}
@@ -293,51 +294,51 @@ const SellerDashboard = () => {
           <div className="flex items-center justify-between mb-8">
             <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border dark:border-slate-800 shadow-sm flex-wrap gap-2">
               <button 
-                onClick={() => setActiveTab("customers")}
+                onClick={() => setActiveTab('customers')}
                 className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  activeTab === "customers" 
-                  ? "bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none" 
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  activeTab === 'customers' 
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
                 All Customers
               </button>
               <button 
-                onClick={() => setActiveTab("enquiries")}
+                onClick={() => setActiveTab('enquiries')}
                 className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  activeTab === "enquiries" 
-                  ? "bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none" 
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  activeTab === 'enquiries' 
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
                 Contact Enquiries
               </button>
               <button 
-                onClick={() => setActiveTab("applications")}
+                onClick={() => setActiveTab('applications')}
                 className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  activeTab === "applications" 
-                  ? "bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none" 
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  activeTab === 'applications' 
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
                 Job Applications
               </button>
               <button 
-                onClick={() => setActiveTab("jobs")}
+                onClick={() => setActiveTab('jobs')}
                 className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  activeTab === "jobs" 
-                  ? "bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none" 
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  activeTab === 'jobs' 
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
                 Manage Jobs
               </button>
               <button 
-                onClick={() => setActiveTab("blogs")}
+                onClick={() => setActiveTab('blogs')}
                 className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  activeTab === "blogs" 
-                  ? "bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none" 
-                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                  activeTab === 'blogs' 
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
                 Manage Blogs
@@ -345,7 +346,7 @@ const SellerDashboard = () => {
             </div>
           </div>
 
-          {activeTab === "customers" && (
+          {activeTab === 'customers' && (
             <>
               <h2 className="text-2xl font-bold text-red-500 dark:text-red-400 mb-4 transition-colors">All Customers</h2>
               <div className="overflow-x-auto">
@@ -366,17 +367,17 @@ const SellerDashboard = () => {
                       <tr key={user._id} className="border-t border-gray-100 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
                         <td className="p-3">{user.name}</td>
                         <td className="p-3">{user.email}</td>
-                        <td className="p-3">{user.phone || "-"}</td>
+                        <td className="p-3">{user.phone || '-'}</td>
                         <td className="p-3 capitalize">{user.role}</td>
                         <td className="p-3">
                           {user.profilePhoto ? (
                             <img
-                              src={`https://magicscale-backend.vercel.app${user.profilePhoto}`}
+                              src={`${API_URL.replace('/api', '')}${user.profilePhoto}`}
                               alt="Profile"
                               className="h-12 w-12 rounded-full object-cover border dark:border-slate-700"
                             />
                           ) : (
-                            "-"
+                            '-'
                           )}
                         </td>
                         <td className="p-3 text-blue-500 hover:underline">
@@ -397,9 +398,9 @@ const SellerDashboard = () => {
             </>
           )}
 
-          {activeTab === "enquiries" && <ManageEnquiries />}
+          {activeTab === 'enquiries' && <ManageEnquiries />}
 
-          {activeTab === "applications" && (
+          {activeTab === 'applications' && (
             <>
               <h2 className="text-2xl font-bold text-red-500 dark:text-red-400 mb-4 transition-colors">Recent Job Applications</h2>
               <div className="overflow-x-auto">
@@ -426,7 +427,7 @@ const SellerDashboard = () => {
                         <td className="p-3 text-sm">{new Date(app.appliedAt).toLocaleDateString()}</td>
                         <td className="p-3">
                           <a 
-                            href={`https://magicscale-backend.vercel.app/api/download?path=${app.resumePath.replace("/uploads/", "")}`}
+                            href={`${API_URL}/download?path=${app.resumePath.replace('/uploads/', '')}`}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-bold hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors border dark:border-slate-700"
                           >
                             View CV

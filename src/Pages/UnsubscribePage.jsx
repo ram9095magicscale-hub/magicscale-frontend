@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { API_URL } from '../services/api';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -18,7 +19,7 @@ const UnsubscribePage = () => {
       }
 
       try {
-        const res = await axios.get(`https://magicscale-backend.vercel.app/api/newsletter?email=${email}`);
+        const res = await axios.get(`${API_URL}/newsletter?email=${email}`);
         setStatus({ loading: false, success: true, message: res.data.message });
       } catch (err) {
         setStatus({ 

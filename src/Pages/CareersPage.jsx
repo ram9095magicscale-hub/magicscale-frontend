@@ -6,6 +6,7 @@ import { Briefcase, Users, Zap, Heart, ArrowRight } from "lucide-react";
 import { companyDetails } from "../data/companyDetails";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../services/api";
 
 const CareersPage = () => {
   const [jobPosts, setJobPosts] = useState([]);
@@ -14,7 +15,7 @@ const CareersPage = () => {
     window.scrollTo(0, 0);
     const fetchJobs = async () => {
       try {
-        const res = await axios.get("https://magicscale-backend.vercel.app/api/jobs");
+        const res = await axios.get(`${API_URL}/jobs`);
         setJobPosts(res.data);
       } catch (err) {
         console.error("Failed to fetch jobs", err);

@@ -166,7 +166,7 @@
  * This centralizes all API calls and handles token management
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://magicscale-backend.vercel.app/api';
+export const API_URL = import.meta.env.VITE_API_URL || 'https://magicscale-backend.vercel.app/api';
 
 /**
  * Make an authenticated API request
