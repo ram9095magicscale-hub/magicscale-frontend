@@ -4,8 +4,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { jobPosts } from "../data/jobData";
-import { ArrowLeft, MapPin, Clock, Upload, Send, CheckCircle2 } from "lucide-react";
-import axios from "axios";
+import { CheckCircle2, MapPin, Clock, Upload, Send, ArrowLeft } from "lucide-react";
+import { careerAPI } from "../services/api";
 
 const JobDetailsPage = () => {
   const { id } = useParams();
@@ -28,8 +28,8 @@ const JobDetailsPage = () => {
     window.scrollTo(0, 0);
     const fetchJob = async () => {
       try {
-        const res = await axios.get("https://magicscale-backend.vercel.app/api/jobs");
-        const foundJob = res.data.find((p) => p._id === id || p.id === id);
+        const resData = await careerAPI.getJobs();
+        const foundJob = resData.find((p) => p._id === id || p.id === id);
         // Fallback to local data if backend doesn't have it (for demo data)
         setJob(foundJob || jobPosts.find((p) => p.id === id));
       } catch (err) {
@@ -72,14 +72,7 @@ const JobDetailsPage = () => {
     data.append("resume", file);
 
     try {
-      // Using the local backend or the production one
-      const apiURL = window.location.hostname === "localhost" 
-        ? "https://magicscale-backend.vercel.app/api/careers/apply"
-        : "https://magicscale-backend.onrender.com/api/careers/apply";
-
-      await axios.post(apiURL, data, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
+      await careerAPI.apply(data);
       setIsSubmitted(true);
     } catch (err) {
       console.error("Submission error:", err);

@@ -346,6 +346,18 @@ export const contactAPI = {
   },
 };
 
+export const careerAPI = {
+  getJobs: async () => {
+    return apiRequest('/jobs');
+  },
+  apply: async (formData) => {
+    return apiRequest('/careers/apply', {
+      method: 'POST',
+      body: formData, // FormData implies multi-part/form-data
+    });
+  },
+};
+
 
 
 
@@ -357,4 +369,5 @@ export default {
   sellerAPI,
   userAPI,
   contactAPI,
+  careerAPI,
 };
