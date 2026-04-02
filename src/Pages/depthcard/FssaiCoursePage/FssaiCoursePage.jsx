@@ -529,7 +529,8 @@ const FssaiTrackerCard = ({ isDarkMode }) => {
             <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold mb-6 uppercase tracking-wider">
               <span onClick={() => navigate('/services')} className="text-blue-500 hover:text-blue-600 cursor-pointer transition-colors">Services</span>
               <ChevronRight size={14} className={isDarkMode ? 'text-slate-600' : 'text-slate-400'} />
-              <span className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>FSSAI Registration</span>
+              <span onClick={() => navigate('/services/fssai')} className="text-gray-500 dark:text-slate-400 hover:text-blue-500 cursor-pointer transition-colors">FSSAI Registration</span>
+
             </div>
 
             <h1 className={`text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter leading-[1.1] mb-6 ${isDarkMode ? 'text-white' : 'text-slate-900'

@@ -78,6 +78,8 @@ function App() {
         <Route path="/services/zomato" element={<ZomatoDetails />} />
         <Route path="/services/swiggy" element={<SwiggyDetails />} />
         <Route path="/services/fssai" element={<FssaiDetails />} />
+        <Route path="/services/fssai-registration" element={<FssaiDetails />} />
+
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/about" element={<AboutUsPage />} />
         <Route path="/blogs" element={<BlogsPage />} />

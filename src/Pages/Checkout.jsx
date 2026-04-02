@@ -23,6 +23,8 @@ import {
   Check
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_URL } from "../services/api";
+
 
 const SERVICE_THEMES = {
   zomato: {
@@ -171,7 +173,9 @@ const SERVICE_THEMES = {
   }
 };
 
-const API_BASE = import.meta.env.VITE_BACKEND_URL || "https://magicscale-backend.onrender.com";
+// const API_BASE = import.meta.env.VITE_BACKEND_URL || "https://magicscale-backend.onrender.com";
+const API_BASE = API_URL;
+
 
 const discountMap = { 1: 0, 3: 25, 6: 30, 12: 40 };
 const validCoupons = {
@@ -246,7 +250,8 @@ const Checkout = () => {
         let data = null;
         try {
           // ⚡ Faster fetching logic
-          const res = await fetch(`${API_BASE}/api/plan/${id}`);
+          const res = await fetch(`${API_BASE}/plan/${id}`);
+
           if (res.ok) {
             data = await res.json();
           } else {
@@ -361,7 +366,8 @@ const Checkout = () => {
     setLoading(true);
     try {
       // 1. Create order on backend
-      const res = await fetch(`${API_BASE}/api/razorpay/create-order`, {
+      const res = await fetch(`${API_BASE}/razorpay/create-order`, {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -385,7 +391,8 @@ const Checkout = () => {
         handler: async (response) => {
           // 3. Handle success and verification
           try {
-            const verifyRes = await fetch(`${API_BASE}/api/razorpay/verify-payment`, {
+            const verifyRes = await fetch(`${API_BASE}/razorpay/verify-payment`, {
+
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
