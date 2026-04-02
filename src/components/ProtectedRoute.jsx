@@ -65,10 +65,35 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   // If allowedRoles is specified, check if user has required role
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <div style={{ padding: '2rem', textAlign: 'center', color: 'red' }}>
-      Access Denied. You do not have permission to view this page.
-    </div>;
+  // We only show Access Denied if the user object is fully loaded and role is explicitly unauthorized
+  if (allowedRoles) {
+    if (!user.role) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-white dark:bg-slate-950 transition-colors duration-500">
+          <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+        </div>
+      );
+    }
+
+    if (!allowedRoles.includes(user.role)) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-950 p-6 text-center transition-colors duration-500">
+          <div className="w-20 h-20 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-3xl flex items-center justify-center mb-6">
+            <AlertCircle size={40} />
+          </div>
+          <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">Access Denied</h2>
+          <p className="text-gray-500 dark:text-gray-400 max-w-sm mx-auto mb-8">
+            You do not have the required permissions to view this dashboard. Please contact support if you believe this is an error.
+          </p>
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="px-8 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 transition-all"
+          >
+            Return Home
+          </button>
+        </div>
+      );
+    }
   }
 
   return children;

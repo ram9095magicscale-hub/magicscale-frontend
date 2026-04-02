@@ -68,7 +68,7 @@ const JobDetailsPage = () => {
     data.append("phone", formData.phone);
     data.append("experience", formData.experience);
     data.append("jobTitle", job.title);
-    data.append("jobId", job.id);
+    data.append("jobId", job._id || job.id);
     data.append("resume", file);
 
     try {

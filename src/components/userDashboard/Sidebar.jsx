@@ -11,8 +11,9 @@ const Sidebar = ({ closeSidebar }) => {
 
   const menuItems = [
     ...(isSellerOrAdmin ? [
-      { label: "Users Mgt", icon: <Users size={20} />, path: "/SellerDashboard" },
-      { label: "Job Posts", icon: <Briefcase size={20} />, path: "/SellerDashboard" },
+      { label: "Accounts", icon: <Users size={20} />, path: "/SellerDashboard?tab=customers" },
+      { label: "Applications", icon: <Briefcase size={20} />, path: "/SellerDashboard?tab=applications" },
+      { label: "Manage Jobs", icon: <Briefcase size={20} />, path: "/SellerDashboard?tab=jobs" },
     ] : []),
     { label: "Orders", icon: <ShoppingCart size={20} />, path: "/orders" },
     { label: "Profile", icon: <User size={20} />, path: "/profile" },
