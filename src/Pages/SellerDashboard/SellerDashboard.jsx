@@ -239,8 +239,8 @@ import ManageEnquiries from "../../components/SellerDashboard/ManageEnquiries";
 const SellerDashboard = () => {
   const [users, setUsers] = useState([]);
   const token = localStorage.getItem("token");
-  const [applications, setApplications] = useState([]);
-  const [activeTab, setActiveTab] = useState("customers"); // customers, applications, enquiries, etc.
+  const [transactions, setTransactions] = useState([]);
+  const [activeTab, setActiveTab] = useState("customers"); // customers, applications, enquiries, transactions, etc.
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
@@ -267,8 +267,20 @@ const SellerDashboard = () => {
       }
     };
 
+    const fetchTransactions = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/admin/transactions`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setTransactions(res.data);
+      } catch (err) {
+        console.error("Failed to fetch transactions", err);
+      }
+    };
+
     fetchUsers();
     fetchApplications();
+    fetchTransactions();
   }, [token]);
 
   const getDownloadUrl = (filePath) => {
@@ -302,6 +314,16 @@ const SellerDashboard = () => {
                 }`}
               >
                 All Customers
+              </button>
+              <button 
+                onClick={() => setActiveTab('transactions')}
+                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                  activeTab === 'transactions' 
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                }`}
+              >
+                Transactions
               </button>
               <button 
                 onClick={() => setActiveTab('enquiries')}
@@ -394,6 +416,49 @@ const SellerDashboard = () => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'transactions' && (
+            <>
+              <h2 className="text-2xl font-bold text-red-500 dark:text-red-400 mb-4 transition-colors">All Transactions</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full bg-white dark:bg-slate-900 shadow rounded-xl transition-colors">
+                  <thead className="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-200 transition-colors">
+                    <tr>
+                      <th className="p-3 text-left">Customer</th>
+                      <th className="p-3 text-left">Email</th>
+                      <th className="p-3 text-left">Plan</th>
+                      <th className="p-3 text-left">Amount</th>
+                      <th className="p-3 text-left">Duration</th>
+                      <th className="p-3 text-left">Order ID</th>
+                      <th className="p-3 text-left">Date</th>
+                      <th className="p-3 text-left">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-gray-600 dark:text-gray-300 transition-colors">
+                    {transactions.map((txn) => (
+                      <tr key={txn._id} className="border-t border-gray-100 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="p-3 font-bold">{txn.user?.name || 'Guest'}</td>
+                        <td className="p-3">{txn.user?.email || '-'}</td>
+                        <td className="p-3 font-medium capitalize">{txn.plan}</td>
+                        <td className="p-3 font-bold text-green-600 dark:text-green-400">₹{txn.amount}</td>
+                        <td className="p-3">{txn.duration} Mo</td>
+                        <td className="p-3 text-xs opacity-70">#{txn.orderId?.substring(0, 10).toUpperCase()}</td>
+                        <td className="p-3 text-sm">{new Date(txn.timestamp).toLocaleDateString()}</td>
+                        <td className="p-3">
+                          <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-md text-xs font-bold uppercase">
+                            {txn.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {transactions.length === 0 && (
+                  <p className="text-center text-gray-500 dark:text-gray-400 py-10 transition-colors">No transactions found.</p>
+                )}
               </div>
             </>
           )}

@@ -56,21 +56,23 @@ const Orders = () => {
                 <table className="w-full table-auto">
                   <thead className="text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-slate-800 rounded-lg">
                     <tr>
-                      <th className="p-3 text-left">Order ID</th>
+                      <th className="p-3 text-left">Plan</th>
                       <th className="p-3 text-left">Date</th>
                       <th className="p-3 text-left">Amount</th>
+                      <th className="p-3 text-left">Order ID</th>
                       <th className="p-3 text-left">Status</th>
                     </tr>
                   </thead>
                   <tbody className="text-gray-600 dark:text-gray-300">
                     {orders.map((order, idx) => (
                       <tr key={idx} className="border-t border-gray-100 dark:border-slate-800">
-                        <td className="p-3 font-medium">#{order._id?.substring(0, 8).toUpperCase() || "N/A"}</td>
-                        <td className="p-3">{new Date(order.createdAt).toLocaleDateString()}</td>
-                        <td className="p-3">₹{order.amount}</td>
+                        <td className="p-3 font-medium capitalize">{order.plan}</td>
+                        <td className="p-3">{new Date(order.timestamp).toLocaleDateString()}</td>
+                        <td className="p-3 font-bold">₹{order.amount}</td>
+                        <td className="p-3 text-xs opacity-60 font-mono">#{order.orderId?.substring(0, 10).toUpperCase() || "N/A"}</td>
                         <td className="p-3">
-                          <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-full text-xs font-bold uppercase">
-                            {order.status || "Pending"}
+                          <span className="px-3 py-1 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full text-[10px] font-black uppercase tracking-widest">
+                            {order.status || "Paid"}
                           </span>
                         </td>
                       </tr>

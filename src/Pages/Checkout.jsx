@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_URL } from "../services/api";
+import { useAuth } from "../components/context/AuthContext/useAuth";
 
 
 const SERVICE_THEMES = {
@@ -193,6 +194,7 @@ const Checkout = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const queryParams = new URLSearchParams(location.search);
   const queryMonths = parseInt(queryParams.get("months"), 10);
 
@@ -237,7 +239,7 @@ const Checkout = () => {
 
       setLoading(true);
       setError(null);
-      
+
       const queryBasePrice = queryParams.get("basePrice");
       const queryFinalPrice = queryParams.get("finalPrice");
       const queryDiscountApplied = queryParams.get("discountApplied") === "true";
@@ -246,12 +248,11 @@ const Checkout = () => {
 
       try {
         if (!id) throw new Error("Invalid plan ID");
-        
+
         let data = null;
         try {
           // ⚡ Faster fetching logic
           const res = await fetch(`${API_BASE}/plan/${id}`);
-
           if (res.ok) {
             data = await res.json();
           } else {
@@ -290,7 +291,7 @@ const Checkout = () => {
           data.price = effectiveBasePrice;
           console.log(`-> Applied URL price override: ${data.price}`);
         }
-        
+
         if (queryPlanName) data.name = queryPlanName;
         if (queryFeatures) data.features = queryFeatures.split(',');
 
@@ -367,10 +368,9 @@ const Checkout = () => {
     try {
       // 1. Create order on backend
       const res = await fetch(`${API_BASE}/razorpay/create-order`, {
-
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           amount: totalPrice,
           planId: id,
           customerDetails: formData
@@ -382,7 +382,7 @@ const Checkout = () => {
 
       // 2. Open Razorpay Checkout
       const options = {
-        key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY_ID, 
+        key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: orderData.amount,
         currency: orderData.currency || "INR",
         name: "MagicScale",
@@ -392,12 +392,11 @@ const Checkout = () => {
           // 3. Handle success and verification
           try {
             const verifyRes = await fetch(`${API_BASE}/razorpay/verify-payment`, {
-
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 ...response,
-                userId: localStorage.getItem("userId") || "guest",
+                userId: user?._id || "guest",
                 plan: plan.name,
                 duration: duration,
                 amount: totalPrice,
@@ -417,7 +416,7 @@ const Checkout = () => {
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_order_id: response.razorpay_order_id,
               }));
-              
+
               navigate(`/payment-success?order_id=${orderData.id}`);
             } else {
               throw new Error(verifyData.message || "Payment verification failed.");
@@ -601,8 +600,8 @@ const Checkout = () => {
                         key={m}
                         onClick={() => setDuration(m)}
                         className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${duration === m
-                            ? theme.activeBtn
-                            : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
+                          ? theme.activeBtn
+                          : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
                           }`}
                       >
                         {m}M
@@ -658,7 +657,7 @@ const Checkout = () => {
                     <div className="max-w-[70%]">
                       <p className="font-bold text-slate-900 dark:text-white text-sm leading-tight">{plan.name}</p>
                       <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-widest mt-0.5">
-                        {isOneTime 
+                        {isOneTime
                           ? (quantity > 1 ? `${quantity}x One-time Onboarding` : "One-time Onboarding")
                           : `${duration} Month Subscription`}
                       </p>
@@ -679,7 +678,7 @@ const Checkout = () => {
                         Coupon Discount ({couponDiscount.type === "percent" ? `${couponDiscount.value}%` : `₹${couponDiscount.value}`})
                       </p>
                       <p className="text-emerald-600 font-bold">
-                        -₹{couponDiscount.type === "percent" 
+                        -₹{couponDiscount.type === "percent"
                           ? Math.round(totalPrice * (couponDiscount.value / (100 - couponDiscount.value))).toLocaleString()
                           : couponDiscount.value.toLocaleString()}
                       </p>
@@ -741,8 +740,8 @@ const Checkout = () => {
                     onClick={handleRazorpayPayment}
                     disabled={!isFormFilled || loading || !sdkLoaded}
                     className={`w-full py-4 rounded-xl font-black text-white text-base shadow-xl transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98] ${isFormFilled && !loading && sdkLoaded
-                        ? `bg-gradient-to-r ${theme.payBtn}`
-                        : "bg-slate-200 dark:bg-slate-800 cursor-not-allowed text-slate-400"
+                      ? `bg-gradient-to-r ${theme.payBtn}`
+                      : "bg-slate-200 dark:bg-slate-800 cursor-not-allowed text-slate-400"
                       }`}
                   >
                     {loading ? (
