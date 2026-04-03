@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../../services/api";
+import RichTextEditor from "./RichTextEditor";
 
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,7 +12,13 @@ const ManageBlogs = () => {
     category: ""
   });
   const [coverImage, setCoverImage] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const token = localStorage.getItem("token");
+
+  const handleEditorChange = (content) => {
+    setFormData({ ...formData, content });
+  };
+
 
   const fetchBlogs = async () => {
     try {
@@ -30,8 +37,28 @@ const ManageBlogs = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
   const handleFileChange = (e) => {
     setCoverImage(e.target.files[0]);
+  };
+
+  const handleEdit = (blog) => {
+    setEditingId(blog._id);
+    setFormData({
+      title: blog.title,
+      content: blog.content,
+      author: blog.author,
+      category: blog.category || ""
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const resetForm = () => {
+    setEditingId(null);
+    setFormData({ title: "", content: "", author: "", category: "" });
+    setCoverImage(null);
+    const fileInput = document.getElementById("coverImageInput");
+    if (fileInput) fileInput.value = "";
   };
 
   const handleSubmit = async (e) => {
@@ -46,15 +73,22 @@ const ManageBlogs = () => {
     }
 
     try {
-      await axios.post(`${API_URL}/blogs`, data, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data" 
-        }
-      });
-      setFormData({ title: "", content: "", author: "", category: "" });
-      setCoverImage(null);
-      document.getElementById("coverImageInput").value = "";
+      if (editingId) {
+        await axios.put(`${API_URL}/blogs/${editingId}`, data, {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data" 
+          }
+        });
+      } else {
+        await axios.post(`${API_URL}/blogs`, data, {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data" 
+          }
+        });
+      }
+      resetForm();
       fetchBlogs();
     } catch (err) {
       console.error("Failed to post blog", err);
@@ -74,21 +108,43 @@ const ManageBlogs = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-20">
       <div className="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border dark:border-slate-800">
-        <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">Publish a New Blog</h3>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
+          {editingId ? "Edit Blog Post" : "Publish a New Blog"}
+        </h3>
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="text" name="title" value={formData.title} onChange={handleChange} placeholder="Blog Title" required className="p-3 rounded-lg border dark:border-slate-700 bg-gray-50 dark:bg-slate-800 focus:ring-2 focus:ring-red-500 w-full outline-none dark:text-white" />
             <input type="text" name="author" value={formData.author} onChange={handleChange} placeholder="Author Name" required className="p-3 rounded-lg border dark:border-slate-700 bg-gray-50 dark:bg-slate-800 focus:ring-2 focus:ring-red-500 w-full outline-none dark:text-white" />
             <input type="text" name="category" value={formData.category} onChange={handleChange} placeholder="Category (e.g. Technology)" className="p-3 rounded-lg border dark:border-slate-700 bg-gray-50 dark:bg-slate-800 focus:ring-2 focus:ring-red-500 w-full outline-none dark:text-white" />
             <div className="flex flex-col">
-              <label className="text-xs text-gray-500 mb-1">Cover Image</label>
+              <label className="text-xs text-gray-500 mb-1">Cover Image {editingId && "(Leave empty to keep current)"}</label>
               <input id="coverImageInput" type="file" name="coverImage" onChange={handleFileChange} accept="image/*" className="p-2 border dark:border-slate-700 rounded-lg dark:text-gray-300 bg-gray-50 dark:bg-slate-800" />
             </div>
-            <textarea name="content" value={formData.content} onChange={handleChange} placeholder="Blog Content (Markdown or Plaintext)" required className="p-3 rounded-lg border dark:border-slate-700 bg-gray-50 dark:bg-slate-800 focus:ring-2 focus:ring-red-500 w-full outline-none dark:text-white md:col-span-2" rows="6"></textarea>
+            
+            <div className="md:col-span-2">
+              <label className="text-xs text-gray-500 mb-2 block uppercase tracking-widest font-bold">Blog Content (Structured Format)</label>
+              <RichTextEditor 
+                content={formData.content} 
+                onChange={handleEditorChange} 
+              />
+            </div>
           </div>
-          <button type="submit" className="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg shadow-md transition-all">Publish Blog</button>
+          <div className="flex gap-4">
+            <button type="submit" className="px-8 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg shadow-lg transition-all transform active:scale-95">
+              {editingId ? "Update Changes" : "Publish Blog"}
+            </button>
+            {editingId && (
+              <button 
+                type="button" 
+                onClick={resetForm}
+                className="px-8 py-3 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-bold rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 transition-all"
+              >
+                Cancel Edit
+              </button>
+            )}
+          </div>
         </form>
       </div>
 
@@ -102,7 +158,7 @@ const ManageBlogs = () => {
                 <th className="p-3 text-left">Title</th>
                 <th className="p-3 text-left">Author</th>
                 <th className="p-3 text-left">Date Posted</th>
-                <th className="p-3 text-left">Actions</th>
+                <th className="p-3 text-right pr-6">Actions</th>
               </tr>
             </thead>
             <tbody className="text-gray-600 dark:text-gray-300">
@@ -118,8 +174,21 @@ const ManageBlogs = () => {
                   <td className="p-3 font-semibold">{blog.title}</td>
                   <td className="p-3">{blog.author}</td>
                   <td className="p-3 text-sm">{new Date(blog.createdAt).toLocaleDateString()}</td>
-                  <td className="p-3">
-                    <button onClick={() => handleDelete(blog._id)} className="text-red-500 hover:underline font-bold text-sm">Delete</button>
+                  <td className="p-3 text-right pr-6">
+                    <div className="flex justify-end gap-3">
+                      <button 
+                        onClick={() => handleEdit(blog)} 
+                        className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold text-sm"
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(blog._id)} 
+                        className="text-red-500 hover:underline font-bold text-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -1,7 +1,7 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 #root {
-  text-align: center;
   font-family: "poppins";
 }
 

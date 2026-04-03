@@ -49,7 +49,7 @@ const BlogsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-500 font-poppins">
+    <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-500 font-poppins text-left">
 
       
       <main className="pt-20">
@@ -62,7 +62,7 @@ const BlogsPage = () => {
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808005_1px,transparent_1px),linear-gradient(to_bottom,#80808005_1px,transparent_1px)] bg-[size:40px_40px] dark:bg-none"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto relative z-10">
+            <div className="max-w-7xl mx-auto relative z-10 text-center">
                 <div className="flex flex-col items-center text-center space-y-8">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -101,9 +101,7 @@ const BlogsPage = () => {
                   <BlogCard 
                     id={post._id || post.id}
                     title={post.title}
-                    description={post.content?.substring(0, 100) + '...'}
-                    summary={post.summary}
-                    excerpt={post.excerpt || post.content?.substring(0, 100) + '...'}
+                    excerpt={post.excerpt || post.content}
                     date={new Date(post.createdAt).toLocaleDateString()}
                     image={post.coverImage ? (post.coverImage.startsWith('http') ? post.coverImage : `${API_URL.replace('/api', '')}${post.coverImage}`) : "https://via.placeholder.com/400x250?text=Blog"}
                     author={post.author || "Admin"}

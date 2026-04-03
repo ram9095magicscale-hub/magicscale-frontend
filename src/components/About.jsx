@@ -97,7 +97,7 @@ export default function AboutPage({ showTitle = true }) {
             <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100 to-sky-50 dark:from-indigo-900/20 dark:to-sky-900/20 rounded-[3rem] transform rotate-3 scale-105 -z-10"></div>
             <img
               src={restaurantLogo}
-              alt="Brands we work with"
+              alt="Successful Indian Foodpreneurs with Swiggy and Zomato"
               className="w-full max-w-lg object-contain dark:brightness-90 drop-shadow-2xl rounded-[2rem] bg-white/50 backdrop-blur-sm dark:bg-slate-900/50 p-6 border border-white/20 dark:border-slate-800"
             />
           </motion.div>

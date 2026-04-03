@@ -127,11 +127,11 @@ const BlogDetailsPage = () => {
         </div>
 
         {/* Article Content */}
-        <div className="max-w-7xl mx-auto px-6 pb-32">
+        <div className="max-w-4xl mx-auto px-6 pb-32">
             <div 
-                className="prose prose-lg md:prose-xl dark:prose-invert prose-indigo max-w-none text-gray-700 dark:text-gray-300 leading-relaxed font-medium text-center
-                prose-h3:text-gray-900 dark:prose-h3:text-white prose-h3:font-black prose-h3:text-3xl prose-h3:mt-16 prose-h3:mb-8 prose-h3:text-center
-                prose-p:mb-8 prose-p:text-lg mx-auto"
+                className="prose prose-lg md:prose-xl dark:prose-invert prose-indigo max-w-none text-gray-700 dark:text-gray-300 leading-relaxed text-left
+                prose-h3:text-gray-900 dark:prose-h3:text-white prose-h3:font-black prose-h3:text-3xl prose-h3:mt-16 prose-h3:mb-8
+                prose-p:mb-8 prose-p:text-lg"
                 dangerouslySetInnerHTML={{ __html: post.content }}
             />
             

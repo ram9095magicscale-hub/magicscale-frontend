@@ -3,7 +3,23 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock, User } from "lucide-react";
 
+const stripHtml = (html) => {
+  if (!html) return "";
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  let text = temp.textContent || temp.innerText || "";
+  // Handle potential double encoding
+  if (text.includes("<") && text.includes(">")) {
+    temp.innerHTML = text;
+    text = temp.textContent || temp.innerText || "";
+  }
+  return text.trim();
+};
+
 const BlogCard = ({ id, image, category, title, excerpt, date, author }) => {
+  const stripped = stripHtml(excerpt);
+  const cleanExcerpt = stripped.length > 120 ? stripped.substring(0, 120) + "..." : stripped;
+  
   return (
     <Link to={`/blogs/${id}`} className="block h-full">
       <motion.div 
@@ -45,7 +61,7 @@ const BlogCard = ({ id, image, category, title, excerpt, date, author }) => {
           </h3>
 
           <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-medium max-w-[90%]">
-            {excerpt}
+            {cleanExcerpt}
           </p>
 
           <div className="pt-6 mt-auto">

@@ -201,25 +201,6 @@ const ServicesPage = () => {
                 />
                 <div className="absolute inset-0 bg-indigo-600/20 group-hover:bg-transparent transition-colors duration-500"></div>
                 
-                {/* Float Card */}
-                <motion.div 
-                  animate={{ y: [0, -20, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute bottom-10 -left-6 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-2xl border border-gray-100 dark:border-slate-800"
-                >
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600">
-                      <FaRocket />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-500 uppercase">Success Rate</p>
-                      <p className="text-2xl font-black text-gray-900 dark:text-white">99.8%</p>
-                    </div>
-                  </div>
-                  <div className="h-2 w-48 bg-gray-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full w-[99.8%] bg-emerald-500 rounded-full"></div>
-                  </div>
-                </motion.div>
               </div>
             </div>
           </div>
