@@ -459,8 +459,8 @@ const SellerDashboard = () => {
                   <tbody className="text-gray-600 dark:text-gray-300 transition-colors">
                     {transactions.map((txn) => (
                       <tr key={txn._id} className="border-t border-gray-100 dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td className="p-3 font-bold">{txn.user?.name || 'Guest'}</td>
-                        <td className="p-3">{txn.user?.email || '-'}</td>
+                        <td className="p-3 font-bold">{txn.name || txn.user?.name || 'Guest'}</td>
+                        <td className="p-3">{txn.email || txn.user?.email || '-'}</td>
                         <td className="p-3 font-medium capitalize">{txn.plan}</td>
                         <td className="p-3 font-bold text-green-600 dark:text-green-400">₹{txn.amount}</td>
                         <td className="p-3">{txn.duration} Mo</td>
