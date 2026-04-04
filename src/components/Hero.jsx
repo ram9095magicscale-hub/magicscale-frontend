@@ -113,28 +113,128 @@ const AbstractPattern = ({ color }) => (
   </svg>
 );
 
-// Toingit-style Card Component
-const ToingitCard = ({ title, img, originalPrice, toingPrice }) => (
+
+// Sparkline component for mini charts
+const Sparkline = ({ data, color = "#3b82f6", width = 100, height = 30 }) => {
+  const points = data.map((d, i) => ({
+    x: (i / (data.length - 1)) * width,
+    y: height - (d / 100) * height,
+  }));
+
+  const pathContent = `M ${points.map(p => `${p.x},${p.y}`).join(' L')}`;
+
+  return (
+    <svg width={width} height={height} className="overflow-visible">
+      <motion.path
+        d={pathContent}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 1.5, ease: "easeInOut" }}
+      />
+    </svg>
+  );
+};
+
+// Growth Metric Row Component
+const MetricRow = ({ icon: Icon, label, value, trend, trendValue, sparkData, colorClass }) => (
+  <div className="flex items-center justify-between py-3 border-b border-white/5 last:border-0 group/row hover:bg-white/5 transition-colors rounded-lg px-2">
+    <div className="flex items-center gap-4 flex-1">
+      <div className={`p-2 rounded-lg ${colorClass} bg-opacity-20`}>
+        <Icon size={18} className="text-white" />
+      </div>
+      <span className="text-white/80 text-sm font-medium">{label}</span>
+    </div>
+    
+    <div className="flex items-center gap-6 md:gap-12">
+      <div className="hidden sm:block">
+        <Sparkline data={sparkData} color={colorClass === "bg-blue-500" ? "#3b82f6" : "#10b981"} />
+      </div>
+      
+      <div className="flex flex-col items-end min-w-[80px]">
+        <span className="text-white font-bold text-base">{value}</span>
+        <div className={`flex items-center gap-1 text-[10px] ${trend === 'up' ? 'text-emerald-400' : 'text-rose-400'}`}>
+           {trend === 'up' ? '↑' : '↓'} {trendValue}%
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+// Analytics Dashboard Card
+const AnalyticsDashboard = () => (
   <motion.div 
-    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-    animate={{ opacity: 1, scale: 1, y: 0 }}
-    className="w-[180px] md:w-[220px] bg-[#FFF9E6] rounded-[30px] p-4 shadow-xl flex flex-col items-center relative"
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    className="w-full max-w-[500px] bg-slate-900/40 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 md:p-8 shadow-2xl relative overflow-hidden"
   >
-    <div className="w-full aspect-square rounded-[20px] overflow-hidden mb-3 relative">
-      <img src={img} alt={title} className="w-full h-full object-cover" />
-      <button className="absolute bottom-2 right-2 w-8 h-8 bg-[#FF1D8E] rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-transform">
-        <Plus size={18} />
-      </button>
+    {/* Header */}
+    <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center gap-3">
+        <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+        <h3 className="text-white font-bold text-lg tracking-tight">Customer Funnel</h3>
+      </div>
+      <div className="text-white/40 hover:text-white transition-colors cursor-help">
+        <Plus size={20} className="rotate-45" />
+      </div>
     </div>
-    <h4 className="text-gray-900 font-bold text-sm md:text-base mb-2 w-full text-left px-1">{title}</h4>
-    <div className="flex items-center gap-2 w-full px-1">
-      <span className="bg-[#FFEB3B] text-black text-[10px] md:text-xs font-bold px-2 py-0.5 rounded-full shadow-sm">
-         ₹{toingPrice}
-      </span>
-      <span className="text-gray-400 text-[10px] md:text-xs line-through font-medium">
-         ₹{originalPrice}
-      </span>
+
+    {/* Metrics List */}
+    <div className="space-y-1">
+      <MetricRow 
+        icon={ArrowRight} 
+        label="Impressions" 
+        value="37,369" 
+        trend="up" 
+        trendValue="10" 
+        colorClass="bg-blue-500"
+        sparkData={[30, 45, 35, 50, 48, 60, 55]}
+      />
+      <MetricRow 
+        icon={TrendingUp} 
+        label="Menu Conversion" 
+        value="8.8%" 
+        trend="up" 
+        trendValue="13" 
+        colorClass="bg-blue-500"
+        sparkData={[40, 55, 65, 60, 75, 70, 85]}
+      />
+      <MetricRow 
+        icon={Plus} 
+        label="Menu to Cart" 
+        value="35.8%" 
+        trend="up" 
+        trendValue="9" 
+        colorClass="bg-blue-500"
+        sparkData={[35, 45, 55, 50, 65, 60, 75]}
+      />
+      <MetricRow 
+        icon={ArrowRight} 
+        label="Cart to Order" 
+        value="42.6%" 
+        trend="up" 
+        trendValue="10" 
+        colorClass="bg-emerald-500"
+        sparkData={[50, 60, 55, 70, 65, 80, 75]}
+      />
+      <MetricRow 
+        icon={TrendingUp} 
+        label="Repeat Users" 
+        value="38%" 
+        trend="up" 
+        trendValue="15" 
+        colorClass="bg-indigo-500"
+        sparkData={[20, 30, 45, 40, 55, 65, 70]}
+      />
     </div>
+
+    {/* Background Glow */}
+    <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-[80px]" />
+    <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-fuchsia-500/20 rounded-full blur-[80px]" />
   </motion.div>
 );
 
@@ -288,40 +388,32 @@ const Hero = () => {
 
 
                 {slide.isGrowthSlide ? (
-                  /* Toingit-inspired UI for Growth Slide */
+                  /* Modern Analytics Dashboard for Growth Slide */
                   <div className="relative w-full h-full flex items-center justify-center">
-                    <div className="relative rotate-[-5deg] bg-white/10 backdrop-blur-xl border border-white/20 p-6 md:p-10 rounded-[40px] shadow-2xl flex flex-col md:flex-row gap-6 items-center">
-                       <ToingitCard 
-                         title="Masala Dosa" 
-                         img="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&q=80&w=300" 
-                         originalPrice="120" 
-                         toingPrice="89" 
-                       />
-                       <div className="hidden md:block translate-y-12">
-                         <ToingitCard 
-                           title="Special Pizza" 
-                           img="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=300" 
-                           originalPrice="299" 
-                           toingPrice="189" 
-                         />
-                       </div>
-                       <div className="hidden lg:block -translate-y-6">
-                         <ToingitCard 
-                           title="Hyderabadi Biryani" 
-                           img="https://images.unsplash.com/photo-1563379091339-03b21bc4a4f8?auto=format&fit=crop&q=80&w=300" 
-                           originalPrice="240" 
-                           toingPrice="169" 
-                         />
-                       </div>
+                    <div className="relative rotate-[-3deg] transition-transform hover:rotate-0 duration-500 ease-out z-20">
+                       <AnalyticsDashboard />
 
                        {/* Callout Bubble */}
                        <motion.div 
                          initial={{ scale: 0, opacity: 0 }}
                          animate={{ scale: 1, opacity: 1 }}
                          transition={{ delay: 0.8 }}
-                         className="absolute -top-10 -right-6 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-2xl border border-indigo-100 dark:border-slate-800 z-30 hidden md:block"
+                         className="absolute -top-6 -right-12 bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-2xl border border-indigo-100 dark:border-slate-800 z-30 hidden md:block"
                        >
-                          <p className="text-gray-900 dark:text-white font-bold text-sm">30% High Profits! 🚀</p>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                            <p className="text-gray-900 dark:text-white font-bold text-sm">30% Profit Growth! 🚀</p>
+                          </div>
+                       </motion.div>
+
+                       {/* Supplementary Floating UI Elements */}
+                       <motion.div 
+                         initial={{ x: -20, opacity: 0 }}
+                         animate={{ x: 0, opacity: 1 }}
+                         transition={{ delay: 1 }}
+                         className="absolute -bottom-4 -left-8 bg-indigo-600/90 backdrop-blur-md p-3 rounded-xl shadow-xl text-white text-xs font-bold z-10 hidden lg:block"
+                       >
+                          ROI +124%
                        </motion.div>
                     </div>
                   </div>

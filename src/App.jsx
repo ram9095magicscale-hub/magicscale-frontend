@@ -113,14 +113,7 @@ function App() {
         <Route path="/terms-and-condition" element={<Terms />} />
         <Route path="/login-phone" element={<PhoneOTPLogin />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
-        <Route 
-          path="/checkout/:id" 
-          element={
-            <ProtectedRoute allowedRoles={['user', 'seller', 'admin']}>
-              <Checkout />
-            </ProtectedRoute>
-          } 
-        />
+        <Route path="/checkout/:id" element={<Checkout />} />
 
 
         <Route

@@ -235,6 +235,7 @@ import Sidebar from "../../components/userDashboard/Sidebar";
 import Topbar from "../../components/userDashboard/Topbar";
 import ManageJobs from "../../components/SellerDashboard/ManageJobs";
 import ManageBlogs from "../../components/SellerDashboard/ManageBlogs";
+import ManageGallery from "../../components/SellerDashboard/ManageGallery";
 import ManageEnquiries from "../../components/SellerDashboard/ManageEnquiries";
 
 const SellerDashboard = () => {
@@ -372,6 +373,16 @@ const SellerDashboard = () => {
                 }`}
               >
                 Manage Blogs
+              </button>
+              <button 
+                onClick={() => setActiveTab('gallery')}
+                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                  activeTab === 'gallery' 
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                }`}
+              >
+                Manage Gallery
               </button>
             </div>
           </div>
@@ -552,6 +563,7 @@ const SellerDashboard = () => {
 
           {activeTab === "jobs" && <ManageJobs />}
           {activeTab === "blogs" && <ManageBlogs />}
+          {activeTab === "gallery" && <ManageGallery />}
         </div>
       </div>
     </div>

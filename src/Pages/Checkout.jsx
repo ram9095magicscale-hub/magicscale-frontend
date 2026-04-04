@@ -211,6 +211,17 @@ const Checkout = () => {
   const [couponError, setCouponError] = useState("");
 
   useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone || "",
+      }));
+    }
+  }, [user]);
+
+  useEffect(() => {
     if (couponApplied && couponCode) {
       const code = couponCode.trim().toUpperCase();
       if (validCoupons[code]) {
