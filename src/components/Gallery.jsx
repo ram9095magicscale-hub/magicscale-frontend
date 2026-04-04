@@ -4,7 +4,7 @@ import { Camera, ExternalLink, LayoutGrid, Zap, Loader2, X, Maximize2 } from "lu
 import axios from "axios";
 import { API_URL } from "../services/api";
 
-const GalleryItem = ({ item, index, onView }) => {
+const GalleryItem = ({ item, index, onView, onHover }) => {
   const isLarge = item.size === "large";
   const isMedium = item.size === "medium";
   const isWide = item.size === "wide";
@@ -22,6 +22,8 @@ const GalleryItem = ({ item, index, onView }) => {
       transition={{ duration: 0.6, delay: index * 0.1 }}
       viewport={{ once: true }}
       onClick={() => onView(item)}
+      onMouseEnter={() => onHover(item)}
+      onMouseLeave={() => onHover(null)}
       className={`relative group overflow-hidden rounded-[2.5rem] bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-800 cursor-pointer
         ${isLarge ? "md:col-span-2 md:row-span-2 aspect-[3/4] md:aspect-auto" : ""}
         ${isWide ? "md:col-span-2 md:row-span-1 aspect-video md:aspect-auto" : ""}
@@ -62,7 +64,7 @@ const GalleryItem = ({ item, index, onView }) => {
   );
 };
 
-const Lightbox = ({ item, onClose }) => {
+const Lightbox = ({ item, isHovered, onClose }) => {
   if (!item) return null;
   const imageUrl = item.image.startsWith("http") 
     ? item.image 
@@ -73,17 +75,19 @@ const Lightbox = ({ item, onClose }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12 bg-slate-950/95 backdrop-blur-xl"
-      onClick={onClose}
+      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-12 bg-slate-950/95 backdrop-blur-xl ${isHovered ? 'pointer-events-none' : ''}`}
+      onClick={isHovered ? undefined : onClose}
     >
-      <motion.button
-        whileHover={{ scale: 1.1, rotate: 90 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={onClose}
-        className="absolute top-8 right-8 text-white/50 hover:text-white transition-all z-[110]"
-      >
-        <X size={32} />
-      </motion.button>
+      {!isHovered && (
+        <motion.button
+          whileHover={{ scale: 1.1, rotate: 90 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={onClose}
+          className="absolute top-8 right-8 text-white/50 hover:text-white transition-all z-[110]"
+        >
+          <X size={32} />
+        </motion.button>
+      )}
 
       <motion.div
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -125,12 +129,14 @@ const Lightbox = ({ item, onClose }) => {
             </div>
           </div>
 
-          <button 
-             onClick={onClose}
-             className="mt-4 px-8 py-4 bg-white text-slate-950 font-black rounded-2xl w-full hover:bg-slate-200 transition-colors uppercase tracking-widest text-xs"
-          >
-             Back to Gallery
-          </button>
+          {!isHovered && (
+            <button 
+              onClick={onClose}
+              className="mt-4 px-8 py-4 bg-white text-slate-950 font-black rounded-2xl w-full hover:bg-slate-200 transition-colors uppercase tracking-widest text-xs"
+            >
+              Back to Work
+            </button>
+          )}
         </div>
       </motion.div>
     </motion.div>
@@ -141,6 +147,7 @@ const Gallery = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [hoveredItem, setHoveredItem] = useState(null);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -166,11 +173,18 @@ const Gallery = () => {
   }, []);
 
   return (
-    <section id="gallery" className="relative py-24 px-6 sm:px-12 lg:px-24 bg-white dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
+    <section id="work" className="relative pt-24 pb-8 px-6 sm:px-12 lg:px-24 bg-white dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
       
       <AnimatePresence>
-        {selectedItem && (
-          <Lightbox item={selectedItem} onClose={() => setSelectedItem(null)} />
+        {(selectedItem || hoveredItem) && (
+          <Lightbox 
+            item={selectedItem || hoveredItem} 
+            isHovered={!!hoveredItem && !selectedItem}
+            onClose={() => {
+              setSelectedItem(null);
+              setHoveredItem(null);
+            }} 
+          />
         )}
       </AnimatePresence>
 
@@ -187,7 +201,7 @@ const Gallery = () => {
             viewport={{ once: true }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold uppercase tracking-widest"
           >
-             <Camera size={14} /> Portfolio
+             <LayoutGrid size={14} /> Our Work
           </motion.div>
           
           <motion.h2 
@@ -197,7 +211,7 @@ const Gallery = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight"
           >
-            Our Success <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-sky-600 dark:from-indigo-400 dark:to-sky-400 font-serif italic font-normal">Stories</span>
+            MagicScale <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-sky-600 dark:from-indigo-400 dark:to-sky-400 font-serif italic font-normal">Impact</span>
           </motion.h2>
           
           <motion.p 
@@ -207,7 +221,7 @@ const Gallery = () => {
             transition={{ delay: 0.2 }}
             className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-medium"
           >
-            Transforming restaurants through data-driven strategies and expert delivery optimization.
+            Explore how we help leading restaurants and cloud kitchens scale with data-driven precision.
           </motion.p>
         </div>
 
@@ -218,9 +232,15 @@ const Gallery = () => {
           </div>
         ) : items.length > 0 ? (
           /* Bento Grid */
-          <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 auto-rows-[250px] gap-4 md:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[250px] gap-4 md:gap-6 lg:gap-8">
             {items.map((item, index) => (
-              <GalleryItem key={item._id} item={item} index={index} onView={setSelectedItem} />
+              <GalleryItem 
+                key={item._id} 
+                item={item} 
+                index={index} 
+                onView={setSelectedItem}
+                onHover={setHoveredItem} 
+              />
             ))}
           </div>
         ) : (
@@ -229,31 +249,6 @@ const Gallery = () => {
           </div>
         )}
 
-        {/* Call to action */}
-        {!loading && items.length > 0 && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-            className="mt-16 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 border-t border-slate-100 dark:border-slate-900 pt-12"
-          >
-            <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <span className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-sky-600 bg-clip-text text-transparent">500+</span>
-              <span className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Restaurants Partnered</span>
-            </div>
-            <div className="w-12 h-px bg-slate-200 dark:bg-slate-800 rotate-0 md:rotate-90"></div>
-            <div className="flex flex-col items-center md:items-start text-center md:text-left">
-              <span className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-sky-600 bg-clip-text text-transparent">₹25Cr+</span>
-              <span className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Revenue Generated</span>
-            </div>
-            <div className="w-12 h-px bg-slate-200 dark:bg-slate-800 rotate-0 md:rotate-90"></div>
-            <div className="flex flex-col items-center md:items-start text-center md:text-left">
-               <span className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-sky-600 bg-clip-text text-transparent">10+</span>
-               <span className="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Cities Reached</span>
-            </div>
-          </motion.div>
-        )}
       </div>
     </section>
   );

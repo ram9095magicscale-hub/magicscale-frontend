@@ -56,15 +56,58 @@ const ZomatoOnboardingCourse = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  const [couponCode, setCouponCode] = useState('');
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [appliedCouponInfo, setAppliedCouponInfo] = useState(null);
   const [finalPrice, setFinalPrice] = useState(currentPlan.price);
 
+  const availableCoupons = [
+    { code: 'MAGIC20', discount: 20, description: 'Get 20% off on your total purchase!' },
+    { code: 'ZOMATO100', discount: null, flatDiscount: 100, description: 'Get ₹100 off on any plan!' },
+    { code: 'NEWREST50', discount: null, flatDiscount: 50, description: '₹50 off for new restaurants!' },
+  ];
+
   useEffect(() => {
-    setFinalPrice(currentPlan.price);
-  }, [selectedPlan]);
+    let price = currentPlan.price;
+    if (discountApplied && appliedCouponInfo) {
+      if (appliedCouponInfo.discount) {
+        price = price * (1 - appliedCouponInfo.discount / 100);
+      } else if (appliedCouponInfo.flatDiscount) {
+        price = price - appliedCouponInfo.flatDiscount;
+      }
+    }
+    setFinalPrice(Math.max(0, Math.round(price)));
+  }, [selectedPlan, discountApplied, appliedCouponInfo, currentPlan.price]);
+
+  const handleCouponApply = () => {
+    const couponToApply = availableCoupons.find(coupon => coupon.code.toUpperCase() === couponCode.trim().toUpperCase());
+    if (couponToApply) {
+      setDiscountApplied(true);
+      setAppliedCouponInfo(couponToApply);
+      alert(`Coupon "${couponToApply.code}" applied! ${couponToApply.description}`);
+    } else {
+      setDiscountApplied(false);
+      setAppliedCouponInfo(null);
+      alert('Invalid coupon code. Please try again.');
+    }
+  };
+
+  const handleCouponSelect = (coupon) => {
+    setCouponCode(coupon.code);
+    setDiscountApplied(true);
+    setAppliedCouponInfo(coupon);
+    alert(`Coupon "${coupon.code}" applied! ${coupon.description}`);
+  };
+
+  const handleRemoveCoupon = () => {
+    setCouponCode('');
+    setDiscountApplied(false);
+    setAppliedCouponInfo(null);
+  };
 
   const handleCheckout = () => {
     const featuresString = currentPlan.features.join(',');
-    navigate(`/checkout/${currentPlan.slug}?finalPrice=${finalPrice}&basePrice=${currentPlan.price}&discountApplied=false&couponCode=&planName=${encodeURIComponent(currentPlan.name)}&planFeatures=${encodeURIComponent(featuresString)}`);
+    navigate(`/checkout/${currentPlan.slug}?finalPrice=${finalPrice}&basePrice=${currentPlan.price}&discountApplied=${discountApplied}&couponCode=${appliedCouponInfo ? appliedCouponInfo.code : ''}&planName=${encodeURIComponent(currentPlan.name)}&planFeatures=${encodeURIComponent(featuresString)}`);
   };
 
 
@@ -133,9 +176,21 @@ const ZomatoOnboardingCourse = () => {
 
         {/* Dynamic Pricing Inside the Box Details */}
         <div className="mb-4">
-          <h2 className={`text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`} id="plans">
-            ₹{currentPlan.price.toLocaleString()}
-          </h2>
+          <div className="flex items-baseline gap-2">
+            <h2 className={`text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`} id="plans">
+              ₹{finalPrice.toLocaleString()}
+            </h2>
+            {discountApplied && (
+              <span className={`text-sm sm:text-base font-bold line-through ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                ₹{currentPlan.price.toLocaleString()}
+              </span>
+            )}
+          </div>
+          {discountApplied && appliedCouponInfo && (
+            <p className="text-emerald-500 font-bold text-[10px] sm:text-[11px] mb-1">
+              {appliedCouponInfo.discount ? `Save ${appliedCouponInfo.discount}%` : `Save ₹${appliedCouponInfo.flatDiscount}`} with {appliedCouponInfo.code}!
+            </p>
+          )}
           <p className={`text-[13px] sm:text-sm mt-1.5 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'} leading-relaxed font-medium`}>
             {currentPlan.description}
           </p>
@@ -182,26 +237,54 @@ const ZomatoOnboardingCourse = () => {
           </p>
         </div>
 
-        {/* Coupon - Ultra Compact */}
-        <div className={`mt-5 pt-5 border-t ${isDarkMode ? 'border-slate-700/50' : 'border-slate-200'}`}>
-          <label htmlFor="coupon-input" className={`text-[10px] font-bold uppercase tracking-widest block mb-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+        {/* Coupon - Built-in functionality */}
+        <div className={`mt-4 pt-4 border-t ${isDarkMode ? 'border-slate-700/50' : 'border-slate-200'}`}>
+          <label htmlFor={`coupon-input-${isMobile ? 'm' : 'd'}`} className={`text-[10px] font-bold uppercase tracking-widest block mb-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
             Have a Coupon?
           </label>
           <div className="flex gap-2">
             <input
-              id="coupon-input"
+              id={`coupon-input-${isMobile ? 'm' : 'd'}`}
               type="text"
               placeholder="Enter code"
-              className={`flex-1 min-w-0 border px-3 py-2 rounded-lg text-xs font-medium transition-colors shadow-inner ${isDarkMode
-                ? 'bg-[#0b101d] border-slate-700 text-white placeholder-slate-500 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none'
-                : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none'
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+              disabled={discountApplied}
+              className={`flex-1 min-w-0 border px-3 py-2 rounded-lg text-xs font-bold transition-colors shadow-inner uppercase ${isDarkMode
+                ? 'bg-[#0b101d] border-slate-700 text-white placeholder-slate-500 focus:border-red-500 outline-none disabled:opacity-50'
+                : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-red-500 outline-none disabled:opacity-50'
                 }`}
             />
-            <button className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm ${isDarkMode ? 'bg-slate-700 text-white hover:bg-slate-600' : 'bg-slate-900 text-white hover:bg-slate-800'
-              }`}>
-              Apply
-            </button>
+            {discountApplied ? (
+              <button onClick={handleRemoveCoupon} className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm bg-red-500/10 text-red-500 hover:bg-red-500/20`}>
+                Remove
+              </button>
+            ) : (
+              <button onClick={handleCouponApply} className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm ${isDarkMode ? 'bg-red-600 text-white hover:bg-red-500' : 'bg-red-600 text-white hover:bg-red-700'
+                }`}>
+                Apply
+              </button>
+            )}
           </div>
+
+          {/* Available Coupons List */}
+          {!discountApplied && (
+            <div className="mt-3 space-y-1.5 max-h-24 overflow-y-auto pr-1">
+              {availableCoupons.map((coupon, idx) => (
+                <div key={idx} onClick={() => handleCouponSelect(coupon)} className={`group flex items-center justify-between py-1.5 px-2.5 rounded-md border cursor-pointer transition-all ${isDarkMode ? 'bg-[#0f172a]/50 border-slate-700 hover:border-red-500/50' : 'bg-slate-50 border-slate-200 hover:border-red-300 hover:shadow-sm'
+                  }`}>
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <CheckCircle2 className="text-red-500 shrink-0 text-xs opacity-80 group-hover:opacity-100 transition-opacity" />
+                    <div className="min-w-0">
+                      <p className={`text-[10px] font-black tracking-wide uppercase truncate ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{coupon.code}</p>
+                      <p className={`text-[9px] font-medium leading-none mt-0.5 truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{coupon.description}</p>
+                    </div>
+                  </div>
+                  <button className="text-[9px] font-bold text-red-500 opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wider pl-2 shrink-0">Apply</button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -373,7 +456,7 @@ const ZomatoOnboardingCourse = () => {
           onClick={handleCheckout}
           className="w-full bg-gradient-to-r from-red-600 to-rose-600 text-white py-3.5 rounded-xl text-sm font-bold shadow-lg shadow-red-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
         >
-          Get Started Now <span className="opacity-80 mx-1">•</span> ₹{currentPlan.price.toLocaleString()}
+          Get Started Now <span className="opacity-80 mx-1">•</span> ₹{finalPrice.toLocaleString()}
           <ChevronRight size={18} />
         </button>
       </div>

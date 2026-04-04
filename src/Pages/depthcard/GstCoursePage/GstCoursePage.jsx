@@ -174,6 +174,12 @@ const GstCoursePage = () => {
               Professional and prompt GST registration, modification, and monthly filing services for food businesses. Ensure 100% compliance with government norms.
             </p>
 
+            {/* Mobile Checkout Card & Notice Placement */}
+            <div className="w-full lg:hidden mb-12">
+              {renderCheckoutCard(true)}
+              {renderLiveNotice(true)}
+            </div>
+
             <div className="space-y-16 mt-12">
               <section>
                 <h3 className={`text-2xl sm:text-3xl font-black mb-10 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Documents Required</h3>
@@ -220,6 +226,18 @@ const GstCoursePage = () => {
         </div>
       </div>
       <SiteFooter />
+
+      {/* Floating Bottom Bar CTA for Mobile */}
+      <div className={`fixed bottom-0 left-0 right-0 p-4 lg:hidden z-50 border-t backdrop-blur-xl transition-all duration-300 ${isDarkMode ? 'bg-[#0b101d]/90 border-slate-800' : 'bg-white/95 border-slate-200 shadow-[0_-4px_25px_-4px_rgba(0,0,0,0.1)]'
+        }`}>
+        <button
+          onClick={handleCheckout}
+          className="w-full bg-gradient-to-r from-blue-700 to-indigo-700 text-white py-3.5 rounded-xl text-sm font-bold shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+        >
+          Secure Your GST <span className="opacity-80 mx-1">•</span> ₹{finalPrice.toLocaleString()}
+          <ChevronRight size={18} />
+        </button>
+      </div>
     </div>
   );
 };

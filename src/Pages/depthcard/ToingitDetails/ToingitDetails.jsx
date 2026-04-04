@@ -183,6 +183,11 @@ const ToingitDetails = () => {
               Seamlessly integrate your restaurant with the Toingit ecosystem. Bypass high aggregator commissions and build direct relationships with your customers.
             </motion.p>
 
+            {/* Mobile Checkout Card Placement */}
+            <div className="w-full lg:hidden mb-12">
+              {renderCheckoutCard(true)}
+            </div>
+
             <div className="grid sm:grid-cols-3 gap-6 mb-16">
               {features.map((f, i) => (
                 <motion.div 
@@ -253,6 +258,18 @@ const ToingitDetails = () => {
       </div>
       
       <SiteFooter />
+
+      {/* Floating Bottom Bar CTA for Mobile */}
+      <div className={`fixed bottom-0 left-0 right-0 p-4 lg:hidden z-50 border-t backdrop-blur-xl transition-all duration-300 ${isDarkMode ? 'bg-[#0b101d]/90 border-slate-800' : 'bg-white/95 border-slate-200 shadow-[0_-4px_25px_-4px_rgba(0,0,0,0.1)]'
+        }`}>
+        <button
+          onClick={handleCheckout}
+          className="w-full bg-gradient-to-r from-pink-500 to-pink-600 text-white py-3.5 rounded-xl text-sm font-bold shadow-lg shadow-pink-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+        >
+          Scale Direct Orders <span className="opacity-80 mx-1">•</span> ₹{finalPrice.toLocaleString()}
+          <ChevronRight size={18} />
+        </button>
+      </div>
     </div>
   );
 };

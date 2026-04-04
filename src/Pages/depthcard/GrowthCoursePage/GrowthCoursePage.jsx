@@ -425,6 +425,12 @@ const GrowthCoursePage = () => {
                </div>
             </div>
 
+            {/* Mobile Checkout Card & Notice Placement */}
+            <div className="w-full lg:hidden mb-12">
+              {renderCheckoutCard(true)}
+              {renderLiveNotice(true)}
+            </div>
+
             <div className="space-y-16 lg:space-y-20">
 
               <section className="pt-2">

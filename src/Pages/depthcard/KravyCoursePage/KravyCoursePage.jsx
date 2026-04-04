@@ -138,6 +138,11 @@ const KravyCoursePage = () => {
               Kravy is a powerful, unified billing and restaurant management platform designed to help you scale from one outlet to a national franchise.
             </p>
 
+            {/* Mobile Checkout Card Placement */}
+            <div className="w-full lg:hidden mb-12">
+              {renderCheckoutCard(true)}
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-20">
               {[
                 { icon: FaChartBar, title: 'Smart Analytics', desc: 'Real-time sales reports, item-wise performance, and profit tracking.', color: 'emerald' },
@@ -214,6 +219,18 @@ const KravyCoursePage = () => {
         </div>
       </div>
       <SiteFooter />
+
+      {/* Floating Bottom Bar CTA for Mobile */}
+      <div className={`fixed bottom-0 left-0 right-0 p-4 lg:hidden z-50 border-t backdrop-blur-xl transition-all duration-300 ${isDarkMode ? 'bg-[#0b101d]/90 border-slate-800' : 'bg-white/95 border-slate-200 shadow-[0_-4px_25px_-4px_rgba(0,0,0,0.1)]'
+        }`}>
+        <button
+          onClick={handleCheckout}
+          className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white py-3.5 rounded-xl text-sm font-bold shadow-lg shadow-emerald-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+        >
+          Activate Kravy POS <span className="opacity-80 mx-1">•</span> ₹{finalPrice.toLocaleString()}
+          <ChevronRight size={18} />
+        </button>
+      </div>
     </div>
   );
 };

@@ -32,42 +32,42 @@ const Signup = () => {
       {/* Background shape */}
       <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-purple-200 dark:bg-purple-900 rounded-full blur-3xl opacity-50 dark:opacity-20 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-0"></div>
 
-      <div className="relative z-10 w-[90%] sm:w-full max-w-md bg-white dark:bg-gray-900 p-6 sm:p-10 rounded-xl shadow-xl dark:shadow-2xl border border-transparent dark:border-gray-800 mx-auto">
-        <h2 className="text-3xl font-bold text-center text-blue-800 dark:text-indigo-400 mb-6">Sign Up</h2>
+      <div className="relative z-10 w-[90%] sm:w-full max-w-md bg-white dark:bg-slate-900 p-6 sm:p-10 rounded-3xl shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-slate-800 mx-auto">
+        <h2 className="text-3xl font-black text-center text-blue-800 dark:text-blue-400 mb-6 font-logo tracking-tight">Sign Up</h2>
         <form onSubmit={handleSignup} className="space-y-4">
-          <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800">
-            <FaUser className="mr-3 text-gray-600 dark:text-gray-400" />
+          <div className="flex items-center border border-gray-200 dark:border-slate-700/50 rounded-xl p-3 bg-gray-50 dark:bg-slate-800/50 transition-colors">
+            <FaUser className="mr-3 text-gray-400 dark:text-gray-500" />
             <input
               type="text"
               placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full bg-transparent outline-none text-gray-800 dark:text-white"
+              className="w-full bg-transparent outline-none text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600"
             />
           </div>
 
-          <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800">
-            <FaEnvelope className="mr-3 text-gray-600 dark:text-gray-400" />
+          <div className="flex items-center border border-gray-200 dark:border-slate-700/50 rounded-xl p-3 bg-gray-50 dark:bg-slate-800/50 transition-colors">
+            <FaEnvelope className="mr-3 text-gray-400 dark:text-gray-500" />
             <input
               type="email"
               placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full bg-transparent outline-none text-gray-800 dark:text-white"
+              className="w-full bg-transparent outline-none text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600"
             />
           </div>
 
-          <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-800">
-            <FaLock className="mr-3 text-gray-600 dark:text-gray-400" />
+          <div className="flex items-center border border-gray-200 dark:border-slate-700/50 rounded-xl p-3 bg-gray-50 dark:bg-slate-800/50 transition-colors">
+            <FaLock className="mr-3 text-gray-400 dark:text-gray-500" />
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full bg-transparent outline-none text-gray-800 dark:text-white"
+              className="w-full bg-transparent outline-none text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-600"
             />
           </div>
 
@@ -75,7 +75,7 @@ const Signup = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-700 dark:bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-800 dark:hover:bg-blue-700 transition"
+            className="w-full bg-indigo-600 dark:bg-indigo-600 text-white py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 transition transform active:scale-[0.98]"
           >
             Create Account
           </button>
@@ -83,7 +83,7 @@ const Signup = () => {
 
         <p className="mt-4 text-sm text-center text-gray-600 dark:text-gray-400">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-700 dark:text-blue-400 hover:underline">Login</Link>
+          <Link to="/login" className="text-blue-700 dark:text-blue-400 hover:underline font-bold">Login</Link>
         </p>
       </div>
     </div>

@@ -66,30 +66,30 @@ const Login = () => {
         </div>
 
         {/* Right Section (Login) */}
-        <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center dark:bg-gray-900">
-          <h2 className="text-3xl font-bold text-blue-800 mb-6">Login</h2>
+        <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center dark:bg-[#0f172a]">
+          <h2 className="text-3xl font-bold text-blue-800 dark:text-blue-400 mb-6 font-logo">Login</h2>
           <form onSubmit={handleLogin} className="space-y-4">
-            <div className="flex items-center border border-gray-300 rounded-lg p-3 bg-gray-50">
-              <FaEnvelope className="mr-3 text-gray-600" />
+            <div className="flex items-center border border-gray-300 dark:border-slate-700 rounded-xl p-3 bg-gray-50 dark:bg-slate-800/50 transition-colors">
+              <FaEnvelope className="mr-3 text-gray-500 dark:text-gray-400" />
               <input
                 type="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-transparent outline-none text-gray-800"
+                className="w-full bg-transparent outline-none text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
               />
             </div>
 
-            <div className="flex items-center border border-gray-300 rounded-lg p-3 bg-gray-50">
-              <FaLock className="mr-3 text-gray-600" />
+            <div className="flex items-center border border-gray-300 dark:border-slate-700 rounded-xl p-3 bg-gray-50 dark:bg-slate-800/50 transition-colors">
+              <FaLock className="mr-3 text-gray-500 dark:text-gray-400" />
               <input
                 type="password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-transparent outline-none text-gray-800"
+                className="w-full bg-transparent outline-none text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
               />
             </div>
 
@@ -106,13 +106,13 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="mt-4 text-sm text-center text-gray-600">
-            <Link to="/forgot-password" className="text-blue-700 hover:underline">Forgot Password?</Link>
+          <p className="mt-4 text-sm text-center text-gray-600 dark:text-gray-400">
+            <Link to="/forgot-password" size="sm" className="text-blue-700 dark:text-blue-400 hover:underline font-bold">Forgot Password?</Link>
           </p>
 
-          <p className="mt-2 text-sm text-center text-gray-600">
+          <p className="mt-2 text-sm text-center text-gray-600 dark:text-gray-400">
             Don’t have an account?{' '}
-            <Link to="/signup" className="text-blue-700 hover:underline">Sign up here</Link>
+            <Link to="/signup" className="text-blue-700 dark:text-blue-400 hover:underline font-bold">Sign up here</Link>
           </p>
         </div>
       </div>

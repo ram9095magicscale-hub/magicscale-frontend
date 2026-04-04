@@ -199,6 +199,18 @@ const ComboCoursePage = () => {
         </div>
       </div>
       <SiteFooter />
+
+      {/* Floating Bottom Bar CTA for Mobile */}
+      <div className={`fixed bottom-0 left-0 right-0 p-4 lg:hidden z-50 border-t backdrop-blur-xl transition-all duration-300 ${isDarkMode ? 'bg-[#0b101d]/90 border-slate-800' : 'bg-white/95 border-slate-200 shadow-[0_-4px_25px_-4px_rgba(0,0,0,0.1)]'
+        }`}>
+        <button
+          onClick={handleCheckout}
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-500 text-white py-3.5 rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+        >
+          Launch Your Concept <span className="opacity-80 mx-1">•</span> ₹{finalPrice.toLocaleString()}
+          <ChevronRight size={18} />
+        </button>
+      </div>
     </div>
   );
 };

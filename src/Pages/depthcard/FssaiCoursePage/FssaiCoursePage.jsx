@@ -561,6 +561,12 @@ const FssaiTrackerCard = ({ isDarkMode }) => {
                </div>
             </div>
 
+            {/* Mobile Checkout Card & Notice Placement */}
+            <div className="w-full lg:hidden mb-12">
+              {renderCheckoutCard(true)}
+              {renderLiveNotice(true)}
+            </div>
+
             {/* Main Content Details */}
             <div className="space-y-16 lg:space-y-20">
 
