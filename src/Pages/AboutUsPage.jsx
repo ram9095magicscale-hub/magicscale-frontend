@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import Header from "../components/Header";
 import About from "../components/About";
-import Contact from "../components/Contact";
+import Team from "../components/Team";
+import Culture from "../components/Culture";
+import TeamGallery from "../components/TeamGallery";
 import FAQ from "../components/FAQ";
 import Footer from "../components/Footer";
 import { motion } from "framer-motion";
@@ -103,6 +105,15 @@ const AboutUsPage = () => {
             </div>
         </section>
 
+        {/* Our Team Section */}
+        <Team />
+
+        {/* Our Culture Section */}
+        <Culture />
+
+        {/* Life at MagicScale - Gallery */}
+        <TeamGallery />
+
         {/* Call to Action - Final Polish */}
         <section className="py-24 px-6 relative overflow-hidden">
             <div className="max-w-4xl mx-auto text-center border border-indigo-100 dark:border-indigo-900 bg-indigo-600 dark:bg-indigo-600 rounded-[3rem] p-12 md:p-20 shadow-2xl shadow-indigo-200 dark:shadow-none">
@@ -117,11 +128,6 @@ const AboutUsPage = () => {
         
         {/* FAQ Section */}
         <FAQ />
-
-        {/* Contact Section */}
-        <div className="bg-white dark:bg-slate-950 relative z-20">
-            <Contact />
-        </div>
       </main>
       <Footer />
     </div>
