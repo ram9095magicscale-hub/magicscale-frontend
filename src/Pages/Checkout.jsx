@@ -175,10 +175,7 @@ const SERVICE_THEMES = {
   }
 };
 
-// const API_BASE = import.meta.env.VITE_BACKEND_URL || "https://magicscale-backend.onrender.com";
 const API_BASE = API_URL;
-
-
 const discountMap = { 1: 0, 3: 25, 6: 30, 12: 40 };
 
 const Checkout = () => {
@@ -209,8 +206,6 @@ const Checkout = () => {
     }
   }, [user]);
 
-
-
   const getTheme = () => {
     const key = Object.keys(SERVICE_THEMES).find(k => id?.toLowerCase().includes(k)) || 'default';
     return SERVICE_THEMES[key];
@@ -224,9 +219,7 @@ const Checkout = () => {
 
   useEffect(() => {
     const fetchPlan = async () => {
-      // If we already have the plan, don't re-trigger loading
       if (plan && plan.id === id) return;
-
       setLoading(true);
       setError(null);
 
@@ -238,24 +231,16 @@ const Checkout = () => {
 
       try {
         if (!id) throw new Error("Invalid plan ID");
-
         let data = null;
         try {
-          // ⚡ Faster fetching logic
           const res = await fetch(`${API_BASE}/plan/${id}`);
-          if (res.ok) {
-            data = await res.json();
-          } else {
-            console.warn(`Plan fetch failed with status: ${res.status}. Falling back to URL parameters.`);
-          }
+          if (res.ok) data = await res.json();
         } catch (fetchErr) {
           console.error("Backend fetch error:", fetchErr.message);
         }
 
-        // If no data from backend, try fallback to "Virtual Plan" from URL
         if (!data) {
           if (queryBasePrice || queryFinalPrice || queryPlanName) {
-            console.log(`-> Using URL parameter fallbacks for plan: ${id}`);
             data = {
               id: id,
               slug: id,
@@ -265,44 +250,32 @@ const Checkout = () => {
               isVirtual: true
             };
           } else {
-            throw new Error("Could not find plan data in backend or URL parameters.");
+            throw new Error("Could not find plan data.");
           }
         }
 
-        // Apply price overrides for one-time payments if provided in URL
         let effectiveBasePrice = null;
-        if (queryBasePrice) {
-          effectiveBasePrice = parseInt(queryBasePrice, 10);
-        } else if (queryFinalPrice && !queryDiscountApplied) {
-          effectiveBasePrice = parseInt(queryFinalPrice, 10);
-        }
+        if (queryBasePrice) effectiveBasePrice = parseInt(queryBasePrice, 10);
+        else if (queryFinalPrice && !queryDiscountApplied) effectiveBasePrice = parseInt(queryFinalPrice, 10);
 
-        if (effectiveBasePrice && isOneTime) {
-          data.price = effectiveBasePrice;
-          console.log(`-> Applied URL price override: ${data.price}`);
-        }
-
+        if (effectiveBasePrice && isOneTime) data.price = effectiveBasePrice;
         if (queryPlanName) data.name = queryPlanName;
         if (queryFeatures) data.features = queryFeatures.split(',');
 
         setPlan(data);
       } catch (err) {
-        setError("Could not load plan data: " + err.message);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchPlan();
-  }, [id, location.search]); // 👈 Refined dependencies
-
+  }, [id, location.search]);
 
   useEffect(() => {
     const initCashfree = async () => {
       try {
-        const cf = await load({
-          mode: "production" // standard for your live setup
-        });
+        const cf = await load({ mode: "production" });
         setCashfree(cf);
       } catch (err) {
         console.error("Failed to load Cashfree SDK:", err);
@@ -315,32 +288,24 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-
-
   const calculateTotal = () => {
     if (!plan) return 0;
     const basePrice = isOneTime ? plan.price * quantity : plan.price * duration;
     const durationDiscount = isOneTime ? 0 : (discountMap[duration] || 0);
     let total = basePrice * (1 - durationDiscount / 100);
-
-
     return Math.max(0, Math.round(total));
   };
 
   const handleCashfreePayment = async () => {
     if (!cashfree || !formData.name || !formData.email || !formData.phone) {
-      alert("Please fill all required fields and wait for the payment gateway to load.");
+      alert("Please fill all required fields.");
       return;
     }
 
     const totalPrice = calculateTotal();
     setLoading(true);
     try {
-      // 1. Create order on backend (Cashfree)
-      const apiEndpoint = `${API_BASE}/cashfree/initiate-payment`;
-      console.log("🚀 Initiating payment at:", apiEndpoint);
-
-      const res = await fetch(apiEndpoint, {
+      const res = await fetch(`${API_BASE}/cashfree/initiate-payment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -355,18 +320,8 @@ const Checkout = () => {
       });
 
       const orderData = await res.json();
-      if (!res.ok || !orderData.payment_session_id) {
-        console.error("❌ Backend Error:", orderData);
-        throw new Error(orderData.message || `Server responded with status ${res.status}`);
-      }
+      if (!res.ok || !orderData.payment_session_id) throw new Error(orderData.message || "Server error");
 
-      // 2. Open Cashfree Checkout
-      const checkoutOptions = {
-        paymentSessionId: orderData.payment_session_id,
-        redirectTarget: "_self", // Redirect back after payment
-      };
-
-      // Optional: Store order info for success page cleanup
       localStorage.setItem("checkout_order", JSON.stringify({
         name: formData.name,
         email: formData.email,
@@ -378,11 +333,13 @@ const Checkout = () => {
         duration: isOneTime ? 1 : duration
       }));
 
-      await cashfree.checkout(checkoutOptions);
+      await cashfree.checkout({
+        paymentSessionId: orderData.payment_session_id,
+        redirectTarget: "_self",
+      });
       
     } catch (err) {
-      console.error("💥 Payment initiation failed:", err);
-      alert(`Payment initiation failed: ${err.message}\n\nPlease check your internet connection or try again later.`);
+      alert(`Payment failed: ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -392,7 +349,7 @@ const Checkout = () => {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6">
       <div className="bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-2xl text-center max-w-md border border-red-100 dark:border-red-900/30">
         <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Oops! Something went wrong</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Oops!</h2>
         <p className="text-slate-600 dark:text-slate-400 mb-6">{error}</p>
         <button onClick={() => navigate(-1)} className={`px-6 py-3 text-white rounded-xl font-bold transition-all ${theme.errorBtn}`}>Go Back</button>
       </div>
@@ -403,7 +360,7 @@ const Checkout = () => {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className={`w-12 h-12 animate-spin ${theme.loader}`} />
-        <p className="text-slate-500 font-medium animate-pulse">Preparing your checkout...</p>
+        <p className="text-slate-500 font-medium animate-pulse">Preparing checkout...</p>
       </div>
     </div>
   );
@@ -413,15 +370,12 @@ const Checkout = () => {
 
   return (
     <div className={`min-h-screen pt-28 pb-12 px-4 sm:px-6 lg:px-8 font-poppins transition-all duration-500 ${theme.bgGradient}`}>
-
-      {/* Background Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className={`absolute -top-[10%] -right-[10%] w-[40%] h-[40%] rounded-full blur-[120px] opacity-20 ${theme.orb}`}></div>
         <div className={`absolute -bottom-[10%] -left-[10%] w-[40%] h-[40%] rounded-full blur-[120px] opacity-20 ${theme.orb2}`}></div>
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-10">
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -441,229 +395,196 @@ const Checkout = () => {
           </motion.h1>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-6 items-start">
-          {/* Left: Form & features */}
-          <div className="lg:col-span-7 space-y-6">
-            {/* Contact Details Card */}
-              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl p-7 rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-800/50">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className={`p-2.5 rounded-2xl ${theme.accentBg} ${theme.accent} dark:bg-slate-800 shadow-sm`}>
-                    <User size={22} />
+        <div className="grid lg:grid-cols-12 gap-8 items-start">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="lg:col-span-7 space-y-6"
+          >
+            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl p-7 rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-800/50">
+              <div className="flex items-center gap-3 mb-8">
+                <div className={`p-2.5 rounded-2xl ${theme.accentBg} ${theme.accent} dark:bg-slate-800 shadow-sm`}>
+                  <User size={22} />
+                </div>
+                <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Business Information</h2>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[12px] font-black text-slate-900 dark:text-slate-300 ml-1 uppercase tracking-widest opacity-70">Full Name</label>
+                  <div className="relative group">
+                    <User className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={18} />
+                    <input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="John Doe"
+                      className={`w-full pl-12 pr-4 py-3.5 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-2xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm font-semibold`}
+                      required
+                    />
                   </div>
-                  <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Business Information</h2>
                 </div>
 
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[12px] font-black text-slate-900 dark:text-slate-300 ml-1 uppercase tracking-widest opacity-70">Full Name</label>
-                    <div className="relative group">
-                      <User className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={18} />
-                      <input
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="John Doe"
-                        className={`w-full pl-12 pr-4 py-3.5 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-2xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm font-semibold`}
-                        required
-                      />
-                    </div>
+                <div className="space-y-2">
+                  <label className="text-[12px] font-black text-slate-900 dark:text-slate-300 ml-1 uppercase tracking-widest opacity-70">Email Address</label>
+                  <div className="relative group">
+                    <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={18} />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="john@example.com"
+                      className={`w-full pl-12 pr-4 py-3.5 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-2xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm font-semibold`}
+                      required
+                    />
                   </div>
+                </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[12px] font-black text-slate-900 dark:text-slate-300 ml-1 uppercase tracking-widest opacity-70">Email Address</label>
-                    <div className="relative group">
-                      <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={18} />
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="john@example.com"
-                        className={`w-full pl-12 pr-4 py-3.5 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-2xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm font-semibold`}
-                        required
-                      />
-                    </div>
+                <div className="space-y-2">
+                  <label className="text-[12px] font-black text-slate-900 dark:text-slate-300 ml-1 uppercase tracking-widest opacity-70">Phone Number</label>
+                  <div className="relative group">
+                    <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={18} />
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="+91 98765 43210"
+                      className={`w-full pl-12 pr-4 py-3.5 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-2xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm font-semibold`}
+                      required
+                    />
                   </div>
+                </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[12px] font-black text-slate-900 dark:text-slate-300 ml-1 uppercase tracking-widest opacity-70">Phone Number</label>
-                    <div className="relative group">
-                      <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={18} />
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder="+91 98765 43210"
-                        className={`w-full pl-12 pr-4 py-3.5 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-2xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm font-semibold`}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-[12px] font-black text-slate-900 dark:text-slate-300 ml-1 uppercase tracking-widest opacity-70">Business Address</label>
-                    <div className="relative group">
-                      <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={18} />
-                      <input
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        placeholder="Street, City, Zip"
-                        className={`w-full pl-12 pr-4 py-3.5 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-2xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm font-semibold`}
-                      />
-                    </div>
+                <div className="space-y-2">
+                  <label className="text-[12px] font-black text-slate-900 dark:text-slate-300 ml-1 uppercase tracking-widest opacity-70">Business Address</label>
+                  <div className="relative group">
+                    <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={18} />
+                    <input
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      placeholder="Street, City, Zip"
+                      className={`w-full pl-12 pr-4 py-3.5 bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-2xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm font-semibold`}
+                    />
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Plan Configuration */}
-              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl p-7 rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-800/50">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className={`p-2.5 rounded-2xl ${theme.accentBg} ${theme.accent} dark:bg-slate-800 shadow-sm`}>
-                    <Icon size={22} />
+            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl p-7 rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-800/50">
+              <div className="flex items-center gap-3 mb-8">
+                <div className={`p-2.5 rounded-2xl ${theme.accentBg} ${theme.accent} dark:bg-slate-800 shadow-sm`}>
+                  <Icon size={22} />
+                </div>
+                <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Plan Features</h2>
+              </div>
+
+              <div className="space-y-6">
+                <div className="p-6 rounded-3xl bg-slate-50/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 group">
+                  <h3 className="text-[13px] font-black text-slate-900 dark:text-white mb-5 uppercase tracking-widest opacity-60">What's included in {plan.name}:</h3>
+                  <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
+                    {plan.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-start gap-3 group/item">
+                        <div className={`mt-0.5 p-0.5 rounded-full ${theme.accentBg} bg-opacity-20`}>
+                          <CheckCircle2 className={`w-4 h-4 shrink-0 ${theme.check}`} />
+                        </div>
+                        <span className="text-sm text-slate-700 dark:text-slate-300 font-bold leading-snug group-hover/item:text-slate-900 dark:group-hover/item:text-white transition-colors">{feature}</span>
+                      </div>
+                    ))}
                   </div>
-                  <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Plan Features</h2>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="p-6 rounded-3xl bg-slate-50/50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 group">
-                    <h3 className="text-[13px] font-black text-slate-900 dark:text-white mb-5 uppercase tracking-widest opacity-60">What's included in {plan.name}:</h3>
-                    <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
-                      {plan.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-start gap-3 group/item">
-                          <div className={`mt-0.5 p-0.5 rounded-full ${theme.accentBg} bg-opacity-20`}>
-                            <CheckCircle2 className={`w-4 h-4 shrink-0 ${theme.check}`} />
-                          </div>
-                          <span className="text-sm text-slate-700 dark:text-slate-300 font-bold leading-snug group-hover/item:text-slate-900 dark:group-hover/item:text-white transition-colors">{feature}</span>
-                        </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900/30 flex items-center gap-3 transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-900/30">
+                    <ShieldCheck className="text-emerald-600" size={20} />
+                    <span className="text-[11px] font-black text-emerald-800 dark:text-emerald-400 uppercase tracking-widest leading-none">Money Back Guarantee</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 flex items-center gap-3 transition-colors hover:bg-blue-50 dark:hover:bg-blue-900/30">
+                    <Zap className="text-blue-600" size={20} />
+                    <span className="text-[11px] font-black text-blue-800 dark:text-blue-400 uppercase tracking-widest leading-none">Instant Activation</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="lg:col-span-5 h-full"
+          >
+            <div className="sticky top-28 space-y-6 flex flex-col">
+              <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl p-7 rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-800/50 overflow-hidden relative flex flex-col flex-1">
+                <div className={`absolute top-0 right-0 w-32 h-32 blur-[80px] opacity-10 rounded-full translate-x-1/2 -translate-y-1/2 ${theme.orb}`}></div>
+
+                <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100 dark:border-slate-800/50">
+                  <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Order Summary</h2>
+                  {!isOneTime && (
+                    <div className="flex gap-1 p-1 bg-slate-100/50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
+                      {[1, 3, 6, 12].map((m) => (
+                        <button
+                          key={m}
+                          onClick={() => setDuration(m)}
+                          className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${duration === m ? theme.activeBtn : "text-slate-500"}`}
+                        >
+                          {m}M
+                        </button>
                       ))}
                     </div>
+                  )}
+                </div>
+
+                <div className="space-y-6 mb-10">
+                  <div className="flex justify-between items-start gap-4">
+                    <div className="max-w-[70%]">
+                      <p className="font-black text-slate-900 dark:text-white text-lg leading-tight tracking-tight">{plan.name}</p>
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <Tag size={12} className="text-slate-400" />
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest">
+                          {isOneTime ? "One-time Onboarding" : `${duration} Month Subscription`}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="font-black text-slate-900 dark:text-white text-lg">₹{plan.price.toLocaleString()}</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900/30 flex items-center gap-3 transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-900/30">
-                      <ShieldCheck className="text-emerald-600" size={20} />
-                      <span className="text-[11px] font-black text-emerald-800 dark:text-emerald-400 uppercase tracking-widest leading-none">Money Back Guarantee</span>
-                    </div>
-                    <div className="p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 flex items-center gap-3 transition-colors hover:bg-blue-50 dark:hover:bg-blue-900/30">
-                      <Zap className="text-blue-600" size={20} />
-                      <span className="text-[11px] font-black text-blue-800 dark:text-blue-400 uppercase tracking-widest leading-none">Instant Activation</span>
+                  <div className="pt-6 border-t border-slate-100 dark:border-slate-800/50 space-y-4">
+                    <div className="flex justify-between items-center">
+                      <p className="text-slate-500 dark:text-slate-400 font-black uppercase tracking-[0.2em] text-[10px]">Total Amount</p>
+                      <div className="text-right">
+                        <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">₹{totalPrice.toLocaleString()}</p>
+                        <p className="text-[9px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest mt-1">Inclusive of all taxes</p>
+                      </div>
                     </div>
                   </div>
+                </div>
+
+                <div className="mt-auto space-y-4">
+                  <button
+                    onClick={handleCashfreePayment}
+                    disabled={!isFormFilled || loading || !cashfree}
+                    className={`w-full py-5 rounded-2xl font-black text-white text-lg shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98] ${isFormFilled && !loading && cashfree ? `bg-gradient-to-r ${theme.payBtn}` : "bg-slate-200 dark:bg-slate-800 cursor-not-allowed text-slate-400"}`}
+                  >
+                    {loading ? <Loader2 className="animate-spin" size={22} /> : <>Pay ₹{totalPrice.toLocaleString()} <ArrowRight size={22} /></>}
+                  </button>
+                  <p className="text-[10px] text-center text-slate-400 font-black uppercase tracking-widest">Secure SSL Protected Transaction</p>
+                </div>
+              </div>
+
+              <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-md p-4 rounded-3xl border border-white dark:border-slate-800 flex items-center gap-4 transition-colors hover:bg-white/80">
+                <div className={`w-11 h-11 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center ${theme.supportIcon} shadow-sm border border-slate-100`}>
+                  <ShoppingCart size={20} />
+                </div>
+                <div>
+                  <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Need Help?</p>
+                  <p className="text-[10px] text-slate-500 dark:text-gray-400 font-bold mt-1.5">Email: support@magicscale.in</p>
                 </div>
               </div>
             </div>
-
-            {/* Right: Order Summary */}
-            <div className="lg:col-span-5 h-full">
-              <div className="sticky top-28 space-y-6 flex flex-col">
-                <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl p-7 rounded-[2.5rem] shadow-2xl border border-white dark:border-slate-800/50 overflow-hidden relative flex flex-col flex-1">
-                  {/* Decorative Background Element */}
-                  <div className={`absolute top-0 right-0 w-32 h-32 blur-[80px] opacity-10 rounded-full translate-x-1/2 -translate-y-1/2 ${theme.orb}`}></div>
-
-                  <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100 dark:border-slate-800/50">
-                    <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Order Summary</h2>
-                    
-                    {!isOneTime && (
-                      <div className="flex gap-1 p-1 bg-slate-100/50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
-                        {[1, 3, 6, 12].map((m) => (
-                          <button
-                            key={m}
-                            onClick={() => setDuration(m)}
-                            className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${duration === m
-                              ? theme.activeBtn
-                              : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
-                              }`}
-                          >
-                            {m}M
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-6 mb-10">
-                    <div className="flex justify-between items-start gap-4">
-                      <div className="max-w-[70%]">
-                        <p className="font-black text-slate-900 dark:text-white text-lg leading-tight tracking-tight">{plan.name}</p>
-                        <div className="flex items-center gap-1.5 mt-1.5">
-                          <Tag size={12} className="text-slate-400" />
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400 font-black uppercase tracking-widest">
-                            {isOneTime
-                              ? (quantity > 1 ? `${quantity}x One-time Onboarding` : "One-time Onboarding")
-                              : `${duration} Month Subscription`}
-                          </p>
-                        </div>
-                      </div>
-                      <p className="font-black text-slate-900 dark:text-white text-lg">₹{plan.price.toLocaleString()}</p>
-                    </div>
-
-                    {!isOneTime && (
-                      <div className="flex justify-between items-center text-sm p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-900/10 border border-emerald-100/50 dark:border-emerald-900/20">
-                        <p className="text-emerald-700 dark:text-emerald-400 font-bold">Duration Discount ({discountMap[duration]}%)</p>
-                        <p className="text-emerald-600 font-black">-₹{Math.round((plan.price * duration * (discountMap[duration] / 100))).toLocaleString()}</p>
-                      </div>
-                    )}
-
-                    <div className="pt-6 border-t border-slate-100 dark:border-slate-800/50 space-y-4">
-                      <div className="flex justify-between items-center">
-                        <p className="text-slate-500 dark:text-slate-400 font-black uppercase tracking-[0.2em] text-[10px]">Total Amount</p>
-                        <div className="text-right">
-                          <p className="text-4xl font-black text-slate-900 dark:text-white tracking-tighter">₹{totalPrice.toLocaleString()}</p>
-                          <p className="text-[9px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-widest mt-1">Inclusive of all taxes</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto space-y-4">
-                    <button
-                      onClick={handleCashfreePayment}
-                      disabled={!isFormFilled || loading || !cashfree}
-                      className={`w-full py-5 rounded-2xl font-black text-white text-lg shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98] ${isFormFilled && !loading && cashfree
-                        ? `bg-gradient-to-r ${theme.payBtn} hover:shadow-xl`
-                        : "bg-slate-200 dark:bg-slate-800 cursor-not-allowed text-slate-400"
-                        }`}
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="animate-spin" size={22} />
-                          Processing...
-                        </>
-                      ) : (
-                        <>
-                          Pay ₹{totalPrice.toLocaleString()}
-                          <ArrowRight size={22} />
-                        </>
-                      )}
-                    </button>
-
-                    <div className="flex items-center justify-center gap-2 py-2">
-                       <ShieldCheck className="text-slate-400" size={14} />
-                       <p className="text-[10px] text-center text-slate-400 font-black uppercase tracking-widest">
-                        Secure SSL Protected Transaction
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Support Info */}
-                <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-md p-4 rounded-3xl border border-white dark:border-slate-800 flex items-center gap-4 transition-colors hover:bg-white/80 dark:hover:bg-slate-900/80">
-                  <div className={`w-11 h-11 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center ${theme.supportIcon} shadow-sm border border-slate-100 dark:border-slate-700`}>
-                    <ShoppingCart size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none">Need Help?</p>
-                    <p className="text-[10px] text-slate-500 dark:text-gray-400 font-bold mt-1.5">Email: support@magicscale.in</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+          </motion.div>
         </div>
       </div>
     </div>
