@@ -349,7 +349,8 @@ const Checkout = () => {
           email: formData.email,
           phone: formData.phone,
           planId: id,
-          customerId: user?._id || `guest_${Date.now()}`
+          customerId: user?._id || `guest_${Date.now()}`,
+          return_url: `${window.location.origin}/payment-success?order_id={order_id}`
         }),
       });
 
@@ -372,7 +373,9 @@ const Checkout = () => {
         phone: formData.phone,
         planSlug: plan.slug || id,
         total: totalPrice,
-        order_id: orderData.order_id
+        order_id: orderData.order_id,
+        userId: user?._id || `guest_${Date.now()}`,
+        duration: isOneTime ? 1 : duration
       }));
 
       await cashfree.checkout(checkoutOptions);

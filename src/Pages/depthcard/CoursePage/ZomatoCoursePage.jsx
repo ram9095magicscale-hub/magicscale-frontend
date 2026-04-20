@@ -348,6 +348,7 @@ const ZomatoOnboardingCourse = () => {
           </div>
 
         </div>
+      </div>
       <SiteFooter />
 
       {/* Floating Bottom Bar CTA for Mobile */}
@@ -362,7 +363,6 @@ const ZomatoOnboardingCourse = () => {
         </button>
       </div>
     </div>
-  </div>
 );
 };
 

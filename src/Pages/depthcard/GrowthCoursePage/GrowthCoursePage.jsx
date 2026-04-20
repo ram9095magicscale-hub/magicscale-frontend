@@ -505,6 +505,7 @@ const GrowthCoursePage = () => {
           </div>
 
         </div>
+      </div>
       <SiteFooter />
 
       <div className={`fixed bottom-0 left-0 right-0 p-4 lg:hidden z-50 border-t backdrop-blur-xl transition-all duration-300 ${isDarkMode ? 'bg-[#0b101d]/90 border-slate-800' : 'bg-white/95 border-slate-200 shadow-[0_-4px_25px_-4px_rgba(0,0,0,0.1)]'
@@ -518,7 +519,6 @@ const GrowthCoursePage = () => {
         </button>
       </div>
     </div>
-  </div>
 );
 };
 
