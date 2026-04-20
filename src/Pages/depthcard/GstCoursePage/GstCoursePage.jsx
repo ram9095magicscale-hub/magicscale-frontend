@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import bannerImg from '../../../assets/Emblem_of_India.svg';
-import { FaFileInvoice, FaDownload, FaHistory, FaCheckCircle, FaWhatsapp, FaArrowUp, FaGavel, FaEdit, FaShieldAlt, FaCalendarCheck, FaTag } from 'react-icons/fa';
+import { FaFileInvoice, FaDownload, FaHistory, FaCheckCircle, FaWhatsapp, FaArrowUp, FaGavel, FaEdit, FaShieldAlt, FaCalendarCheck } from 'react-icons/fa';
 import { useTheme } from '../../../components/context/ThemeContext';
 import SiteFooter from '../FssaiCoursePage/SiteFooter';
 import { CheckCircle2, ChevronRight, Star, ShieldCheck, ChevronDown, ChevronUp, X, FileText, Info } from 'lucide-react';
@@ -23,10 +23,6 @@ const plansList = [
   },
 ];
 
-const availableCoupons = [
-  { code: 'MAGICGST', discount: 15, description: '15% off on your first registration!' },
-  { code: 'FIRSTFILE', discount: null, flatDiscount: 200, description: 'Flat ₹200 off your first filling.' },
-];
 
 const notices = [
   { text: "GST Portal Update: Aadhaar authentication mandatory for all new registrations.", date: "Today" },
@@ -47,9 +43,7 @@ const GstCoursePage = () => {
   const { isDarkMode } = useTheme();
 
   const [selectedPlan, setSelectedPlan] = useState(plansList[0]);
-  const [couponCode, setCouponCode] = useState('');
-  const [discountApplied, setDiscountApplied] = useState(false);
-  const [appliedCouponInfo, setAppliedCouponInfo] = useState(null);
+
   const [finalPrice, setFinalPrice] = useState(plansList[0].price);
   const [isNoticePaused, setIsNoticePaused] = useState(false);
   const [expandedFaqIndex, setExpandedFaqIndex] = useState(null);
@@ -61,28 +55,13 @@ const GstCoursePage = () => {
   }, []);
 
   useEffect(() => {
-    let basePrice = selectedPlan.price;
-    if (discountApplied && appliedCouponInfo) {
-      if (appliedCouponInfo.discount) {
-        basePrice = basePrice * (1 - appliedCouponInfo.discount / 100);
-      } else if (appliedCouponInfo.flatDiscount) {
-        basePrice = basePrice - appliedCouponInfo.flatDiscount;
-      }
-    }
-    setFinalPrice(Math.max(0, Math.round(basePrice)));
-  }, [selectedPlan, discountApplied, appliedCouponInfo]);
+    setFinalPrice(Math.max(0, Math.round(selectedPlan.price)));
+  }, [selectedPlan]);
 
-  const handleCouponApply = () => {
-    const couponToApply = availableCoupons.find(coupon => coupon.code.toUpperCase() === couponCode.trim().toUpperCase());
-    if (couponToApply) {
-      setDiscountApplied(true);
-      setAppliedCouponInfo(couponToApply);
-    }
-  };
 
   const handleCheckout = () => {
     const featuresString = selectedPlan.features.join(',');
-    navigate(`/checkout/${selectedPlan.slug}?finalPrice=${finalPrice}&basePrice=${selectedPlan.price}&discountApplied=${discountApplied}&couponCode=${appliedCouponInfo ? appliedCouponInfo.code : ''}&planName=${encodeURIComponent(selectedPlan.label)}&planFeatures=${encodeURIComponent(featuresString)}`);
+    navigate(`/checkout/${selectedPlan.slug}?finalPrice=${finalPrice}&basePrice=${selectedPlan.price}&planName=${encodeURIComponent(selectedPlan.label)}&planFeatures=${encodeURIComponent(featuresString)}`);
   };
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import swiggyImg from '../../../assets/zomato_hero_art_generated.png';
-import { FaTv, FaDownload, FaSatelliteDish, FaSmile, FaTag } from 'react-icons/fa';
+import { FaTv, FaDownload, FaSatelliteDish, FaSmile } from 'react-icons/fa';
 import { useTheme } from '../../../components/context/ThemeContext';
 import SwiggyFAQ from './SwiggyFAQ';
 import SwiggyWhatYouGet from './SwiggyWhatYouGet';
@@ -45,17 +45,10 @@ const SwiggyOnboardingCourse = () => {
     { text: "Instamart cross-promotional opportunities now available for select vendors.", date: "2026-03-10", link: "https://partner.swiggy.com/login" }
   ];
 
-  const availableCoupons = [
-    { code: 'MAGIC20', discount: 20, description: 'Get 20% off on your total purchase!' },
-    { code: 'SWIGGY100', discount: null, flatDiscount: 100, description: 'Get ₹100 off on any plan!' },
-    { code: 'NEWUSER50', discount: null, flatDiscount: 50, description: '₹50 off for new users!' },
-  ];
+
 
   const [selectedPlan, setSelectedPlan] = useState('planA'); // Default to the first plan (Onboarding)
   const currentPlan = plans[selectedPlan];
-  const [couponCode, setCouponCode] = useState('');
-  const [discountApplied, setDiscountApplied] = useState(false);
-  const [appliedCouponInfo, setAppliedCouponInfo] = useState(null);
   const [finalPrice, setFinalPrice] = useState(currentPlan.price);
 
   const mainContentRef = useRef(null);
@@ -66,46 +59,14 @@ const SwiggyOnboardingCourse = () => {
   }, []);
 
   useEffect(() => {
-    let price = currentPlan.price;
-    if (discountApplied && appliedCouponInfo) {
-      if (appliedCouponInfo.discount) {
-        price = price * (1 - appliedCouponInfo.discount / 100);
-      } else if (appliedCouponInfo.flatDiscount) {
-        price = price - appliedCouponInfo.flatDiscount;
-      }
-    }
-    setFinalPrice(Math.max(0, Math.round(price)));
-  }, [selectedPlan, discountApplied, currentPlan.price, appliedCouponInfo]);
+    setFinalPrice(Math.max(0, Math.round(currentPlan.price)));
+  }, [selectedPlan, currentPlan.price]);
 
-  const handleCouponApply = () => {
-    const couponToApply = availableCoupons.find(coupon => coupon.code.toUpperCase() === couponCode.trim().toUpperCase());
-    if (couponToApply) {
-      setDiscountApplied(true);
-      setAppliedCouponInfo(couponToApply);
-      alert(`Coupon "${couponToApply.code}" applied! ${couponToApply.description}`);
-    } else {
-      setDiscountApplied(false);
-      setAppliedCouponInfo(null);
-      alert('Invalid coupon code. Please try again.');
-    }
-  };
 
-  const handleCouponSelect = (coupon) => {
-    setCouponCode(coupon.code);
-    setDiscountApplied(true);
-    setAppliedCouponInfo(coupon);
-    alert(`Coupon "${coupon.code}" applied! ${coupon.description}`);
-  };
-
-  const handleRemoveCoupon = () => {
-    setCouponCode('');
-    setDiscountApplied(false);
-    setAppliedCouponInfo(null);
-  };
 
   const handleCheckout = () => {
     const featuresString = currentPlan.features.join(',');
-    navigate(`/checkout/${currentPlan.slug}?finalPrice=${finalPrice}&basePrice=${currentPlan.price}&discountApplied=${discountApplied}&couponCode=${appliedCouponInfo ? appliedCouponInfo.code : ''}&planName=${encodeURIComponent(currentPlan.name)}&planFeatures=${encodeURIComponent(featuresString)}`);
+    navigate(`/checkout/${currentPlan.slug}?finalPrice=${finalPrice}&basePrice=${currentPlan.price}&planName=${encodeURIComponent(currentPlan.name)}&planFeatures=${encodeURIComponent(featuresString)}`);
   };
 
 
@@ -178,17 +139,7 @@ const SwiggyOnboardingCourse = () => {
             <h2 className={`text-2xl sm:text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`} id="plans">
               ₹{finalPrice.toLocaleString()}
             </h2>
-            {discountApplied && (
-              <span className={`text-sm sm:text-base font-bold line-through ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                ₹{currentPlan.price.toLocaleString()}
-              </span>
-            )}
           </div>
-          {discountApplied && appliedCouponInfo && (
-            <p className="text-emerald-500 font-bold text-[10px] sm:text-[11px] mb-1">
-              {appliedCouponInfo.discount ? `Save ${appliedCouponInfo.discount}%` : `Save ₹${appliedCouponInfo.flatDiscount}`} with {appliedCouponInfo.code}!
-            </p>
-          )}
           <p className={`text-xs mt-1 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'} leading-relaxed font-medium line-clamp-2`}>
             {currentPlan.description}
           </p>
@@ -201,7 +152,6 @@ const SwiggyOnboardingCourse = () => {
               key={key}
               onClick={() => {
                 setSelectedPlan(key);
-                handleRemoveCoupon();
               }}
               className={`flex-1 py-2 px-1 text-center text-[11px] sm:text-xs font-bold rounded-lg transition-all duration-300 uppercase tracking-wide
               ${selectedPlan === key
@@ -238,55 +188,7 @@ const SwiggyOnboardingCourse = () => {
           </p>
         </div>
 
-        {/* Coupon - Built-in functionality */}
-        <div className={`mt-4 pt-4 border-t ${isDarkMode ? 'border-slate-700/50' : 'border-slate-200'}`}>
-          <label htmlFor={`coupon-input-${isMobile ? 'm' : 'd'}`} className={`text-[10px] font-bold uppercase tracking-widest block mb-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-            Have a Coupon?
-          </label>
-          <div className="flex gap-2">
-            <input
-              id={`coupon-input-${isMobile ? 'm' : 'd'}`}
-              type="text"
-              placeholder="Enter code"
-              value={couponCode}
-              onChange={(e) => setCouponCode(e.target.value)}
-              disabled={discountApplied}
-              className={`flex-1 min-w-0 border px-3 py-2 rounded-lg text-xs font-bold transition-colors shadow-inner uppercase ${isDarkMode
-                ? 'bg-[#0b101d] border-slate-700 text-white placeholder-slate-500 focus:border-orange-500 outline-none disabled:opacity-50'
-                : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-orange-500 outline-none disabled:opacity-50'
-                }`}
-            />
-            {discountApplied ? (
-              <button onClick={handleRemoveCoupon} className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm bg-red-500/10 text-red-500 hover:bg-red-500/20`}>
-                Remove
-              </button>
-            ) : (
-              <button onClick={handleCouponApply} className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm ${isDarkMode ? 'bg-orange-600 text-white hover:bg-orange-500' : 'bg-orange-600 text-white hover:bg-orange-700'
-                }`}>
-                Apply
-              </button>
-            )}
-          </div>
 
-          {/* Available Coupons List */}
-          {!discountApplied && (
-            <div className="mt-3 space-y-1.5 max-h-24 overflow-y-auto pr-1">
-              {availableCoupons.map((coupon, idx) => (
-                <div key={idx} onClick={() => handleCouponSelect(coupon)} className={`group flex items-center justify-between py-1.5 px-2.5 rounded-md border cursor-pointer transition-all ${isDarkMode ? 'bg-[#0f172a]/50 border-slate-700 hover:border-orange-500/50' : 'bg-slate-50 border-slate-200 hover:border-orange-300 hover:shadow-sm'
-                  }`}>
-                  <div className="flex items-center gap-2 overflow-hidden">
-                    <FaTag className="text-orange-500 shrink-0 text-xs opacity-80 group-hover:opacity-100 transition-opacity" />
-                    <div className="min-w-0">
-                      <p className={`text-[10px] font-black tracking-wide uppercase truncate ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{coupon.code}</p>
-                      <p className={`text-[9px] font-medium leading-none mt-0.5 truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{coupon.description}</p>
-                    </div>
-                  </div>
-                  <button className="text-[9px] font-bold text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wider pl-2 shrink-0">Apply</button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
@@ -446,8 +348,6 @@ const SwiggyOnboardingCourse = () => {
           </div>
 
         </div>
-      </div>
-
       <SiteFooter />
 
       {/* Floating Bottom Bar CTA for Mobile */}
@@ -462,7 +362,8 @@ const SwiggyOnboardingCourse = () => {
         </button>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default SwiggyOnboardingCourse;

@@ -25,6 +25,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { API_URL } from "../services/api";
 import { useAuth } from "../components/context/AuthContext/useAuth";
+import { load } from "@cashfreepayments/cashfree-js";
 
 
 const SERVICE_THEMES = {
@@ -179,16 +180,6 @@ const API_BASE = API_URL;
 
 
 const discountMap = { 1: 0, 3: 25, 6: 30, 12: 40 };
-const validCoupons = {
-  SAVE10: { type: "percent", value: 10 },
-  SAVE15: { type: "percent", value: 15 },
-  SAVE20: { type: "percent", value: 20 },
-  MAGIC20: { type: "percent", value: 20 },
-  SWIGGY100: { type: "flat", value: 100 },
-  NEWUSER50: { type: "flat", value: 50 },
-};
-
-const disabledCouponPlans = ["basic-growth", "premium-growth"];
 
 const Checkout = () => {
   const { id } = useParams();
@@ -200,15 +191,12 @@ const Checkout = () => {
 
   const [plan, setPlan] = useState(null);
   const [error, setError] = useState(null);
-  const [duration, setDuration] = useState(queryMonths || 12);
+  const [duration, setDuration] = useState(queryMonths || 1);
   const [quantity, setQuantity] = useState(parseInt(queryParams.get("quantity"), 10) || 1);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", address: "" });
-  const [sdkLoaded, setSdkLoaded] = useState(false);
+  const [cashfree, setCashfree] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [couponCode, setCouponCode] = useState(queryParams.get("couponCode") || "");
-  const [couponApplied, setCouponApplied] = useState(queryParams.get("discountApplied") === "true");
-  const [couponDiscount, setCouponDiscount] = useState(null);
-  const [couponError, setCouponError] = useState("");
+  const [finalPriceFromQuery] = useState(parseInt(queryParams.get("finalPrice"), 10) || 0);
 
   useEffect(() => {
     if (user) {
@@ -221,16 +209,7 @@ const Checkout = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (couponApplied && couponCode) {
-      const code = couponCode.trim().toUpperCase();
-      if (validCoupons[code]) {
-        setCouponDiscount(validCoupons[code]);
-      } else {
-        setCouponApplied(false);
-      }
-    }
-  }, [couponCode, couponApplied]);
+
 
   const getTheme = () => {
     const key = Object.keys(SERVICE_THEMES).find(k => id?.toLowerCase().includes(k)) || 'default';
@@ -319,38 +298,24 @@ const Checkout = () => {
 
 
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    script.onload = () => {
-      setSdkLoaded(true);
-    };
-    document.body.appendChild(script);
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
+    const initCashfree = async () => {
+      try {
+        const cf = await load({
+          mode: "production" // standard for your live setup
+        });
+        setCashfree(cf);
+      } catch (err) {
+        console.error("Failed to load Cashfree SDK:", err);
       }
     };
+    initCashfree();
   }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleApplyCoupon = () => {
-    if (disabledCouponPlans.includes(id)) {
-      setCouponError("Coupon not applicable for this plan.");
-      return;
-    }
-    const code = couponCode.trim().toUpperCase();
-    if (validCoupons[code]) {
-      setCouponDiscount(validCoupons[code]);
-      setCouponApplied(true);
-      setCouponError("");
-    } else {
-      setCouponError("Invalid coupon code.");
-    }
-  };
+
 
   const calculateTotal = () => {
     if (!plan) return 0;
@@ -358,99 +323,63 @@ const Checkout = () => {
     const durationDiscount = isOneTime ? 0 : (discountMap[duration] || 0);
     let total = basePrice * (1 - durationDiscount / 100);
 
-    if (couponApplied && couponDiscount) {
-      if (couponDiscount.type === "percent") {
-        total = total * (1 - couponDiscount.value / 100);
-      } else if (couponDiscount.type === "flat") {
-        total = total - couponDiscount.value;
-      }
-    }
+
     return Math.max(0, Math.round(total));
   };
 
-  const handleRazorpayPayment = async () => {
-    if (!sdkLoaded || !formData.name || !formData.email || !formData.phone) {
-      alert("Please fill all required fields.");
+  const handleCashfreePayment = async () => {
+    if (!cashfree || !formData.name || !formData.email || !formData.phone) {
+      alert("Please fill all required fields and wait for the payment gateway to load.");
       return;
     }
 
     const totalPrice = calculateTotal();
     setLoading(true);
     try {
-      // 1. Create order on backend
-      const res = await fetch(`${API_BASE}/razorpay/create-order`, {
+      // 1. Create order on backend (Cashfree)
+      const apiEndpoint = `${API_BASE}/cashfree/initiate-payment`;
+      console.log("🚀 Initiating payment at:", apiEndpoint);
+
+      const res = await fetch(apiEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: totalPrice,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
           planId: id,
-          customerDetails: formData
+          customerId: user?._id || `guest_${Date.now()}`
         }),
       });
 
       const orderData = await res.json();
-      if (!res.ok || !orderData.id) throw new Error(orderData.message || "Order creation failed.");
+      if (!res.ok || !orderData.payment_session_id) {
+        console.error("❌ Backend Error:", orderData);
+        throw new Error(orderData.message || `Server responded with status ${res.status}`);
+      }
 
-      // 2. Open Razorpay Checkout
-      const options = {
-        key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: orderData.amount,
-        currency: orderData.currency || "INR",
-        name: "MagicScale",
-        description: `Payment for ${plan.name}`,
-        order_id: orderData.id,
-        handler: async (response) => {
-          // 3. Handle success and verification
-          try {
-            const verifyRes = await fetch(`${API_BASE}/razorpay/verify-payment`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                ...response,
-                userId: user?._id || "guest",
-                plan: plan.name,
-                duration: duration,
-                amount: totalPrice,
-                email: formData.email,
-                name: formData.name
-              }),
-            });
-
-            const verifyData = await verifyRes.json();
-            if (verifyRes.ok && verifyData.success) {
-              localStorage.setItem("checkout_order", JSON.stringify({
-                name: formData.name,
-                email: formData.email,
-                phone: formData.phone,
-                planSlug: plan.slug || id,
-                total: totalPrice,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-              }));
-
-              navigate(`/payment-success?order_id=${orderData.id}`);
-            } else {
-              throw new Error(verifyData.message || "Payment verification failed.");
-            }
-          } catch (verifyError) {
-            alert("Payment verification failed: " + verifyError.message);
-            navigate("/payment-failed");
-          }
-        },
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.phone
-        },
-        theme: {
-          color: theme.primary === "zomato" ? "#EF4444" : "#F97316"
-        }
+      // 2. Open Cashfree Checkout
+      const checkoutOptions = {
+        paymentSessionId: orderData.payment_session_id,
+        redirectTarget: "_self", // Redirect back after payment
       };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+      // Optional: Store order info for success page cleanup
+      localStorage.setItem("checkout_order", JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        planSlug: plan.slug || id,
+        total: totalPrice,
+        order_id: orderData.order_id
+      }));
+
+      await cashfree.checkout(checkoutOptions);
+      
     } catch (err) {
-      alert("Payment initiation failed: " + err.message);
+      console.error("💥 Payment initiation failed:", err);
+      alert(`Payment initiation failed: ${err.message}\n\nPlease check your internet connection or try again later.`);
     } finally {
       setLoading(false);
     }
@@ -527,62 +456,62 @@ const Checkout = () => {
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-black text-slate-500 dark:text-slate-400 ml-1 uppercase tracking-wider">Full Name</label>
+                  <label className="text-[11px] font-black text-slate-800 dark:text-slate-400 ml-1 uppercase tracking-wider">Full Name</label>
                   <div className="relative group">
-                    <User className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={16} />
+                    <User className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 ${theme.inputIcon} transition-colors`} size={16} />
                     <input
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="John Doe"
-                      className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-xl outline-none transition-all dark:text-white text-sm font-medium`}
+                      className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-500 text-sm font-medium`}
                       required
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-black text-slate-500 dark:text-slate-400 ml-1 uppercase tracking-wider">Email Address</label>
+                  <label className="text-[11px] font-black text-slate-800 dark:text-slate-400 ml-1 uppercase tracking-wider">Email Address</label>
                   <div className="relative group">
-                    <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={16} />
+                    <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 ${theme.inputIcon} transition-colors`} size={16} />
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="john@example.com"
-                      className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-xl outline-none transition-all dark:text-white text-sm font-medium`}
+                      className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-500 text-sm font-medium`}
                       required
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-black text-slate-500 dark:text-slate-400 ml-1 uppercase tracking-wider">Phone Number</label>
+                  <label className="text-[11px] font-black text-slate-800 dark:text-slate-400 ml-1 uppercase tracking-wider">Phone Number</label>
                   <div className="relative group">
-                    <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={16} />
+                    <Phone className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 ${theme.inputIcon} transition-colors`} size={16} />
                     <input
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="+91 98765 43210"
-                      className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-xl outline-none transition-all dark:text-white text-sm font-medium`}
+                      className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-500 text-sm font-medium`}
                       required
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] font-black text-slate-500 dark:text-slate-400 ml-1 uppercase tracking-wider">Business Address</label>
+                  <label className="text-[11px] font-black text-slate-800 dark:text-slate-400 ml-1 uppercase tracking-wider">Business Address</label>
                   <div className="relative group">
-                    <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 ${theme.inputIcon} transition-colors`} size={16} />
+                    <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 ${theme.inputIcon} transition-colors`} size={16} />
                     <input
                       name="address"
                       value={formData.address}
                       onChange={handleInputChange}
                       placeholder="Street, City, Zip"
-                      className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-xl outline-none transition-all dark:text-white text-sm font-medium`}
+                      className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:ring-4 ${theme.focusRing} ${theme.focusBorder} rounded-xl outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-500 dark:placeholder:text-slate-500 text-sm font-medium`}
                     />
                   </div>
                 </div>
@@ -596,30 +525,13 @@ const Checkout = () => {
               transition={{ delay: 0.1 }}
               className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl p-6 rounded-[2rem] shadow-xl border border-white dark:border-slate-800"
             >
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+              <div className="flex flex-col gap-4 mb-6">
                 <div className="flex items-center gap-2.5">
                   <div className={`p-2 rounded-xl ${theme.accentBg} ${theme.accent} dark:bg-slate-800`}>
                     <Icon size={20} />
                   </div>
-                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">Plan Configuration</h2>
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">Plan Features</h2>
                 </div>
-
-                {!isOneTime && (
-                  <div className="flex gap-2 p-1.5 bg-slate-100 dark:bg-slate-800 rounded-xl w-fit">
-                    {[1, 3, 6, 12].map((m) => (
-                      <button
-                        key={m}
-                        onClick={() => setDuration(m)}
-                        className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${duration === m
-                          ? theme.activeBtn
-                          : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
-                          }`}
-                      >
-                        {m}M
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
 
               <div className="space-y-4">
@@ -661,7 +573,26 @@ const Checkout = () => {
                 {/* Decorative Background Element */}
                 <div className={`absolute top-0 right-0 w-24 h-24 blur-3xl opacity-10 rounded-full translate-x-1/2 -translate-y-1/2 ${theme.orb}`}></div>
 
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6 border-b border-slate-100 dark:border-slate-800 pb-3">Order Summary</h2>
+                <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <h2 className="text-xl font-bold text-slate-900 dark:text-white">Order Summary</h2>
+                  
+                  {!isOneTime && (
+                    <div className="flex gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+                      {[1, 3, 6, 12].map((m) => (
+                        <button
+                          key={m}
+                          onClick={() => setDuration(m)}
+                          className={`px-2.5 py-1 rounded-lg text-[10px] font-black transition-all ${duration === m
+                            ? theme.activeBtn
+                            : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
+                            }`}
+                        >
+                          {m}M
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 <div className="space-y-4 mb-auto">
                   <div className="flex justify-between items-start">
@@ -683,18 +614,7 @@ const Checkout = () => {
                     </div>
                   )}
 
-                  {couponApplied && couponDiscount && (
-                    <div className="flex justify-between items-center text-xs">
-                      <p className="text-slate-600 dark:text-slate-400 font-medium">
-                        Coupon Discount ({couponDiscount.type === "percent" ? `${couponDiscount.value}%` : `₹${couponDiscount.value}`})
-                      </p>
-                      <p className="text-emerald-600 font-bold">
-                        -₹{couponDiscount.type === "percent"
-                          ? Math.round(totalPrice * (couponDiscount.value / (100 - couponDiscount.value))).toLocaleString()
-                          : couponDiscount.value.toLocaleString()}
-                      </p>
-                    </div>
-                  )}
+
 
                   <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
                     <div className="flex justify-between items-end">
@@ -704,53 +624,13 @@ const Checkout = () => {
                   </div>
                 </div>
 
-                {/* Coupon Input */}
-                <div className="mt-4 mb-6 space-y-2">
-                  <div className="relative group">
-                    <Tag className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                    <input
-                      type="text"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
-                      placeholder="Promo Code"
-                      className={`w-full pl-9 pr-20 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl outline-none focus:ring-2 ${theme.focusRing} text-xs font-bold placeholder:text-slate-400 dark:text-white uppercase`}
-                    />
-                    <button
-                      onClick={handleApplyCoupon}
-                      className="absolute right-1.5 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-slate-900 dark:bg-white dark:text-slate-900 text-white text-[10px] font-black rounded-lg hover:bg-slate-800 transition-colors uppercase"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                  <AnimatePresence>
-                    {couponError && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="text-[9px] text-red-500 font-black ml-1 uppercase"
-                      >
-                        {couponError}
-                      </motion.p>
-                    )}
-                    {couponApplied && couponDiscount && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="text-[9px] text-emerald-500 font-black ml-1 uppercase tracking-widest"
-                      >
-                        Nice! Coupon {couponDiscount.type === "percent" ? `${couponDiscount.value}%` : `₹${couponDiscount.value}`} applied.
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
+
 
                 <div className="mt-auto space-y-3">
                   <button
-                    onClick={handleRazorpayPayment}
-                    disabled={!isFormFilled || loading || !sdkLoaded}
-                    className={`w-full py-4 rounded-xl font-black text-white text-base shadow-xl transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98] ${isFormFilled && !loading && sdkLoaded
+                    onClick={handleCashfreePayment}
+                    disabled={!isFormFilled || loading || !cashfree}
+                    className={`w-full py-4 rounded-xl font-black text-white text-base shadow-xl transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98] ${isFormFilled && !loading && cashfree
                       ? `bg-gradient-to-r ${theme.payBtn}`
                       : "bg-slate-200 dark:bg-slate-800 cursor-not-allowed text-slate-400"
                       }`}

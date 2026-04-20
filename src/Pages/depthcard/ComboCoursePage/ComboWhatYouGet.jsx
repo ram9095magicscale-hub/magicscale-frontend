@@ -8,7 +8,7 @@ const items = [
   "Unified Menu Upload & Categories Optimization",
   "Professional Branding (Logo, Banner, Menu Card)",
   "Digital QR Code for Restaurant Operations",
-  "Payment Gateway Integration (Razorpay/Cashfree)",
+  "Payment Gateway Integration (Cashfree/UPI)",
   "SEO Listing Optimization for Both Platforms",
   "Priority Listing & Dashboard Setup",
   "Dedicated WhatsApp Support for Onboarding",

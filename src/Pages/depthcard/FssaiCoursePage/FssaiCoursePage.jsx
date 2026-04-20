@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import fssaiImg from '../../../assets/fssai.png';
 import bannerImg from '../../../assets/Bannerfssai.png';
-import { FaTv, FaDownload, FaSatelliteDish, FaSmile, FaTag, FaCheckCircle, FaWhatsapp, FaPlus, FaMinus } from 'react-icons/fa';
+import { FaTv, FaDownload, FaSatelliteDish, FaSmile, FaCheckCircle, FaWhatsapp, FaPlus, FaMinus } from 'react-icons/fa';
 import { useTheme } from '../../../components/context/ThemeContext';
 import FssaiFAQ from './FssaiFAQ';
 import FssaiWhatYouGet from './FssaiWhatYouGet';
@@ -37,17 +37,10 @@ const FssaiLicenseCourse = () => {
     { text: "FoSCos portal maintenance scheduled for this weekend. Submissions will be paused.", date: "2026-03-08", link: "https://foscos.fssai.gov.in/notification-list" }
   ];
 
-  const availableCoupons = [
-    { code: 'MAGIC20', discount: 20, description: 'Get 20% off on your total purchase!' },
-    { code: 'FSSAI100', discount: null, flatDiscount: 100, description: 'Get ₹100 off your license!' },
-    { code: 'STARTUP50', discount: null, flatDiscount: 50, description: '₹50 off for new founders!' },
-  ];
+
 
   const [selectedPlan, setSelectedPlan] = useState(plansList[0]);
   const [quantity, setQuantity] = useState(1);
-  const [couponCode, setCouponCode] = useState('');
-  const [discountApplied, setDiscountApplied] = useState(false);
-  const [appliedCouponInfo, setAppliedCouponInfo] = useState(null);
   const [finalPrice, setFinalPrice] = useState(selectedPlan.price);
   const [isNoticePaused, setIsNoticePaused] = useState(false);
 
@@ -60,48 +53,15 @@ const FssaiLicenseCourse = () => {
 
   // Recalculate Final Price deeply checking Plan, Quantity, and Discounts
   useEffect(() => {
-    let basePrice = selectedPlan.price;
-    if (discountApplied && appliedCouponInfo) {
-      if (appliedCouponInfo.discount) {
-        basePrice = basePrice * (1 - appliedCouponInfo.discount / 100);
-      } else if (appliedCouponInfo.flatDiscount) {
-        basePrice = basePrice - appliedCouponInfo.flatDiscount;
-      }
-    }
-    setFinalPrice(Math.max(0, Math.round(basePrice))); // Never below 0
-  }, [selectedPlan, discountApplied, appliedCouponInfo]);
+    setFinalPrice(Math.max(0, Math.round(selectedPlan.price)));
+  }, [selectedPlan]);
 
-  const handleCouponApply = () => {
-    const couponToApply = availableCoupons.find(coupon => coupon.code.toUpperCase() === couponCode.trim().toUpperCase());
-    if (couponToApply) {
-      setDiscountApplied(true);
-      setAppliedCouponInfo(couponToApply);
-      alert(`Coupon "${couponToApply.code}" applied! ${couponToApply.description}`);
-    } else {
-      setDiscountApplied(false);
-      setAppliedCouponInfo(null);
-      alert('Invalid coupon code. Please try again.');
-    }
-  };
 
-  const handleCouponSelect = (coupon) => {
-    setCouponCode(coupon.code);
-    setDiscountApplied(true);
-    setAppliedCouponInfo(coupon);
-    alert(`Coupon "${coupon.code}" applied! ${coupon.description}`);
-  };
-
-  const handleRemoveCoupon = () => {
-    setCouponCode('');
-    setDiscountApplied(false);
-    setAppliedCouponInfo(null);
-  };
 
   const handlePlanChange = (e) => {
     const selected = plansList.find((p) => p.label === e.target.value);
     if (selected) {
       setSelectedPlan(selected);
-      handleRemoveCoupon(); // Reset coupon on plan change
     }
   };
 
@@ -109,7 +69,6 @@ const FssaiLicenseCourse = () => {
     const selected = renewalPlans.find((p) => p.label === e.target.value);
     if (selected) {
       setSelectedPlan(selected);
-      handleRemoveCoupon();
     }
   };
 
@@ -129,7 +88,7 @@ const FssaiLicenseCourse = () => {
     }
 
     const featuresString = features.join(',');
-    navigate(`/checkout/${selectedPlan.slug}?quantity=1&finalPrice=${finalPrice}&basePrice=${selectedPlan.price}&discountApplied=${discountApplied}&couponCode=${appliedCouponInfo ? appliedCouponInfo.code : ''}&planName=${encodeURIComponent(planName)}&planFeatures=${encodeURIComponent(featuresString)}`);
+    navigate(`/checkout/${selectedPlan.slug}?quantity=1&finalPrice=${finalPrice}&basePrice=${selectedPlan.price}&planName=${encodeURIComponent(planName)}&planFeatures=${encodeURIComponent(featuresString)}`);
   };
 
 
@@ -354,19 +313,10 @@ const FssaiTrackerCard = ({ isDarkMode }) => {
             <h2 className={`text-2xl sm:text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`} id="plans">
               ₹{finalPrice.toLocaleString()}
             </h2>
-            {discountApplied && (
-              <span className={`text-sm sm:text-base font-bold line-through ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
-                ₹{(selectedPlan.price * quantity).toLocaleString()}
-              </span>
-            )}
+
           </div>
           <div className="flex items-center justify-between">
-            {discountApplied && appliedCouponInfo && (
-              <p className="text-emerald-500 font-bold text-[10px] sm:text-[11px] mb-1">
-                {appliedCouponInfo.discount ? `Save ${appliedCouponInfo.discount}%` : `Save ₹${appliedCouponInfo.flatDiscount}`} with {appliedCouponInfo.code}!
-              </p>
-            )}
-            {quantity > 1 && !discountApplied && (
+            {quantity > 1 && (
                <p className="text-blue-500 font-bold text-[10px] sm:text-[11px] mb-1">
                  Total for {quantity} outlets
                </p>
@@ -452,55 +402,7 @@ const FssaiTrackerCard = ({ isDarkMode }) => {
           </p>
         </div>
 
-        {/* Coupon - Built-in functionality */}
-        <div className={`mt-4 pt-4 border-t ${isDarkMode ? 'border-slate-700/50' : 'border-slate-200'}`}>
-          <label htmlFor={`coupon-input-${isMobile ? 'm' : 'd'}`} className={`text-[10px] font-bold uppercase tracking-widest block mb-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-            Have a Coupon?
-          </label>
-          <div className="flex gap-2">
-            <input
-              id={`coupon-input-${isMobile ? 'm' : 'd'}`}
-              type="text"
-              placeholder="Enter code"
-              value={couponCode}
-              onChange={(e) => setCouponCode(e.target.value)}
-              disabled={discountApplied}
-              className={`flex-1 min-w-0 border px-3 py-2 rounded-lg text-xs font-bold transition-colors shadow-inner uppercase ${isDarkMode
-                  ? 'bg-[#0b101d] border-slate-700 text-white placeholder-slate-500 focus:border-blue-500 outline-none disabled:opacity-50'
-                  : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-500 outline-none disabled:opacity-50'
-                }`}
-            />
-            {discountApplied ? (
-              <button onClick={handleRemoveCoupon} className={`px-3 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm bg-red-500/10 text-red-500 hover:bg-red-500/20`}>
-                Remove
-              </button>
-            ) : (
-              <button onClick={handleCouponApply} className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors shadow-sm ${isDarkMode ? 'bg-blue-600 text-white hover:bg-blue-500' : 'bg-blue-600 text-white hover:bg-blue-700'
-                }`}>
-                Apply
-              </button>
-            )}
-          </div>
 
-          {/* Available Coupons List */}
-          {!discountApplied && (
-            <div className="mt-3 space-y-1.5 max-h-24 overflow-y-auto pr-1">
-              {availableCoupons.map((coupon, idx) => (
-                <div key={idx} onClick={() => handleCouponSelect(coupon)} className={`group flex items-center justify-between py-1.5 px-2.5 rounded-md border cursor-pointer transition-all ${isDarkMode ? 'bg-[#0f172a]/50 border-slate-700 hover:border-blue-500/50' : 'bg-slate-50 border-slate-200 hover:border-blue-300 hover:shadow-sm'
-                  }`}>
-                  <div className="flex items-center gap-2 overflow-hidden">
-                    <FaTag className="text-blue-500 shrink-0 text-xs opacity-80 group-hover:opacity-100 transition-opacity" />
-                    <div className="min-w-0">
-                      <p className={`text-[10px] font-black tracking-wide uppercase truncate ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{coupon.code}</p>
-                      <p className={`text-[9px] font-medium leading-none mt-0.5 truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>{coupon.description}</p>
-                    </div>
-                  </div>
-                  <button className="text-[9px] font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wider pl-2 shrink-0">Apply</button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
@@ -632,8 +534,6 @@ const FssaiTrackerCard = ({ isDarkMode }) => {
           </div>
 
         </div>
-      </div>
-
       <SiteFooter />
 
       {/* Floating Bottom Bar CTA for Mobile */}
@@ -647,9 +547,9 @@ const FssaiTrackerCard = ({ isDarkMode }) => {
           <ChevronRight size={18} />
         </button>
       </div>
-      
-    </div>
-  );
+      </div>
+  </div>
+);
 };
 
 export default FssaiLicenseCourse;

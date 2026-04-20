@@ -18,7 +18,7 @@ const SwiggyWhatYouGet = () => {
     {
       title: 'Payments & Delivery Setup',
       description:
-        'Integration with Cashfree, Razorpay, UPI and delivery partner activation.',
+        'Integration with Cashfree, UPI and delivery partner activation.',
     },
     {
       title: 'Listing & SEO Optimization',

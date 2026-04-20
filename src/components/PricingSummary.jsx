@@ -25,8 +25,8 @@ const PricingSummary = () => {
   const [durations, setDurations] = useState({ basic: 1, premium: 1 });
 
   const prices = {
-    basic: 7999,
-    premium: 9999,
+    basic: 8499,
+    premium: 11999,
   };
 
   const handleMoreInfo = () => {

@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { blogPosts } from "../data/blogData"; // Fallback data
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock, User, Calendar, Share2 } from "lucide-react";
+import { ArrowLeft, Clock, User, Calendar, Share2, Linkedin, Facebook, Twitter, Link as LinkIcon, Check } from "lucide-react";
 import axios from "axios";
 import { API_URL } from "../services/api";
 
@@ -12,6 +12,19 @@ const BlogDetailsPage = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  const shareUrls = {
+    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`,
+    twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post?.title || "Check this out!")}`,
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -135,15 +148,49 @@ const BlogDetailsPage = () => {
                 dangerouslySetInnerHTML={{ __html: post.content }}
             />
             
-            <div className="mt-20 pt-10 border-t border-gray-100 dark:border-white/5 flex items-center justify-between">
+
+            <div className="mt-20 pt-10 border-t border-gray-100 dark:border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/40 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                         <Share2 size={20} />
                     </div>
                     <span className="font-bold text-gray-900 dark:text-white uppercase tracking-widest text-xs">Share Article</span>
                 </div>
-                <div className="flex gap-4">
-                    {/* Share Buttons would go here */}
+                <div className="flex items-center gap-3">
+                    <a 
+                        href={shareUrls.linkedin} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-300"
+                        title="Share on LinkedIn"
+                    >
+                        <Linkedin size={18} />
+                    </a>
+                    <a 
+                        href={shareUrls.facebook} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-blue-700 hover:text-white hover:border-blue-700 transition-all duration-300"
+                        title="Share on Facebook"
+                    >
+                        <Facebook size={18} />
+                    </a>
+                    <a 
+                        href={shareUrls.twitter} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-black hover:text-white hover:border-black dark:hover:bg-white dark:hover:text-black dark:hover:border-white transition-all duration-300"
+                        title="Share on X"
+                    >
+                        <Twitter size={18} />
+                    </a>
+                    <button 
+                        onClick={copyToClipboard}
+                        className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-all duration-300 ${copied ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-indigo-600 hover:text-white hover:border-indigo-600'}`}
+                        title="Copy Link"
+                    >
+                        {copied ? <Check size={18} /> : <LinkIcon size={18} />}
+                    </button>
                 </div>
             </div>
         </div>

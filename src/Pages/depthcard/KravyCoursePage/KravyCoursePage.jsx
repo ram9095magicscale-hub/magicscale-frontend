@@ -54,7 +54,7 @@ const KravyCoursePage = () => {
 
   const handleCheckout = () => {
     const featuresString = selectedPlan.features.join(',');
-    navigate(`/checkout/${selectedPlan.slug}?finalPrice=${finalPrice}&basePrice=${selectedPlan.price}&discountApplied=false&couponCode=&planName=${encodeURIComponent(selectedPlan.label)}&planFeatures=${encodeURIComponent(featuresString)}`);
+    navigate(`/checkout/${selectedPlan.slug}?finalPrice=${finalPrice}&basePrice=${selectedPlan.price}&planName=${encodeURIComponent(selectedPlan.label)}&planFeatures=${encodeURIComponent(featuresString)}`);
   };
 
 

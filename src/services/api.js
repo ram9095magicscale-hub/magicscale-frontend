@@ -166,7 +166,11 @@
  * This centralizes all API calls and handles token management
  */
 
-export const API_URL = import.meta.env.VITE_API_URL || 'https://magicscale-backend.vercel.app/api';
+// Smart fallback: use .env variable if exists, otherwise use localhost for development or production Vercel URL
+export const API_URL = import.meta.env.VITE_API_URL || 
+  (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api' 
+    : 'https://magicscale-backend.vercel.app/api');
 
 /**
  * Make an authenticated API request

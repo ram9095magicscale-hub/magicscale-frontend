@@ -7,7 +7,7 @@ const items = [
   "Full Zomato Registration — PAN, GST, FSSAI setup assistance",
   "Menu Upload with categories, pricing, and dish images",
   "Restaurant Logo, Banner, QR Code, and Menu Card Design",
-  "Payment Integration (Cashfree, Razorpay, UPI setup)",
+  "Payment Integration (Cashfree, UPI setup)",
   "Delivery Activation — Radius, Partner enablement & dashboard",
   "Listing Optimization — SEO, location tags, photo gallery",
   "WhatsApp Support for document collection & live chat",

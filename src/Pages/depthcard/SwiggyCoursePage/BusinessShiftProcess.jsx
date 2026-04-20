@@ -51,7 +51,7 @@ const BusinessShiftProcess = () => {
             <FaMoneyBillWave className="text-3xl mb-3 text-indigo-400" />
             <h3 className="text-xl font-semibold mb-1">Payments & Delivery</h3>
             <p className="text-sm text-purple-100">
-              Activate UPI, Razorpay, Cashfree & setup delivery partners in one click.
+              Activate UPI, Cashfree & setup delivery partners in one click.
             </p>
           </div>
 

@@ -119,10 +119,25 @@ const JobDetailsPage = () => {
                   </div>
                 </div>
 
-                <div 
-                  className="prose prose-indigo dark:prose-invert max-w-none text-gray-600 dark:text-gray-400"
-                  dangerouslySetInnerHTML={{ __html: job.fullDescription }}
-                />
+                {job.fullDescription ? (
+                  <div 
+                    className="prose prose-indigo dark:prose-invert max-w-none text-gray-600 dark:text-gray-400"
+                    dangerouslySetInnerHTML={{ __html: job.fullDescription }}
+                  />
+                ) : (
+                  <div className="space-y-10">
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">About the Role</h3>
+                      <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{job.description}</p>
+                    </div>
+                    {job.requirements && (
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Requirements</h3>
+                        <p className="text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line">{job.requirements}</p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </section>
             </div>
 

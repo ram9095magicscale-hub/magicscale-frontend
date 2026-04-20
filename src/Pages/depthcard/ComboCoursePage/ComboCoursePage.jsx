@@ -55,7 +55,7 @@ const ComboCoursePage = () => {
 
   const handleCheckout = () => {
     const features = currentPlan.features.join(',');
-    navigate(`/checkout/${currentPlan.slug}?finalPrice=${finalPrice}&basePrice=${currentPlan.price}&discountApplied=false&couponCode=&planName=${encodeURIComponent(currentPlan.name)}&planFeatures=${encodeURIComponent(features)}`);
+    navigate(`/checkout/${currentPlan.slug}?finalPrice=${finalPrice}&basePrice=${currentPlan.price}&planName=${encodeURIComponent(currentPlan.name)}&planFeatures=${encodeURIComponent(features)}`);
   };
 
   const renderCheckoutCard = (isMobile = false) => (
@@ -90,9 +90,7 @@ const ComboCoursePage = () => {
           <h2 className={`text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
             ₹{currentPlan.price.toLocaleString()}
           </h2>
-          <p className={`text-[13px] sm:text-sm mt-1.5 ${isDarkMode ? 'text-slate-300' : 'text-slate-600'} leading-relaxed font-medium`}>
-              +{ (currentPlan.price * 0.18).toLocaleString() } GST (18%)
-          </p>
+
           <p className={`text-[13px] sm:text-sm mt-2 font-bold ${isDarkMode ? 'text-purple-400' : 'text-indigo-600'}`}>
             {currentPlan.name}
           </p>

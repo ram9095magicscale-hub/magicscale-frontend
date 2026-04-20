@@ -42,9 +42,9 @@ const BlogCard = ({ id, image, category, title, excerpt, date, author }) => {
           </div>
         </div>
 
-          {/* Content */}
-        <div className="p-10 flex flex-col flex-grow items-center text-center space-y-5">
-          <div className="flex items-center justify-center gap-4 text-[11px] font-black text-indigo-600/60 dark:text-indigo-400/60 uppercase tracking-[0.2em]">
+                {/* Content */}
+        <div className="p-8 flex flex-col flex-grow items-start text-left space-y-4">
+          <div className="flex items-center gap-4 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest opacity-80">
             <div className="flex items-center gap-1.5">
               <Clock size={14} />
               <span>{date}</span>
@@ -56,16 +56,16 @@ const BlogCard = ({ id, image, category, title, excerpt, date, author }) => {
             </div>
           </div>
 
-          <h3 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white leading-[1.2] group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          <h3 className="text-2xl font-black text-gray-900 dark:text-white leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
             {title}
           </h3>
 
-          <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-medium max-w-[90%]">
+          <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed font-medium line-clamp-3">
             {cleanExcerpt}
           </p>
 
-          <div className="pt-6 mt-auto">
-            <div className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gray-50 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-widest border border-gray-100 dark:border-slate-700 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-all duration-300">
+          <div className="pt-4 mt-auto">
+            <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-widest group-hover:translate-x-1 transition-transform duration-300">
               Read Article
               <ArrowRight size={16} />
             </div>

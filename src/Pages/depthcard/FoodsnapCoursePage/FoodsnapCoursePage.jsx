@@ -48,7 +48,7 @@ const FoodsnapCoursePage = () => {
   }, []);
 
   const handleCheckout = () => {
-    navigate(`/checkout/${selectedPlan.slug}?finalPrice=${selectedPlan.price}&basePrice=${selectedPlan.price}&discountApplied=false&couponCode=`);
+    navigate(`/checkout/${selectedPlan.slug}?finalPrice=${selectedPlan.price}&basePrice=${selectedPlan.price}`);
   };
 
   const renderCheckoutCard = () => (

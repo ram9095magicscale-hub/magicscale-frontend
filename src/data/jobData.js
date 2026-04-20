@@ -84,5 +84,43 @@ export const jobPosts = [
         <li>Excellent written and verbal communication skills in Hindi & English.</li>
       </ul>
     `
+  },
+  {
+    id: "customer-sales-executive",
+    title: "Customer Sales Executive",
+    type: "Full-Time",
+    location: "Delhi",
+    description: "Drive growth by engaging with potential restaurant partners and showcasing the power of MagicScale's solutions.",
+    icon: Zap,
+    iconColor: "text-indigo-600",
+    fullDescription: `
+      <p>As a Customer Sales Executive at MagicScale, you will be the face of our company for new partners. You'll be responsible for identifying high-potential restaurants, explaining our value proposition, and closing deals that help both MagicScale and our partners thrive.</p>
+      
+      <h3>Key Responsibilities:</h3>
+      <ul>
+        <li>Identify potential leads through market research and direct outreach.</li>
+        <li>Present MagicScale's services to restaurant owners and decision-makers.</li>
+        <li>Achieve and exceed monthly sales targets.</li>
+        <li>Maintain a strong pipeline of prospective clients and manage the end-to-end sales cycle.</li>
+        <li>Provide valuable market feedback to the product and growth teams.</li>
+      </ul>
+      
+      <h3>Requirements:</h3>
+      <ul>
+        <li>0-2 years of experience in sales or business development (Freshers with great communication are welcome!).</li>
+        <li>Strong persuasive and negotiation skills.</li>
+        <li>Hunger for growth and a result-oriented mindset.</li>
+        <li>Fluency in English and Hindi.</li>
+        <li>Ability to work in a target-driven, high-energy environment.</li>
+      </ul>
+      
+      <h3>What we offer:</h3>
+      <ul>
+        <li>Competitive base salary + attractive commission structure.</li>
+        <li>Fast-track career progression in a rapidly growing startup.</li>
+        <li>Collaborative and transparent work culture.</li>
+        <li>Opportunity to reshape the food industry landscape in India.</li>
+      </ul>
+    `
   }
 ];
