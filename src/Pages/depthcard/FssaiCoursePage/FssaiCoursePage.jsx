@@ -21,9 +21,9 @@ const plansList = [
 ];
 
 const renewalPlans = [
-  { slug: 'fssai-renewal-1yr', label: 'Renewal (1 Year)', price: 1, features: ['FSSAI Renewal Filing', '1 Year License Validity', 'Cloud Documentation'], description: 'Renew your basic registration for 1 year.' },
-  { slug: 'fssai-renewal-3yrs', label: 'Renewal (3 Years)', price: 1200, features: ['FSSAI Renewal Filing', '3 Year License Validity', 'Priority Support'], description: 'Renew your basic registration for 3 years.' },
-  { slug: 'fssai-renewal-5yrs', label: 'Renewal (5 Years)', price: 2000, features: ['FSSAI Renewal Filing', '5 Year License Validity', 'Compliance Management'], description: 'Renew your basic registration for 5 years.' },
+  { slug: 'FSSAI License Renewal (1 Year)', label: 'Renewal (1 Year)', price: 700, features: ['FSSAI Renewal Filing', '1 Year License Validity', 'Cloud Documentation'], description: 'Renew your basic registration for 1 year.' },
+  { slug: 'FSSAI License Renewal (3 Years)', label: 'Renewal (3 Years)', price: 1200, features: ['FSSAI Renewal Filing', '3 Year License Validity', 'Priority Support'], description: 'Renew your basic registration for 3 years.' },
+  { slug: 'FSSAI License Renewal (5 Years)', label: 'Renewal (5 Years)', price: 2000, features: ['FSSAI Renewal Filing', '5 Year License Validity', 'Compliance Management'], description: 'Renew your basic registration for 5 years.' },
 ];
 
 const FssaiLicenseCourse = () => {
