@@ -559,7 +559,6 @@ const SellerDashboard = () => {
             </div>
           )}
 
-          {activeTab === 'enquiries' && <ManageEnquiries />}
 
           {activeTab === "jobs" && <ManageJobs />}
           {activeTab === "blogs" && <ManageBlogs />}

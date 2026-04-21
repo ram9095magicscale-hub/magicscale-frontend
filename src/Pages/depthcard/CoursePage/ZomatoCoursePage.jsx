@@ -7,7 +7,8 @@ import ZomatoFAQ from './ZomatoFAQ';
 import ZomatoWhatYouGet from './ZomatoWhatYouGet';
 import DocumentsRequired from './DocumentsRequired';
 import SiteFooter from '../FssaiCoursePage/SiteFooter';
-import { CheckCircle2, ChevronRight, Star, ShieldCheck } from 'lucide-react';
+import { CheckCircle2, ChevronRight, Star, ShieldCheck, ArrowRight } from 'lucide-react';
+import BusinessShiftProcess from './BusinessShiftProcess';
 
 const ZomatoOnboardingCourse = () => {
   const navigate = useNavigate();
@@ -280,6 +281,61 @@ const ZomatoOnboardingCourse = () => {
               <DocumentsRequired />
 
               <ZomatoWhatYouGet />
+
+              {/* Our Process Section - "we follow a great process" */}
+              <div className="pt-10 border-t border-slate-200/80 dark:border-slate-800/80">
+                <div className="flex flex-col items-center sm:items-start mb-10 text-center sm:text-left">
+                  <h3 className={`text-2xl sm:text-3xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+                    We follow a great process
+                  </h3>
+                  <p className={`mt-3 font-medium text-sm sm:text-base ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>A scientific approach to getting you live and profitable.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                  {/* Process Connectors (Desktop) */}
+                  <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-red-500/0 via-red-500/20 to-red-500/0 z-0" />
+                  
+                  {[
+                    {
+                      step: "01",
+                      title: "Consultation",
+                      desc: "We analyze your menu and site location to plan the perfect launch.",
+                      icon: <Star className="text-red-500" size={24} />
+                    },
+                    {
+                      step: "02",
+                      title: "Execution",
+                      desc: "Our experts handle all documentation and menu setup on Zomato.",
+                      icon: <ShieldCheck className="text-rose-500" size={24} />
+                    },
+                    {
+                      step: "03",
+                      title: "Launch",
+                      desc: "Go live with optimized listings designed to rank higher and sell more.",
+                      icon: <CheckCircle2 className="text-orange-500" size={24} />
+                    }
+                  ].map((item, idx) => (
+                    <div key={idx} className={`relative z-10 p-8 rounded-[2rem] border transition-all duration-500 group overflow-hidden ${
+                      isDarkMode 
+                        ? 'bg-[#0f172a]/40 border-slate-800 hover:border-red-500/30' 
+                        : 'bg-white border-slate-100 shadow-sm hover:shadow-xl hover:border-red-100'
+                    }`}>
+                      <div className="absolute top-4 right-6 text-4xl font-black opacity-[0.03] group-hover:opacity-[0.08] transition-opacity uppercase italic">
+                        Step {item.step}
+                      </div>
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:scale-110 ${
+                        isDarkMode ? 'bg-slate-800/80 border border-slate-700' : 'bg-red-50 border border-red-100'
+                      }`}>
+                        {item.icon}
+                      </div>
+                      <h4 className={`text-xl font-extrabold mb-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{item.title}</h4>
+                      <p className={`text-sm leading-relaxed font-medium ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                        {item.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               {/* Reasons Grid */}
               <div className="pt-10 w-full border-t border-slate-200/80 dark:border-slate-800/80">

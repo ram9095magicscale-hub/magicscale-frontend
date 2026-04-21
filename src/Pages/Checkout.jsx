@@ -289,6 +289,11 @@ const Checkout = () => {
   };
 
   const calculateTotal = () => {
+    const queryQuantity = parseInt(queryParams.get("quantity"), 10) || 1;
+    if (finalPriceFromQuery > 0 && duration === queryMonths && quantity === queryQuantity) {
+      return finalPriceFromQuery;
+    }
+    
     if (!plan) return 0;
     const basePrice = isOneTime ? plan.price * quantity : plan.price * duration;
     const durationDiscount = isOneTime ? 0 : (discountMap[duration] || 0);

@@ -25,7 +25,7 @@ const ZomatoWhatYouGet = () => {
     <section
       // Main section background and text color
       className={`py-12 px-4 sm:px-8 md:px-12 font-poppins ${
-        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-[#e6f0ff] text-gray-800' // <-- Light mode: bg-[#e6f0ff] text-gray-800
+        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-rose-50 text-gray-800' // <-- Light mode: bg-rose-50 text-gray-800
       }`}
     >
       <div
@@ -37,7 +37,7 @@ const ZomatoWhatYouGet = () => {
         <h2
           // Heading text color
           className={`text-2xl sm:text-3xl font-bold mb-6 text-center sm:text-left ${
-            isDarkMode ? 'text-purple-400' : 'text-blue-900' // <-- Light mode: text-blue-900
+            isDarkMode ? 'text-rose-400' : 'text-red-900' // <-- Light mode: text-red-900
           }`}
         >
           What You'll Get
@@ -50,7 +50,7 @@ const ZomatoWhatYouGet = () => {
                 key={idx}
                 // Individual item text and hover background color
                 className={`flex items-start gap-3 cursor-pointer rounded p-2 transition ${
-                  isDarkMode ? 'hover:bg-gray-700 text-gray-300' : 'hover:bg-blue-100 text-gray-700' // <-- Light mode: hover:bg-blue-100 text-gray-700
+                  isDarkMode ? 'hover:bg-gray-700 text-gray-300' : 'hover:bg-red-50 text-gray-700' // <-- Light mode: hover:bg-red-50 text-gray-700
                 }`}
                 onClick={() => setSelectedItem(item)}
                 initial={{ opacity: 0, y: 10 }}
@@ -60,7 +60,7 @@ const ZomatoWhatYouGet = () => {
               >
                 <FaCheckCircle
                   // Checkmark icon color
-                  className={`${isDarkMode ? 'text-purple-500' : 'text-blue-600'} mt-1 flex-shrink-0`} // <-- Light mode: text-blue-600
+                  className={`${isDarkMode ? 'text-rose-500' : 'text-red-600'} mt-1 flex-shrink-0`} // <-- Light mode: text-red-600
                 />
                 <p>{item}</p>
               </motion.div>
@@ -73,10 +73,10 @@ const ZomatoWhatYouGet = () => {
           <button
             onClick={() => setExpanded(!expanded)}
             // Toggle button background and text color
-            className={`px-5 py-2 rounded-md transition inline-flex items-center gap-2 text-sm sm:text-base ${
+            className={`px-6 py-2.5 rounded-xl transition-all duration-300 font-bold inline-flex items-center gap-2 shadow-lg shadow-red-500/20 hover:shadow-red-500/40 hover:-translate-y-0.5 active:scale-95 text-sm sm:text-base ${
               isDarkMode
-                ? 'bg-purple-600 text-white hover:bg-purple-700'
-                : 'bg-blue-600 text-white hover:bg-blue-700' // <-- Light mode: bg-blue-600 text-white hover:bg-blue-700
+                ? 'bg-red-600 text-white hover:bg-red-700'
+                : 'bg-red-600 text-white hover:bg-red-700' // <-- Light mode: bg-red-600 text-white hover:bg-red-700
             }`}
           >
             {expanded ? (
@@ -101,7 +101,7 @@ const ZomatoWhatYouGet = () => {
           >
             <h3
               // Modal heading color
-              className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-purple-400' : 'text-blue-900'}`} // <-- Light mode: text-blue-900
+              className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-rose-400' : 'text-red-900'}`} // <-- Light mode: text-red-900
             >
               📦 Service Details
             </h3>
@@ -110,8 +110,8 @@ const ZomatoWhatYouGet = () => {
               <button
                 onClick={() => setSelectedItem(null)}
                 // Modal close button color
-                className={`px-4 py-2 rounded hover:bg-blue-700 transition ${
-                  isDarkMode ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-blue-600 text-white' // <-- Light mode: bg-blue-600 text-white
+                className={`px-4 py-2 rounded hover:bg-red-700 transition ${
+                  isDarkMode ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-red-600 text-white' // <-- Light mode: bg-red-600 text-white
                 }`}
               >
                 Close

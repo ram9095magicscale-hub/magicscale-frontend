@@ -107,8 +107,8 @@ const GrowthCoursePage = () => {
 
   const handleCheckout = () => {
     const featuresString = selectedPlan.features.join(',');
-    // Default to 3 months for growth plans as requested
-    navigate(`/checkout/${selectedPlan.slug}?months=3&finalPrice=${finalPrice}&basePrice=${selectedPlan.price}&planName=${encodeURIComponent(selectedPlan.label)}&planFeatures=${encodeURIComponent(featuresString)}`);
+    // Default to 1 month for growth plans as requested
+    navigate(`/checkout/${selectedPlan.slug}?months=1&finalPrice=${finalPrice}&basePrice=${selectedPlan.price}&planName=${encodeURIComponent(selectedPlan.label)}&planFeatures=${encodeURIComponent(featuresString)}`);
   };
 
 
