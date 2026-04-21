@@ -237,6 +237,7 @@ import ManageJobs from "../../components/SellerDashboard/ManageJobs";
 import ManageBlogs from "../../components/SellerDashboard/ManageBlogs";
 import ManageGallery from "../../components/SellerDashboard/ManageGallery";
 import ManageEnquiries from "../../components/SellerDashboard/ManageEnquiries";
+import ManagePaymentLinks from "../../components/SellerDashboard/ManagePaymentLinks";
 
 const SellerDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -311,12 +312,14 @@ const SellerDashboard = () => {
       
       <div className="flex-1 flex flex-col w-full overflow-auto">
         <Topbar toggleSidebar={toggleSidebar} title="Admin Dashboard" />
-        <div className="p-4 md:p-6 overflow-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border dark:border-slate-800 shadow-sm flex-wrap gap-2">
+        
+        <div className="p-4 md:p-8 flex-1">
+          {/* Tabs Centered Section */}
+          <div className="max-w-6xl mx-auto mb-10 text-center">
+            <div className="inline-flex flex-wrap justify-center bg-white dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/20 dark:shadow-none gap-1 md:gap-2">
               <button 
                 onClick={() => setActiveTab('customers')}
-                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                className={`px-4 md:px-5 py-2.5 rounded-xl text-[11px] md:text-sm font-bold transition-all ${
                   activeTab === 'customers' 
                   ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
@@ -326,7 +329,7 @@ const SellerDashboard = () => {
               </button>
               <button 
                 onClick={() => setActiveTab('transactions')}
-                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                className={`px-4 md:px-5 py-2.5 rounded-xl text-[11px] md:text-sm font-bold transition-all ${
                   activeTab === 'transactions' 
                   ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
@@ -336,7 +339,7 @@ const SellerDashboard = () => {
               </button>
               <button 
                 onClick={() => setActiveTab('enquiries')}
-                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                className={`px-4 md:px-5 py-2.5 rounded-xl text-[11px] md:text-sm font-bold transition-all ${
                   activeTab === 'enquiries' 
                   ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
@@ -346,7 +349,7 @@ const SellerDashboard = () => {
               </button>
               <button 
                 onClick={() => setActiveTab('applications')}
-                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                className={`px-4 md:px-5 py-2.5 rounded-xl text-[11px] md:text-sm font-bold transition-all ${
                   activeTab === 'applications' 
                   ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
@@ -356,7 +359,7 @@ const SellerDashboard = () => {
               </button>
               <button 
                 onClick={() => setActiveTab('jobs')}
-                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                className={`px-4 md:px-5 py-2.5 rounded-xl text-[11px] md:text-sm font-bold transition-all ${
                   activeTab === 'jobs' 
                   ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
@@ -366,7 +369,7 @@ const SellerDashboard = () => {
               </button>
               <button 
                 onClick={() => setActiveTab('blogs')}
-                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                className={`px-4 md:px-5 py-2.5 rounded-xl text-[11px] md:text-sm font-bold transition-all ${
                   activeTab === 'blogs' 
                   ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
@@ -376,7 +379,7 @@ const SellerDashboard = () => {
               </button>
               <button 
                 onClick={() => setActiveTab('gallery')}
-                className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                className={`px-4 md:px-5 py-2.5 rounded-xl text-[11px] md:text-sm font-bold transition-all ${
                   activeTab === 'gallery' 
                   ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
                   : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
@@ -384,8 +387,20 @@ const SellerDashboard = () => {
               >
                 Manage Gallery
               </button>
+              <button 
+                onClick={() => setActiveTab('paylinks')}
+                className={`px-4 md:px-5 py-2.5 rounded-xl text-[11px] md:text-sm font-bold transition-all ${
+                  activeTab === 'paylinks' 
+                  ? 'bg-red-500 text-white shadow-lg shadow-red-200 dark:shadow-none' 
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                }`}
+              >
+                Payment Links
+              </button>
             </div>
           </div>
+
+          <div className="max-w-6xl mx-auto">
 
           {activeTab === 'customers' && (
             <>
@@ -560,13 +575,15 @@ const SellerDashboard = () => {
           )}
 
 
+          {activeTab === "paylinks" && <ManagePaymentLinks />}
           {activeTab === "jobs" && <ManageJobs />}
           {activeTab === "blogs" && <ManageBlogs />}
           {activeTab === "gallery" && <ManageGallery />}
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default SellerDashboard;
