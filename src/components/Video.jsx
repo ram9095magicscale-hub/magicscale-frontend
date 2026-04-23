@@ -7,7 +7,7 @@ const Video = () => {
   return (
     <div 
       id="video" 
-      className="relative py-24 px-6 sm:px-12 md:px-24 overflow-hidden bg-white dark:bg-slate-950 font-poppins transition-colors duration-500"
+      className="relative py-24 px-6 sm:px-12 md:px-24 overflow-hidden bg-transparent font-poppins transition-colors duration-500"
     >
       {/* Decorative Background grid/blobs */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] dark:opacity-20"></div>

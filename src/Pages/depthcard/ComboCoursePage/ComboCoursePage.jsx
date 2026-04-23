@@ -27,14 +27,14 @@ const ComboCoursePage = () => {
     },
     planB: {
       name: 'Combo Launch With Setup',
-      price: 9999,
+      price: 7999,
       slug: 'combo-pro',
       description: 'Full-stack automation with extensive photography and priority listing.',
       features: [
         'Everything in Starter Package',
-        'Extensive Photo Upload (up to 50 items)',
+        'Competitor Analysis & Detailed Monthly Report',
         'Detailed Branding & Profile Configuration',
-        'Priority Listing Support for Both Platforms',
+        'Target Audience Analysis & Personalized Growth Strategies',
         '30 Days Free Consultation',
       ],
     },
@@ -70,12 +70,12 @@ const ComboCoursePage = () => {
 
       <div className="relative h-32 sm:h-40 overflow-hidden bg-indigo-900/10 flex items-center justify-center p-6">
         <div className="flex -space-x-4 items-center justify-center scale-150">
-             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg border-2 border-red-500 z-20">
-                <FaUtensils className="text-red-600 text-3xl" />
-             </div>
-             <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg border-2 border-orange-500 z-10 rotate-6 translate-x-2">
-                <FaMotorcycle className="text-orange-500 text-3xl" />
-             </div>
+          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg border-2 border-red-500 z-20">
+            <FaUtensils className="text-red-600 text-3xl" />
+          </div>
+          <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg border-2 border-orange-500 z-10 rotate-6 translate-x-2">
+            <FaMotorcycle className="text-orange-500 text-3xl" />
+          </div>
         </div>
         <div className="absolute bottom-4 left-5 z-20">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[10px] font-bold uppercase tracking-wider shadow-sm">
@@ -183,7 +183,7 @@ const ComboCoursePage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
                   {/* Process Connectors (Desktop) */}
                   <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gradient-to-r from-purple-500/0 via-purple-500/20 to-purple-500/0 z-0" />
-                  
+
                   {[
                     {
                       step: "01",
@@ -204,17 +204,15 @@ const ComboCoursePage = () => {
                       icon: <CheckCircle2 className="text-purple-600" size={24} />
                     }
                   ].map((item, idx) => (
-                    <div key={idx} className={`relative z-10 p-8 rounded-[2rem] border transition-all duration-500 group overflow-hidden ${
-                      isDarkMode 
-                        ? 'bg-[#0f172a]/40 border-slate-800 hover:border-purple-500/30' 
+                    <div key={idx} className={`relative z-10 p-8 rounded-[2rem] border transition-all duration-500 group overflow-hidden ${isDarkMode
+                        ? 'bg-[#0f172a]/40 border-slate-800 hover:border-purple-500/30'
                         : 'bg-white border-slate-100 shadow-sm hover:shadow-xl hover:border-purple-100'
-                    }`}>
+                      }`}>
                       <div className="absolute top-4 right-6 text-4xl font-black opacity-[0.03] group-hover:opacity-[0.08] transition-opacity uppercase italic">
                         Step {item.step}
                       </div>
-                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:scale-110 ${
-                        isDarkMode ? 'bg-slate-800/80 border border-slate-700' : 'bg-purple-50 border border-purple-100'
-                      }`}>
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-500 group-hover:scale-110 ${isDarkMode ? 'bg-slate-800/80 border border-slate-700' : 'bg-purple-50 border border-purple-100'
+                        }`}>
                         {item.icon}
                       </div>
                       <h4 className={`text-xl font-extrabold mb-3 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>{item.title}</h4>

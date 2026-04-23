@@ -274,7 +274,7 @@ const Hero = () => {
   const slide = heroSlides[currentSlide];
 
   return (
-    <div className="w-full relative bg-white dark:bg-slate-950 pt-24 pb-12 font-poppins transition-colors duration-500">
+    <div className="w-full relative bg-transparent pt-24 pb-12 font-poppins transition-colors duration-500">
       <div 
         className="max-w-[1400px] mx-auto px-4 sm:px-8 relative"
         onMouseEnter={() => setIsAutoPlaying(false)}

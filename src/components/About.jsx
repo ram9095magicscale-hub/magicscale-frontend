@@ -33,7 +33,7 @@ export default function AboutPage({ showTitle = true }) {
   return (
     <section
       id="about"
-      className="relative pt-24 pb-32 px-6 sm:px-12 lg:px-24 bg-white dark:bg-slate-950 overflow-hidden font-poppins transition-colors duration-500"
+      className="relative pt-24 pb-32 px-6 sm:px-12 lg:px-24 bg-transparent overflow-hidden font-poppins transition-colors duration-500"
     >
       {/* Premium Background Decorations */}
       <div className="absolute inset-0 z-0 pointer-events-none">

@@ -5,29 +5,25 @@ const ComboFAQ = () => {
   const { isDarkMode } = useTheme();
   return (
     <div
-      className={`py-16 px-6 md:px-20 font-poppins ${
-        isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gradient-to-br from-indigo-50 to-purple-100 text-gray-800'
-      }`}
+      className={`py-16 px-6 md:px-20 font-poppins ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-gradient-to-br from-indigo-50 to-purple-100 text-gray-800'
+        }`}
     >
       <div className="max-w-5xl mx-auto">
         <h2
-          className={`text-4xl font-bold mb-8 text-center ${
-            isDarkMode ? 'text-purple-400' : 'text-indigo-900'
-          }`}
+          className={`text-4xl font-bold mb-8 text-center ${isDarkMode ? 'text-purple-400' : 'text-indigo-900'
+            }`}
         >
           Combo Frequently Asked Questions
         </h2>
 
         <div className="space-y-6">
           <details
-            className={`group shadow-md rounded-lg p-5 cursor-pointer ${
-              isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
-            }`}
+            className={`group shadow-md rounded-lg p-5 cursor-pointer ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
+              }`}
           >
             <summary
-              className={`text-lg font-medium group-open:text-indigo-600 ${
-                isDarkMode ? 'text-gray-100' : 'text-gray-800'
-              }`}
+              className={`text-lg font-medium group-open:text-indigo-600 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'
+                }`}
             >
               What is included in the Zomato & Swiggy Combo?
             </summary>
@@ -37,14 +33,12 @@ const ComboFAQ = () => {
           </details>
 
           <details
-            className={`group shadow-md rounded-lg p-5 cursor-pointer ${
-              isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
-            }`}
+            className={`group shadow-md rounded-lg p-5 cursor-pointer ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
+              }`}
           >
             <summary
-              className={`text-lg font-medium group-open:text-indigo-600 ${
-                isDarkMode ? 'text-gray-100' : 'text-gray-800'
-              }`}
+              className={`text-lg font-medium group-open:text-indigo-600 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'
+                }`}
             >
               How much time does it take to go live on both platforms?
             </summary>
@@ -54,14 +48,12 @@ const ComboFAQ = () => {
           </details>
 
           <details
-            className={`group shadow-md rounded-lg p-5 cursor-pointer ${
-              isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
-            }`}
+            className={`group shadow-md rounded-lg p-5 cursor-pointer ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
+              }`}
           >
             <summary
-              className={`text-lg font-medium group-open:text-indigo-600 ${
-                isDarkMode ? 'text-gray-100' : 'text-gray-800'
-              }`}
+              className={`text-lg font-medium group-open:text-indigo-600 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'
+                }`}
             >
               Do I need a GST number for the Combo package?
             </summary>
@@ -71,14 +63,12 @@ const ComboFAQ = () => {
           </details>
 
           <details
-            className={`group shadow-md rounded-lg p-5 cursor-pointer ${
-              isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
-            }`}
+            className={`group shadow-md rounded-lg p-5 cursor-pointer ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'
+              }`}
           >
             <summary
-              className={`text-lg font-medium group-open:text-indigo-600 ${
-                isDarkMode ? 'text-gray-100' : 'text-gray-800'
-              }`}
+              className={`text-lg font-medium group-open:text-indigo-600 ${isDarkMode ? 'text-gray-100' : 'text-gray-800'
+                }`}
             >
               Will you help with menu pricing and categories?
             </summary>

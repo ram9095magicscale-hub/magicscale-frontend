@@ -10,7 +10,7 @@ const Footer = () => {
     };
 
   return (
-    <footer className="bg-[#0f172a] dark:bg-[#070b14] text-slate-300 font-poppins relative border-t border-slate-800">
+    <footer className="bg-[#070b14] dark:bg-[#04070d] text-slate-300 font-poppins relative border-t border-slate-800/50">
       
       {/* Top Section: Links & Info */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
@@ -78,7 +78,7 @@ const Footer = () => {
       </div>
 
       {/* Middle Section: Contact Info Cards */}
-      <div className="border-t border-slate-800/80 bg-[#0b101d] dark:bg-[#04070d]">
+      <div className="border-t border-slate-800/30">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8 lg:divide-x lg:divide-slate-800">
           
           {/* Address */}
@@ -133,14 +133,20 @@ const Footer = () => {
       </div>
 
       {/* Bottom Legal Bar */}
-      <div className="bg-[#0f172a] dark:bg-[#070b14] border-t border-slate-800">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-500">
+      <div className="border-t border-slate-800/30">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-medium text-slate-500">
              <p>Copyright © {new Date().getFullYear()} {companyDetails.fullLegalName}. All Rights Reserved.</p>
-             <p className="flex items-center gap-3">
-                <Link to="/privacy-policy" className="hover:text-indigo-400 transition-colors">Privacy Policy</Link> 
-                <span className="text-slate-700">|</span> 
-                <Link to="/terms-and-condition" className="hover:text-indigo-400 transition-colors">Terms & Conditions</Link>
-             </p>
+             <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6">
+                <div className="flex items-center gap-3">
+                   <Link to="/privacy-policy" className="hover:text-indigo-400 transition-colors">Privacy Policy</Link> 
+                   <span className="text-slate-700">|</span> 
+                   <Link to="/terms-and-condition" className="hover:text-indigo-400 transition-colors">Terms & Conditions</Link>
+                </div>
+                <div className="hidden md:block w-px h-3 bg-slate-800"></div>
+                <p className="flex items-center gap-1.5">
+                   Made with love in <span className="text-slate-400 font-bold">Delhi</span> <span className="text-red-500 animate-pulse">❤️</span>
+                </p>
+             </div>
           </div>
       </div>
 

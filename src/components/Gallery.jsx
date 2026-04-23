@@ -173,7 +173,7 @@ const Gallery = () => {
   }, []);
 
   return (
-    <section id="work" className="relative pt-24 pb-8 px-6 sm:px-12 lg:px-24 bg-white dark:bg-slate-950 transition-colors duration-500 overflow-hidden">
+    <section id="work" className="relative pt-24 pb-8 px-6 sm:px-12 lg:px-24 bg-transparent transition-colors duration-500 overflow-hidden">
       
       <AnimatePresence>
         {(selectedItem || hoveredItem) && (

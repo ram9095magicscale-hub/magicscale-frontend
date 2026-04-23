@@ -54,7 +54,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative pt-24 pb-32 px-6 sm:px-12 lg:px-24 bg-white dark:bg-slate-950 overflow-hidden font-poppins transition-colors duration-500"
+      className="relative pt-24 pb-32 px-6 sm:px-12 lg:px-24 bg-transparent overflow-hidden font-poppins transition-colors duration-500"
     >
       {/* Premium Background Decorations */}
       <div className="absolute inset-0 z-0 pointer-events-none">

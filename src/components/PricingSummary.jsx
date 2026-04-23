@@ -35,7 +35,7 @@ const PricingSummary = () => {
   };
 
   return (
-    <div id="pricing" className="relative pt-24 pb-32 px-6 sm:px-12 lg:px-24 bg-white dark:bg-slate-950 overflow-hidden font-poppins transition-colors duration-500">
+    <div id="pricing" className="relative pt-24 pb-32 px-6 sm:px-12 lg:px-24 bg-transparent overflow-hidden font-poppins transition-colors duration-500">
       {/* Background blobs */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 w-[800px] h-[800px] bg-indigo-50/80 dark:bg-indigo-900/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2"></div>
