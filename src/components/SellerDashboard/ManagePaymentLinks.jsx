@@ -81,7 +81,10 @@ const ManagePaymentLinks = () => {
         purpose: mode === "pending" ? `Balance: ${formData.purpose}` : (paymentType === "partial" ? `Partial: ${formData.purpose}` : formData.purpose)
       }, { headers: { Authorization: `Bearer ${token}` } });
       if (res.data.success) setGeneratedLink(res.data.link_url);
-    } catch (err) { alert("Failed to generate link. Check API access."); } finally { setLoading(false); }
+    } catch (err) { 
+      const errorMsg = err.response?.data?.message || err.message || "Failed to generate link.";
+      alert(`Payment Error: ${errorMsg}`); 
+    } finally { setLoading(false); }
   };
 
   const remainingBalance = Math.max(0, (parseFloat(formData.totalServicePrice) || 0) - (parseFloat(formData.amount) || 0));

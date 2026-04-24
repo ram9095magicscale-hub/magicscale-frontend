@@ -10,6 +10,7 @@ import HomeWork from "./components/HomeWork";
 import Work from "./components/Work";
 import Terms from "./components/Terms";
 import Checkout from "./Pages/Checkout";
+import CheckoutLink from "./Pages/CheckoutLink";
 import PaymentSuccess from "./Pages/PaymentSuccess/PaymentSuccess";
 import ServicesPage from "./Pages/ServicesPage";
 import ZomatoDetails from "./Pages/depthcard/ZomatoDetails";
@@ -114,6 +115,7 @@ function App() {
         <Route path="/login-phone" element={<PhoneOTPLogin />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/checkout/:id" element={<Checkout />} />
+        <Route path="/checkout-link" element={<CheckoutLink />} />
 
 
         <Route
