@@ -64,7 +64,12 @@ const ManagePaymentLinks = () => {
       });
       if (res.data.success && res.data.user) {
         setFormData({
-          name: res.data.user.name || "", email: res.data.user.email || "", phone: res.data.user.phone || "", amount: "", purpose: res.data.lastPayment?.plan || "", totalServicePrice: res.data.lastPayment?.amount?.toString() || ""
+          name: res.data.user.name || "", 
+          email: res.data.user.email || "", 
+          phone: res.data.user.phone || "", 
+          amount: res.data.pendingBalance?.toString() || "", 
+          purpose: res.data.lastPayment?.plan || "", 
+          totalServicePrice: res.data.lastPayment?.totalAmount?.toString() || res.data.lastPayment?.amount?.toString() || ""
         });
         setUserFound(true);
       } else alert("Customer not found.");
