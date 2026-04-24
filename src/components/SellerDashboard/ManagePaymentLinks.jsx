@@ -354,6 +354,7 @@ const ManagePaymentLinks = () => {
                           <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Service</th>
                           <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Amount</th>
                           <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Status</th>
+                          <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Link</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
@@ -374,6 +375,17 @@ const ManagePaymentLinks = () => {
                               <span className={`px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter ${link.status === "paid" ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"}`}>
                                 {link.status}
                               </span>
+                            </td>
+                            <td className="px-6 py-4">
+                               {link.paymentLink ? (
+                                  <button 
+                                    onClick={() => { navigator.clipboard.writeText(link.paymentLink); alert("Link Copied!"); }}
+                                    className="p-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-colors"
+                                    title="Copy Payment Link"
+                                  >
+                                    <Copy size={14} />
+                                  </button>
+                               ) : <span className="text-[10px] text-slate-400 italic">No link</span>}
                             </td>
                           </tr>
                         ))}
