@@ -21,6 +21,8 @@ const ManagePaymentLinks = () => {
   const [searching, setSearching] = useState(false);
   const [loading, setLoading] = useState(false);
   const [generatedLink, setGeneratedLink] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [fetchingHistory, setFetchingHistory] = useState(false);
   const [copied, setCopied] = useState(false);
   const [userFound, setUserFound] = useState(false);
   const token = localStorage.getItem("token");
@@ -41,6 +43,20 @@ const ManagePaymentLinks = () => {
         setFormData(prev => ({ ...prev, amount: prev.totalServicePrice }));
     }
   }, [paymentType]);
+
+  const fetchHistory = async () => {
+    setFetchingHistory(true);
+    try {
+      const res = await axios.get(`${API_URL}/cashfree/get-all-links`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.data.success) setHistory(res.data.links);
+    } catch (err) { console.error(err); } finally { setFetchingHistory(false); }
+  };
+
+  useEffect(() => {
+    if (mode === "history") fetchHistory();
+  }, [mode]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -119,6 +135,12 @@ const ManagePaymentLinks = () => {
               className={`px-5 py-2 rounded-lg font-black text-[10px] uppercase transition-all duration-300 ${mode === "pending" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"}`}
             >
               Pending
+            </button>
+            <button
+              onClick={() => { setMode("history"); setGeneratedLink(null); }}
+              className={`px-5 py-2 rounded-lg font-black text-[10px] uppercase transition-all duration-300 ${mode === "history" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none" : "text-slate-500 hover:text-slate-900 dark:hover:text-white"}`}
+            >
+              History
             </button>
           </div>
         </div>
@@ -315,7 +337,51 @@ const ManagePaymentLinks = () => {
                   <span className="text-[9px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight">Instant Settlement</span>
                </div>
             </div>
-          </div>
+        {/* HISTORY LIST */}
+        {mode === "history" && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+             {fetchingHistory ? (
+                <div className="flex justify-center py-12"><Loader2 className="animate-spin text-indigo-500" /></div>
+             ) : (
+                <div className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-2xl shadow-slate-200/50 dark:shadow-none">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50 dark:bg-slate-800/50">
+                          <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Customer</th>
+                          <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Service</th>
+                          <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Amount</th>
+                          <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50 dark:divide-slate-800">
+                        {history.map((link) => (
+                          <tr key={link._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                            <td className="px-6 py-4">
+                              <div className="font-bold text-slate-900 dark:text-white text-xs">{link.name}</div>
+                              <div className="text-[10px] text-slate-500 font-medium">{link.email}</div>
+                            </td>
+                            <td className="px-6 py-4 text-[11px] font-bold text-slate-600 dark:text-slate-300">{link.plan}</td>
+                            <td className="px-6 py-4">
+                              <div className="font-black text-slate-900 dark:text-white text-xs">₹{link.amount}</div>
+                              {link.totalAmount > link.amount && (
+                                <div className="text-[9px] text-amber-600 font-bold">of ₹{link.totalAmount}</div>
+                              )}
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter ${link.status === "paid" ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"}`}>
+                                {link.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {history.length === 0 && <div className="py-12 text-center text-slate-400 font-bold text-xs">No links generated yet.</div>}
+                </div>
+             )}
+          </motion.div>
         )}
       </div>
     </div>
