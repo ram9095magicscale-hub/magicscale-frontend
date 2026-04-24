@@ -320,7 +320,7 @@ const ManagePaymentLinks = () => {
                           <button onClick={() => { navigator.clipboard.writeText(generatedLink); setCopied(true); setTimeout(()=>setCopied(false), 2000); }} className="flex-1 py-4 bg-white text-emerald-600 rounded-xl font-black text-[11px] uppercase shadow-lg"> {copied ? "Link Copied!" : "Copy Link"} </button>
                           <button 
                             onClick={() => {
-                              const waMessage = `Hi ${formData.name},\n\nI've generated your payment link for the *${formData.purpose}* plan.\n\n*Billing Details:*\n💰 Amount: ₹${formData.amount}\n🔗 Payment Link: ${generatedLink}\n\nThank you for choosing MagicScale! We look forward to helping your business grow.\n\nBest Regards,\n*Vikas*\nMagicScale Team\nwww.magicscale.in`;
+                              const waMessage = `Hi ${formData.name},\n\nPlease find the payment link for *${formData.purpose}* below:\n\n💰 *Plan Details:*\nAmount: ₹${formData.amount}\n\n🔗 *Complete Payment:*\n${generatedLink}\n\nThank you for choosing MagicScale!\n\nBest Regards,\n*Akash Verma*\nMagicScale Team\nwww.magicscale.in`;
                               window.open(`https://wa.me/${formData.phone.startsWith('91') ? formData.phone : '91' + formData.phone}?text=${encodeURIComponent(waMessage)}`, '_blank');
                             }} 
                             className="px-5 py-4 bg-emerald-400/30 dark:bg-white/10 hover:bg-white/20 rounded-xl transition-all"
