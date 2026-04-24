@@ -88,7 +88,7 @@ const Video = () => {
               <div className="absolute -inset-4 bg-gradient-to-tr from-indigo-600/20 to-sky-400/20 rounded-[2.5rem] blur-2xl group-hover:opacity-100 opacity-50 transition-opacity duration-500"></div>
               
               <div className="relative bg-white dark:bg-slate-900/80 backdrop-blur-sm p-3 rounded-[2rem] shadow-2xl dark:shadow-indigo-500/10 border border-gray-100 dark:border-slate-800/50 ring-1 ring-black/5 dark:ring-white/10 overflow-hidden transition-colors">
-                <YoutubeVideo videoId={"j8cPFeu8fQQ"} title="MagicScale Intro" />
+                <YoutubeVideo videoId={"5hO2VJNkrQc"} title="MagicScale Intro" />
               </div>
               
 

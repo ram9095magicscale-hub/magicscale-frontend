@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PlayCircle } from "lucide-react";
 
-const YoutubeVideo = ({ videoId, title }) => {
+const YoutubeVideo = ({ videoId = "5hO2VJNkrQc", title = "MagicScale" }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
