@@ -337,6 +337,8 @@ const ManagePaymentLinks = () => {
                   <span className="text-[9px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight">Instant Settlement</span>
                </div>
             </div>
+          </div>
+        )}
         {/* HISTORY LIST */}
         {mode === "history" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
