@@ -17,14 +17,10 @@ const PaymentSuccess = () => {
       const orderId = queryParams.get("order_id");
       
       const savedDetails = localStorage.getItem("checkout_order");
-      if (!savedDetails) {
-        setLoading(false);
-        // If no details in localStorage, we can't confirm, but maybe it was already confirmed
-        // or the user refreshed. We'll show a generic success if orderId exists.
-        return;
-      }
-
-      const orderDetails = JSON.parse(savedDetails);
+      let orderDetails = savedDetails ? JSON.parse(savedDetails) : {};
+      
+      // If we have orderId but no localStorage, we still try to confirm
+      // The backend now handles fetching details from Cashfree using orderId
       setDetails(orderDetails);
 
       try {
@@ -50,6 +46,12 @@ const PaymentSuccess = () => {
 
         console.log("Payment confirmed:", data);
         localStorage.removeItem("checkout_order");
+        
+        // Auto redirect to home after 5 seconds
+        setTimeout(() => {
+            navigate("/");
+        }, 5000);
+
       } catch (err) {
         console.error("Confirmation Error:", err);
         setError(err.message);
@@ -59,7 +61,7 @@ const PaymentSuccess = () => {
     };
 
     confirmPayment();
-  }, [location.search]);
+  }, [location.search, navigate]);
 
   if (loading) {
     return (
