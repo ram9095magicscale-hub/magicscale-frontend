@@ -8,8 +8,8 @@ const PaymentRedirect = () => {
   useEffect(() => {
     const resolveLink = async () => {
       try {
-        // Calling the CRM API to get the actual payment URL
-        const response = await fetch(`https://magicscale.in/api/cashfree/redirect-handler?shortId=${shortId}`);
+        // 🔥 UPDATED: Calling the correct CRM Domain
+        const response = await fetch(`https://team.magicscale.in/api/cashfree/redirect-handler?shortId=${shortId}`);
         const data = await response.json();
 
         if (data.success && data.url) {
