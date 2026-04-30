@@ -43,6 +43,7 @@ import CareersPage from "./Pages/CareersPage";
 import JobDetailsPage from "./Pages/JobDetailsPage";
 import KravyCoursePage from "./Pages/depthcard/KravyCoursePage/KravyCoursePage";
 import ComboCoursePage from "./Pages/depthcard/ComboCoursePage/ComboCoursePage";
+import PaymentRedirect from "./Pages/PaymentRedirect";
 
 import Subscriptions from './Pages/UserDashboard/Subscriptions'; 
 
@@ -59,10 +60,12 @@ function App() {
 
   const location = useLocation();
 
+  const isRedirectPage = location.pathname.startsWith("/p/");
+
   return (
     <ThemeProvider>
-      <Header />
-      <EnquiryModal />
+      {!isRedirectPage && <Header />}
+      {!isRedirectPage && <EnquiryModal />}
       <div>
         <Routes>
         <Route path="/" element={<Home />} />
@@ -158,6 +161,7 @@ function App() {
           }
         />
         <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/p/:shortId" element={<PaymentRedirect />} />
       </Routes>
       </div>
     </ThemeProvider>
