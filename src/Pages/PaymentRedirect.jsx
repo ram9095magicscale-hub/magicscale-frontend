@@ -8,9 +8,16 @@ const PaymentRedirect = () => {
   useEffect(() => {
     const resolveLink = async () => {
       try {
-        // 🔥 UPDATED: Dynamic Origin for API resolution
-        const response = await fetch(`${window.location.origin}/api/cashfree/redirect-handler?shortId=${shortId}`);
-        const data = await response.json();
+        // 1. Try local domain first
+        let response = await fetch(`${window.location.origin}/api/cashfree/redirect-handler?shortId=${shortId}`);
+        let data = await response.json();
+
+        // 2. If not found locally, try CRM (team.magicscale.in) as fallback
+        if (!data.success) {
+          console.log("Not found locally, trying CRM fallback...");
+          response = await fetch(`https://team.magicscale.in/api/cashfree/redirect-handler?shortId=${shortId}`);
+          data = await response.json();
+        }
 
         if (data.success && data.url) {
           window.location.href = data.url;
