@@ -7,27 +7,33 @@ const PaymentRedirect = () => {
 
   useEffect(() => {
     const resolveLink = async () => {
-      try {
-        // 1. Try local domain first
-        let response = await fetch(`${window.location.origin}/api/cashfree/redirect-handler?shortId=${shortId}`);
-        let data = await response.json();
+      const endpoints = [
+        `/api/cashfree/redirect-handler?shortId=${shortId}`,
+        `${window.location.origin}/api/cashfree/redirect-handler?shortId=${shortId}`,
+        `${import.meta.env.VITE_API_URL}/cashfree/redirect-handler?shortId=${shortId}`,
+        `https://magicscale-backend.vercel.app/api/cashfree/redirect-handler?shortId=${shortId}`
+      ];
 
-        // 2. If not found locally, try CRM (team.magicscale.in) as fallback
-        if (!data.success) {
-          console.log("Not found locally, trying CRM fallback...");
-          response = await fetch(`https://team.magicscale.in/api/cashfree/redirect-handler?shortId=${shortId}`);
-          data = await response.json();
+      console.log(`Resolving link: ${shortId} across ${endpoints.length} possible endpoints`);
+      
+      for (const url of endpoints) {
+        try {
+          console.log(`Trying resolution via: ${url}`);
+          const response = await fetch(url);
+          if (!response.ok) continue;
+          
+          const data = await response.json();
+          if (data.success && data.url) {
+            console.log("✅ Success! Redirecting to:", data.url);
+            window.location.href = data.url;
+            return;
+          }
+        } catch (err) {
+          console.warn(`Failed endpoint ${url}:`, err.message);
         }
-
-        if (data.success && data.url) {
-          window.location.href = data.url;
-        } else {
-          setError(data.message || "Link not found or expired.");
-        }
-      } catch (err) {
-        console.error("Redirect failed:", err);
-        setError("Failed to resolve payment link.");
       }
+      
+      setError("Payment link not found. Please check the URL or contact support.");
     };
 
     if (shortId) {

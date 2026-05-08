@@ -5,7 +5,7 @@ import {
   Link as LinkIcon, Copy, Check, Send, Loader2, IndianRupee, 
   User, Mail, Phone, FileText, Search, CreditCard, ArrowRight,
   ChevronDown, AlertCircle, Calculator, Wallet, Zap, Clock, UserCheck,
-  ShieldCheck, Sparkles
+  ShieldCheck, Sparkles, RefreshCw
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ALL_SERVICES } from "../../constants/services";
@@ -308,8 +308,8 @@ const ManagePaymentLinks = () => {
                     <div className="flex flex-col items-center gap-4">
                        <div className="w-16 h-16 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/30 shadow-inner"><Check size={32} /></div>
                        <div className="text-center">
-                          <h4 className="text-2xl font-black tracking-tight leading-none">Invoice Ready</h4>
-                          <p className="text-[11px] font-bold opacity-90 uppercase tracking-widest mt-2">Billed for ₹{formData.amount}</p>
+                          <h4 className="text-2xl font-black tracking-tight leading-none">Link Generated</h4>
+                          <p className="text-[11px] font-bold opacity-90 uppercase tracking-widest mt-2">Automated WhatsApp & Email Sent</p>
                        </div>
                     </div>
                     <div className="flex flex-col gap-3">
@@ -320,10 +320,11 @@ const ManagePaymentLinks = () => {
                           <button onClick={() => { navigator.clipboard.writeText(generatedLink); setCopied(true); setTimeout(()=>setCopied(false), 2000); }} className="flex-1 py-4 bg-white text-emerald-600 rounded-xl font-black text-[11px] uppercase shadow-lg"> {copied ? "Link Copied!" : "Copy Link"} </button>
                           <button 
                             onClick={() => {
-                              const waMessage = `Hi ${formData.name},\n\nPlease find the payment link for *${formData.purpose}* below:\n\n💰 *Plan Details:*\nAmount: ₹${formData.amount}\n\n🔗 *Complete Payment:*\n${generatedLink}\n\nThank you for choosing MagicScale!\n\nBest Regards,\n*Akash Verma*\nMagicScale Team\nwww.magicscale.in`;
+                              const waMessage = `Hi ${formData.name},\n\nPlease find the payment link for *${formData.purpose}* below:\n\n💰 *Amount Details:*\nBilled: ₹${formData.amount}\nTotal: ₹${formData.totalServicePrice}\n\n🔗 *Complete Payment:*\n${generatedLink}\n\nThank you for choosing MagicScale!\n\nBest Regards,\n*MagicScale Team*\nwww.magicscale.in`;
                               window.open(`https://wa.me/${formData.phone.startsWith('91') ? formData.phone : '91' + formData.phone}?text=${encodeURIComponent(waMessage)}`, '_blank');
                             }} 
                             className="px-5 py-4 bg-emerald-400/30 dark:bg-white/10 hover:bg-white/20 rounded-xl transition-all"
+                            title="Resend Manually via WhatsApp"
                           > 
                             <Send size={18} /> 
                           </button>
@@ -385,7 +386,8 @@ const ManagePaymentLinks = () => {
                               </span>
                             </td>
                             <td className="px-6 py-4">
-                               {link.paymentLink ? (
+                              <div className="flex gap-2">
+                               {link.paymentLink && (
                                   <button 
                                     onClick={() => { navigator.clipboard.writeText(link.paymentLink); alert("Link Copied!"); }}
                                     className="p-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 rounded-lg hover:bg-indigo-100 transition-colors"
@@ -393,7 +395,30 @@ const ManagePaymentLinks = () => {
                                   >
                                     <Copy size={14} />
                                   </button>
-                               ) : <span className="text-[10px] text-slate-400 italic">No link</span>}
+                               )}
+                               <button 
+                                 onClick={async () => {
+                                   try {
+                                     const res = await axios.post(`${API_URL}/cashfree/confirm-payment`, 
+                                       { order_id: link.orderId },
+                                       { headers: { Authorization: `Bearer ${token}` } }
+                                     );
+                                     if (res.data.success) {
+                                       alert("Status Updated Successfully!");
+                                       fetchHistory(); // Refresh the list
+                                     } else {
+                                       alert(`Failed: ${res.data.message}`);
+                                     }
+                                   } catch (err) {
+                                     alert("Error updating status.");
+                                   }
+                                 }}
+                                 className="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors"
+                                 title="Refresh Status from Cashfree"
+                               >
+                                 <RefreshCw size={14} />
+                               </button>
+                               </div>
                             </td>
                           </tr>
                         ))}
