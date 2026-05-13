@@ -47,7 +47,7 @@ export const blogPosts = [
       <p>Increase your Average Order Value (AOV) by offering intelligently paired combos. "Make it a meal" buttons are highly effective.</p>
     `,
     date: "Mar 12, 2024",
-    author: "Vishal Kushwaha"
+    author: "Akash Verma"
   },
   {
     id: "legal-compliance",

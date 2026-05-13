@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Footer from '../components/Footer';
 import { FaChevronDown, FaCheckCircle, FaRocket, FaShieldAlt, FaUsers, FaArrowRight, FaHeadset, FaSearch } from 'react-icons/fa';
 import HomeServices from '../components/HomeWork';
 import heroBg from '../assets/services_hero_bg.png';
@@ -277,6 +278,8 @@ const ServicesPage = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };

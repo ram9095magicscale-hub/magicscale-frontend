@@ -5,7 +5,7 @@ import { Linkedin, Twitter, Mail } from "lucide-react";
 
 const teamMembers = [
   {
-    name: "Vishal Kushwaha",
+    name: "Akash Verma",
     role: "Founder & CEO",
     image: portrait_vishal,
     bio: "Visionary leader with 10+ years of experience in the food-tech industry.",

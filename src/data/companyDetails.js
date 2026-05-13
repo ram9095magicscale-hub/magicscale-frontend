@@ -1,7 +1,7 @@
 export const companyDetails = {
   name: "MagicScale",
   fullLegalName: "Magic Scale Restaurant Consultant",
-  founder: "Vishal Kushwaha",
+  founder: "Akash Verma",
   address: {
     country: "INDIA",
     label: "Head Office",
