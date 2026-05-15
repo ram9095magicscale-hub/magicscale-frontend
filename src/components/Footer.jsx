@@ -122,7 +122,7 @@ const Footer = () => {
             </div>
             <div>
                <h4 className="text-lg font-bold text-white mb-2">Email Id</h4>
-               <p className="text-xs text-indigo-400 font-bold uppercase tracking-wider mb-2">General Inquiry:</p>
+               <p className="text-xs text-indigo-400 font-bold uppercase tracking-wider mb-2">General Enquiry:</p>
                <a href={`mailto:${companyDetails.email.general}`} className="text-sm text-slate-300 hover:text-white tracking-wide transition-colors block mb-1 inline-block sm:block">
                  {companyDetails.email.general}
                </a>

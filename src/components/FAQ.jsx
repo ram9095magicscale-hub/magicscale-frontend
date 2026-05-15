@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, HelpCircle } from "lucide-react";
 
 const faqs = [
@@ -39,15 +39,15 @@ const FAQ = () => {
 
       <div className="relative z-10 max-w-4xl mx-auto">
         <div className="text-center mb-16 space-y-4">
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="inline-block px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-[0.2em]"
           >
             Got Questions?
-          </motion.div>
-          <motion.h2
+          </Motion.div>
+          <Motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -55,8 +55,8 @@ const FAQ = () => {
             className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white leading-tight tracking-tighter"
           >
             Frequently Asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-sky-600 dark:from-indigo-400 dark:to-sky-400">Questions</span>
-          </motion.h2>
-          <motion.p
+          </Motion.h2>
+          <Motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -64,12 +64,12 @@ const FAQ = () => {
             className="text-lg text-gray-600 dark:text-slate-400 max-w-2xl mx-auto font-medium"
           >
             Everything you need to know about MagicScale and how we can help you grow your food business.
-          </motion.p>
+          </Motion.p>
         </div>
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <motion.div
+            <Motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -110,7 +110,7 @@ const FAQ = () => {
 
               <AnimatePresence>
                 {openIndex === index && (
-                  <motion.div
+                  <Motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -122,10 +122,10 @@ const FAQ = () => {
                         {faq.answer}
                       </p>
                     </div>
-                  </motion.div>
+                  </Motion.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </Motion.div>
           ))}
         </div>
       </div>

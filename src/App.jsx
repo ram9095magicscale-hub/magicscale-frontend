@@ -54,6 +54,7 @@ import Subscriptions from './Pages/UserDashboard/Subscriptions';
 
 import { ThemeProvider } from "./components/context/ThemeContext";
 import EnquiryModal from "./components/EnquiryModal";
+import CookieConsent from "./components/CookieConsent";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -66,6 +67,7 @@ function App() {
     <ThemeProvider>
       {!isRedirectPage && <Header />}
       {!isRedirectPage && <EnquiryModal />}
+      {!isRedirectPage && <CookieConsent />}
       <div>
         <Routes>
         <Route path="/" element={<Home />} />

@@ -5,9 +5,9 @@ export const companyDetails = {
   address: {
     country: "INDIA",
     label: "Head Office",
-    line1: "599, 3rd Floor, opp. chandra Garden Nar Grand",
-    line2: "West End Greens, Rajokri, New Delhi 110038",
-    fullAddress: "599, 3rd Floor, opp. chandra Garden Nar Grand, West End Greens, Rajokri, Delhi, New Delhi, Delhi 110038",
+    line1: "599, 3rd Floor, opp. chandra Garden ",
+    line2: "Near West End Greens, Rajokri, New Delhi 110038",
+    fullAddress: "599, 3rd Floor, opp. chandra Garden, Near West End Greens, Rajokri, Delhi, New Delhi, Delhi 110038",
     mapLink: "https://maps.app.goo.gl/xLejFDqLj6VtQrqp9"
   },
   phone: {
