@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaCheckCircle, FaRocket, FaUtensils, FaChartLine, FaStore, FaTools, FaBolt, FaBalanceScale } from "react-icons/fa";
+import { FaCheckCircle, FaRocket, FaUtensils, FaChartLine, FaStore, FaTools, FaBolt, FaBalanceScale } from "react-icons/fa";
 import cloudKitchenImg from "../../assets/cloud_kitchen_setup.png";
 import { useTheme } from "../../components/context/ThemeContext";
 import { companyDetails } from "../../data/companyDetails";
@@ -28,15 +28,16 @@ const CloudKitchenDetails = () => {
       icon: <FaStore className="text-blue-500" />,
     },
     {
-      title: "Zomato & Swiggy",
-      desc: "Fast-track onboarding and menu optimization for high conversion.",
-      icon: <FaRocket className="text-orange-500" />,
-    },
-    {
       title: "Legal & Compliance",
       desc: "FSSAI, GST, Trade License, and Trademark registrations.",
       icon: <FaCheckCircle className="text-emerald-500" />,
     },
+    {
+      title: "Zomato & Swiggy",
+      desc: "Fast-track onboarding and menu optimization for high conversion.",
+      icon: <FaRocket className="text-orange-500" />,
+    },
+    
     {
       title: "Menu Optimization",
       desc: "Data-driven pricing and dish selection for better margins.",
@@ -58,29 +59,23 @@ const CloudKitchenDetails = () => {
 
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-500 font-poppins">
-      {/* --- Header / Back Button --- */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-cyan-600 transition-colors font-bold"
-          >
-            <FaArrowLeft /> Back
-          </button>
-          <div className="text-sm font-black tracking-widest text-cyan-600 uppercase">Premium Service</div>
-        </div>
-      </nav>
 
       {/* --- Hero Section --- */}
-      <section className="pt-32 pb-20 px-6 overflow-hidden">
+      <section className="pt-28 pb-20 px-6 overflow-hidden">
         <div className="max-w-5xl mx-auto text-center space-y-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-block px-4 py-1.5 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 text-xs font-bold tracking-widest uppercase mb-4"
-          >
-            End-to-End Brand Building
-          </motion.div>
+
+          {/* Breadcrumb - matches other service pages */}
+          <div className="flex items-center justify-start gap-2 text-xs sm:text-sm font-semibold uppercase tracking-wider mb-2">
+            <span
+              onClick={() => navigate('/services')}
+              className="text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 cursor-pointer transition-colors"
+            >
+              Services
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400 dark:text-slate-600"><polyline points="9 18 15 12 9 6"/></svg>
+            <span className="text-slate-500 dark:text-slate-400">Cloud Kitchen</span>
+          </div>
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
