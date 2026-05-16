@@ -70,8 +70,8 @@ export default function AboutPage({ showTitle = true }) {
             </h1>
             
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-xl">
-              At MagicScale, we simplify everything from cloud kitchen
-              onboarding to legal registrations. You focus on cooking, we handle the chaos.
+              At MagicScale, we specialize in scaling food businesses. From expert Swiggy and Zomato onboarding to 
+              comprehensive restaurant consulting and legal registrations, we handle the chaos so you can focus on cooking.
             </p>
             
             <div className="pt-4 flex flex-col sm:flex-row gap-4">

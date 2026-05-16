@@ -13,15 +13,15 @@ const teamMembers = [
     twitter: "#",
   },
   {
-    name: "Ananya Sharma",
-    role: "Head of Operations",
+    name: "Akshita",
+    role: "Head of Marketing",
     image: portrait_ananya,
     bio: "Ex-Zomato operations expert ensuring seamless onboarding for 500+ kitchens.",
     linkedin: "#",
     twitter: "#",
   },
   {
-    name: "Rahul Verma",
+    name: "Vishal Verma",
     role: "Marketing Strategy",
     image: portrait_rahul,
     bio: "Digital growth specialist who has helped brands achieve 4x order volume.",

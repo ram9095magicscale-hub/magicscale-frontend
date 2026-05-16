@@ -9,28 +9,28 @@ import brandingImg from "../assets/branding.png";
 
 const services = [
   {
-    title: "Zomato Setup",
+    title: "Zomato Onboarding & Growth",
     icon: <FaUtensils size={24} />,
     image: zomatoImg,
-    description: "We help you list and optimize your restaurant on Zomato.",
+    description: "Expert Zomato consulting to list your restaurant and optimize for maximum growth.",
   },
   {
-    title: "Swiggy Setup",
+    title: "Swiggy Partner Success",
     icon: <FaMotorcycle size={24} />,
      image: swiggyImg,
-    description: "Full onboarding and boost for your Swiggy business.",
+    description: "End-to-end Swiggy onboarding and marketing support to boost your food delivery sales.",
   },
   {
-    title: "FSSAI License",
+    title: "FSSAI License Consulting",
     icon: <FaCertificate size={24} />,
     image: fssaiImg,
-    description: "We get your FSSAI license approved quickly.",
+    description: "Fast-track FSSAI registration and food safety license support for your restaurant.",
   },
   {
-    title: "Branding & Logo",
+    title: "Restaurant Branding & Strategy",
     icon: <FaStore size={24} />,
     image: brandingImg,
-    description: "Complete logo and design support for your outlet.",
+    description: "Professional logo design and branding strategies to build a premium restaurant identity.",
   },
 ];
 

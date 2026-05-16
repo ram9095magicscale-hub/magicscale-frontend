@@ -19,8 +19,8 @@ const heroSlides = [
     id: 1,
     collection: "FOOD DELIVERY",
     title: "Swiggy Onboarding",
-    author: "MagicScale Experts",
-    desc: "Launch your restaurant on Swiggy and reach thousands of hungry customers. We manage your menu, photos, and fast-track approval.",
+    author: "Restaurant Consulting Experts",
+    desc: "Launch and scale your restaurant on Swiggy. We handle Swiggy onboarding, menu optimization, and growth marketing to increase your daily orders.",
     bgColor: "bg-[#fc8019]", // Swiggy Orange
     patternColor: "fill-orange-900/20",
     logo: swiggyIcon,
@@ -32,8 +32,8 @@ const heroSlides = [
     id: 2,
     collection: "FOOD DELIVERY",
     title: "Zomato Onboarding",
-    author: "MagicScale Experts",
-    desc: "Get listed on Zomato with a beautifully crafted menu and high-quality setup designed to maximize your daily orders.",
+    author: "Restaurant Consulting Experts",
+    desc: "Get listed on Zomato with expert onboarding. We optimize your Zomato presence with high-converting menus and data-driven marketing strategies.",
     bgColor: "bg-[#e23744]", // Zomato Red
     patternColor: "fill-red-900/20",
     logo: zomatoIcon,
@@ -44,9 +44,9 @@ const heroSlides = [
   {
     id: 5,
     collection: "BEST VALUE",
-    title: "Combo Onboarding",
-    author: "Swiggy & Zomato",
-    desc: "Double your reach with our exclusive Swiggy + Zomato combo package. Professional setup for both platforms at a discounted rate.",
+    title: "Swiggy & Zomato Growth",
+    author: "Restaurant Consulting Experts",
+    desc: "Maximize your reach with our exclusive Swiggy + Zomato growth package. Professional setup and marketing for both platforms to double your revenue.",
     bgColor: "bg-indigo-600",
     patternColor: "fill-indigo-900/40",
     logo: zomatoIcon, // Using Zomato as lead, but will show combo in desc
@@ -57,9 +57,9 @@ const heroSlides = [
   {
     id: 3,
     collection: "COMPLIANCE",
-    title: "FSSAI Food License",
-    author: "Government Registration",
-    desc: "Crucial food safety licenses obtained quickly so you can start cooking legally and safely without the headache.",
+    title: "FSSAI License Consultant",
+    author: "Legal & Compliance Experts",
+    desc: "Get your FSSAI food license quickly. We handle the entire government registration process so you can focus on growing your restaurant business.",
     bgColor: "bg-emerald-600", // Vibrant emerald for light mode, ternary will handle dark
     patternColor: "fill-emerald-900/40",
     logo: fssaiIcon,
@@ -71,8 +71,8 @@ const heroSlides = [
     id: 4,
     collection: "FINANCE",
     title: "GST Registration",
-    author: "Tax & Compliance",
-    desc: "End-to-end GST support for seamless compliance, instant filing, and business growth. 100% online process.",
+    author: "Restaurant Finance Experts",
+    desc: "End-to-end GST support for restaurants and cloud kitchens. Seamless compliance and instant filing to keep your business running smoothly.",
     bgColor: "bg-indigo-500", // Vibrant indigo for light mode
     patternColor: "fill-indigo-900/40",
     logo: gstImg,
@@ -83,9 +83,9 @@ const heroSlides = [
   {
     id: 6,
     collection: "STRATEGY",
-    title: "Revenue Growth",
-    author: "Performance Marketing",
-    desc: "Scale your restaurant's revenue with data-driven growth strategies and offline price parity. Optimize your digital presence.",
+    title: "Restaurant Growth Strategy",
+    author: "Revenue Growth Consulting",
+    desc: "Scale your food business with data-driven restaurant growth strategies, performance marketing, and operational excellence. Your growth partner.",
     bgColor: "bg-fuchsia-600", // Clearly distinct from Swiggy, Zomato, and FSSAI
     patternColor: "fill-fuchsia-900/40",
     logo: null,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./Pages/Home";
@@ -57,8 +57,6 @@ import EnquiryModal from "./components/EnquiryModal";
 import CookieConsent from "./components/CookieConsent";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   const location = useLocation();
 
   const isRedirectPage = location.pathname.startsWith("/p/");
