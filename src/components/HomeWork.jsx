@@ -118,7 +118,6 @@
 
 import React from "react";
 import { FaUtensils, FaMotorcycle, FaCertificate, FaArrowRight, FaChartLine, FaBuilding } from "react-icons/fa";
-import { ChefHat } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTheme } from "./context/ThemeContext";
@@ -257,7 +256,7 @@ const HomeServices = () => {
     {
       title: "Cloud Kitchen Setup",
       desc: "Zero to Brand: Assistance in kitchen setup, branding, and platform onboarding.",
-      icon: <ChefHat size={24} />,
+      icon: <FaUtensils size={24} />,
       image: cloudKitchenImg,
       path: "/services/cloud-kitchen",
       color: "from-cyan-600 to-blue-700",

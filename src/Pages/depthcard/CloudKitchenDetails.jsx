@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
-import { ChefHat } from "lucide-react";
+import { FaArrowLeft, FaCheckCircle, FaRocket, FaUtensils, FaChartLine, FaStore, FaTools, FaBolt, FaBalanceScale } from "react-icons/fa";
 import cloudKitchenImg from "../../assets/cloud_kitchen_setup.png";
 import { useTheme } from "../../components/context/ThemeContext";
 import { companyDetails } from "../../data/companyDetails";
+import Footer from "../../components/Footer";
+import { motion } from "framer-motion";
 
 const CloudKitchenDetails = () => {
   const navigate = useNavigate();
@@ -15,104 +16,186 @@ const CloudKitchenDetails = () => {
     window.open(`https://wa.me/${companyDetails.phone.whatsappGroup}`, '_blank');
   };
 
-  // --- Common Text Content Component ---
-  const TextContent = () => (
-    <div className="space-y-8 text-left pr-4">
-      <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white">
-        A to Z Cloud Kitchen <br />
-        <span className="bg-gradient-to-r from-cyan-600 to-blue-500 dark:from-cyan-500 dark:to-blue-400 bg-clip-text text-transparent">
-          Setup & Scaling
-        </span>
-      </h1>
+  const services = [
+    {
+      title: "Kitchen Setup & Design",
+      desc: "Optimized kitchen layouts for maximum efficiency and flow.",
+      icon: <FaTools className="text-cyan-500" />,
+    },
+    {
+      title: "Brand Identity",
+      desc: "Premium logo design, brand story, and menu engineering.",
+      icon: <FaStore className="text-blue-500" />,
+    },
+    {
+      title: "Zomato & Swiggy",
+      desc: "Fast-track onboarding and menu optimization for high conversion.",
+      icon: <FaRocket className="text-orange-500" />,
+    },
+    {
+      title: "Legal & Compliance",
+      desc: "FSSAI, GST, Trade License, and Trademark registrations.",
+      icon: <FaCheckCircle className="text-emerald-500" />,
+    },
+    {
+      title: "Menu Optimization",
+      desc: "Data-driven pricing and dish selection for better margins.",
+      icon: <FaChartLine className="text-purple-500" />,
+    },
+    {
+      title: "Marketing Growth",
+      desc: "Performance marketing to scale from zero to lakhs in revenue.",
+      icon: <FaChartLine className="text-indigo-500" />,
+    },
+  ];
 
-      <p className="text-lg sm:text-xl leading-relaxed font-medium text-gray-700 dark:text-gray-300">
-        Turn your culinary dream into a profitable digital brand. We provide end-to-end assistance for setting up your cloud kitchen from scratch. From finding the right equipment to building a premium brand identity, we are your growth partners.
-      </p>
-
-      <div className="space-y-6">
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-          <ChefHat className="text-cyan-600 dark:text-cyan-400" />
-          Our Expertise:
-        </h3>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            "Kitchen Layout & Setup",
-            "Brand Identity & Logo",
-            "Zomato & Swiggy Onboarding",
-            "Toingit Integration",
-            "GST & FSSAI Licensing",
-            "Menu Engineering & Pricing",
-            "Marketing & Revenue Growth",
-            "Operational Training"
-          ].map((item, index) => (
-            <li key={index} className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-              <div className="w-2 h-2 rounded-full bg-cyan-500"></div>
-              {item}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <p className="text-lg sm:text-xl leading-relaxed font-medium text-gray-700 dark:text-gray-300">
-        Our experts manage the technical chaos of documentation, licenses, and digital listings while you focus on what you do best—cooking great food.
-      </p>
-
-      <p className="text-sm text-gray-500 dark:text-gray-400 italic font-medium">
-        "From Zero to a Leading Cloud Kitchen Brand — We make it happen."
-      </p>
-
-      <button
-        onClick={handleStartConsultation}
-        className="mt-6 bg-cyan-600 dark:bg-cyan-500 hover:bg-cyan-700 dark:hover:bg-cyan-600 text-white px-8 py-4 rounded-xl text-lg font-bold shadow-xl shadow-cyan-600/20 transition-all hover:-translate-y-1"
-      >
-        Start Your Cloud Kitchen
-      </button>
-    </div>
-  );
+  const steps = [
+    { title: "Concept & Planning", desc: "We define your niche and plan the menu." },
+    { title: "Legal & Setup", desc: "Licenses, kitchen equipment, and staff training." },
+    { title: "Branding & Launch", desc: "Logo, photos, and platform onboarding." },
+    { title: "Growth & Scaling", desc: "Marketing and operational excellence." },
+  ];
 
   return (
-    <div className="min-h-screen relative bg-gradient-to-br from-cyan-50 via-white to-blue-50 dark:from-slate-950 dark:via-cyan-950/10 dark:to-slate-950 transition-colors duration-500">
-
-      {/* --- Fixed Elements: Back Arrow --- */}
-      <div className="fixed top-4 left-4 z-50">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-3 rounded-full shadow-lg bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-200 transition-colors hover:bg-cyan-50 dark:hover:bg-slate-700"
-          aria-label="Go back"
-        >
-          <FaArrowLeft className="text-xl" />
-        </button>
-      </div>
-
-      {/* --- Main Content Area --- */}
-      <div className="flex flex-col md:flex-row pt-20">
-
-        {/* --- Mobile-Only Sticky Image Section --- */}
-        <div className="md:hidden sticky top-0 z-20 w-full px-6 py-4 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md shadow-md">
-            <img
-                src={cloudKitchenImg}
-                alt="Cloud Kitchen Setup"
-                className="w-full max-w-sm sm:max-w-md mx-auto rounded-3xl shadow-2xl dark:shadow-cyan-900/20 object-cover dark:brightness-90"
-            />
+    <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors duration-500 font-poppins">
+      {/* --- Header / Back Button --- */}
+      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-gray-100 dark:border-white/5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-cyan-600 transition-colors font-bold"
+          >
+            <FaArrowLeft /> Back
+          </button>
+          <div className="text-sm font-black tracking-widest text-cyan-600 uppercase">Premium Service</div>
         </div>
+      </nav>
 
-        {/* --- Left: Scrollable Info Section (Mobile & Desktop) --- */}
-        <div className="w-full md:w-1/2 px-6 py-12 sm:px-10 md:py-20 md:overflow-y-auto space-y-8">
-          <TextContent />
-        </div>
+      {/* --- Hero Section --- */}
+      <section className="pt-32 pb-20 px-6 overflow-hidden">
+        <div className="max-w-5xl mx-auto text-center space-y-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-block px-4 py-1.5 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 text-xs font-bold tracking-widest uppercase mb-4"
+          >
+            End-to-End Brand Building
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-7xl font-black text-gray-900 dark:text-white leading-[1.1] tracking-tight"
+          >
+            Launch Your <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-500">
+              Cloud Kitchen Brand
+            </span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-gray-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed"
+          >
+            We take you from a single idea to a nationwide digital food brand. Our experts handle the kitchen setup, branding, and platform scaling while you focus on the cooking.
+          </motion.p>
 
-        {/* --- Right: Sticky Image Section (Desktop Only) --- */}
-        <div className="hidden md:flex md:w-1/2 items-center justify-center sticky top-0 h-screen z-10 p-12">
-          <div className="relative group">
-            <div className="absolute inset-0 bg-cyan-500/20 blur-[100px] rounded-full group-hover:bg-cyan-500/30 transition-colors"></div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3 }}
+            className="relative mt-12 group"
+          >
+            <div className="absolute inset-0 bg-cyan-500/20 blur-[120px] rounded-full scale-75 group-hover:bg-cyan-500/30 transition-all duration-700"></div>
             <img
               src={cloudKitchenImg}
               alt="Cloud Kitchen Setup"
-              className="w-full max-w-2xl rounded-[2.5rem] shadow-2xl dark:shadow-cyan-900/30 object-cover relative z-10 border border-white/20 transform hover:scale-[1.02] transition-transform duration-500"
+              className="w-full max-w-4xl mx-auto rounded-[3rem] shadow-2xl dark:shadow-cyan-900/20 object-cover aspect-video max-h-[500px] relative z-10 border border-white/20"
             />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* --- Features Grid --- */}
+      <section className="py-24 bg-gray-50/50 dark:bg-slate-900/20 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">Everything You Need To Scale</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {services.map((service, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="p-8 rounded-[2rem] bg-white dark:bg-slate-900 border border-gray-100 dark:border-white/5 hover:border-cyan-500/30 transition-all shadow-xl shadow-gray-200/20 dark:shadow-none group"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-gray-50 dark:bg-slate-800 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+                  {service.icon}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{service.title}</h3>
+                <p className="text-gray-600 dark:text-slate-400 leading-relaxed text-sm">
+                  {service.desc}
+                </p>
+              </motion.div>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* --- Process Section --- */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8">
+              <h2 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight">The Zero to Brand Journey</h2>
+              <div className="space-y-6">
+                {steps.map((step, idx) => (
+                  <div key={idx} className="flex gap-6 items-start group">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-cyan-600 text-white flex items-center justify-center font-black text-xl shadow-lg shadow-cyan-600/20">
+                      {idx + 1}
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-cyan-600 transition-colors">{step.title}</h4>
+                      <p className="text-gray-600 dark:text-slate-400 font-medium">{step.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-cyan-600 to-blue-700 rounded-[3rem] p-12 text-white space-y-8 shadow-2xl relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+               <FaBolt className="text-4xl text-cyan-200 mb-2" />
+               <h3 className="text-3xl font-black leading-tight">Why Choose MagicScale for your Cloud Kitchen?</h3>
+               <p className="text-cyan-50 text-lg opacity-90 leading-relaxed font-medium">
+                 We've successfully launched 2000+ kitchens across India. We don't just give you a list of things to do; we execute them for you. Our goal is to ensure you hit ROI as fast as possible.
+               </p>
+               <button
+                 onClick={handleStartConsultation}
+                 className="w-full bg-white text-cyan-700 py-4 rounded-2xl font-bold text-lg hover:bg-cyan-50 transition-colors shadow-xl"
+               >
+                 Book Free Consultation
+               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Final CTA Section --- */}
+      <section className="py-20 text-center space-y-10">
+        <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white">Ready to Cook? <br /> <span className="text-cyan-600">We'll handle the rest.</span></h2>
+        <button
+          onClick={handleStartConsultation}
+          className="bg-cyan-600 dark:bg-cyan-500 hover:bg-cyan-700 dark:hover:bg-cyan-600 text-white px-10 py-5 rounded-[2rem] text-xl font-bold shadow-2xl shadow-cyan-600/20 transition-all hover:-translate-y-1"
+        >
+          Get Started Now
+        </button>
+      </section>
+
+      <Footer />
     </div>
   );
 };

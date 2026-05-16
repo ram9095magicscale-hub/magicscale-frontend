@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Plus, TrendingUp, ChefHat, Layout } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Plus, TrendingUp, Layout } from "lucide-react";
+import { FaUtensils } from "react-icons/fa";
 import cloudKitchenImg from "../assets/cloud_kitchen_setup.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
@@ -343,7 +344,7 @@ const Hero = () => {
                     className="mb-6 bg-white/10 w-fit p-4 rounded-2xl backdrop-blur-md border border-white/20 shadow-xl"
                   >
                      {slide.isCloudKitchenSlide ? (
-                       <ChefHat className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                       <FaUtensils className="w-10 h-10 md:w-12 md:h-12 text-white" />
                      ) : (
                        <TrendingUp className="w-10 h-10 md:w-12 md:h-12 text-white" />
                      )}
