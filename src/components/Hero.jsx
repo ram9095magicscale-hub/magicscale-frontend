@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Plus, TrendingUp } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Plus, TrendingUp, ChefHat, Layout } from "lucide-react";
+import cloudKitchenImg from "../assets/cloud_kitchen_setup.png";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -15,6 +16,20 @@ import gstImg from "../assets/Emblem_of_India.svg";
 
 // Service items for the Hero Slider
 const heroSlides = [
+  {
+    id: 7,
+    collection: "PREMIUM SERVICE",
+    title: "Cloud Kitchen Setup",
+    author: "End-to-End Brand Building",
+    desc: "Launch your cloud kitchen from zero to a leading brand. We assist in kitchen setup, branding, Zomato/Swiggy onboarding, and menu optimization.",
+    bgColor: "bg-cyan-600",
+    patternColor: "fill-cyan-900/40",
+    logo: null,
+    image: cloudKitchenImg,
+    path: "/services/cloud-kitchen",
+    buttonText: "Launch Now",
+    isCloudKitchenSlide: true,
+  },
   {
     id: 1,
     collection: "FOOD DELIVERY",
@@ -321,13 +336,17 @@ const Hero = () => {
                      <img src={slide.logo} alt="Brand" className="w-16 h-16 md:w-20 md:h-20 object-contain drop-shadow-md" />
                   </motion.div>
                 ) : (
-                   <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.1 }}
                     className="mb-6 bg-white/10 w-fit p-4 rounded-2xl backdrop-blur-md border border-white/20 shadow-xl"
                   >
-                     <TrendingUp className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                     {slide.isCloudKitchenSlide ? (
+                       <ChefHat className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                     ) : (
+                       <TrendingUp className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                     )}
                   </motion.div>
                 )}
 

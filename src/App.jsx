@@ -16,6 +16,7 @@ import ServicesPage from "./Pages/ServicesPage";
 import ZomatoDetails from "./Pages/depthcard/ZomatoDetails";
 import SwiggyDetails from "./Pages/depthcard/SwiggyDetails";
 import FssaiDetails from "./Pages/depthcard/FssaiDetails";
+import CloudKitchenDetails from "./Pages/depthcard/CloudKitchenDetails";
 import Login from './components/Login/Login';
 import ForgotPassword from './components/Login/ForgotPassword/ForgotPassword';
 import ResetPassword from './components/Login/ResetPassword/ResetPassword';
@@ -83,6 +84,7 @@ function App() {
         <Route path="/services/swiggy" element={<SwiggyDetails />} />
         <Route path="/services/fssai" element={<FssaiDetails />} />
         <Route path="/services/fssai-registration" element={<FssaiDetails />} />
+        <Route path="/services/cloud-kitchen" element={<CloudKitchenDetails />} />
 
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/about" element={<AboutUsPage />} />

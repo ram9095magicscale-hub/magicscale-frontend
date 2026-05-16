@@ -118,6 +118,7 @@
 
 import React from "react";
 import { FaUtensils, FaMotorcycle, FaCertificate, FaArrowRight, FaChartLine, FaBuilding } from "react-icons/fa";
+import { ChefHat } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTheme } from "./context/ThemeContext";
@@ -127,6 +128,7 @@ import zomatoCover from "../assets/zomato4.png";
 import swiggyCover from "../assets/swiggynew2.png";
 import fssaiCover from "../assets/fssai.png";
 import gstCover from "../assets/Emblem_of_India.svg";
+import cloudKitchenImg from "../assets/cloud_kitchen_setup.png";
 
 // Importing the smaller logo versions (for the top corner icon)
 import zomatoIcon from "../assets/zomato.png";
@@ -251,6 +253,20 @@ const HomeServices = () => {
       btnHover: "hover:bg-white hover:text-[#312e81]",
       btnBg: "bg-blue-900/50 text-white",
       badges: ["100% Online", "Tax Guidance"],
+    },
+    {
+      title: "Cloud Kitchen Setup",
+      desc: "Zero to Brand: Assistance in kitchen setup, branding, and platform onboarding.",
+      icon: <ChefHat size={24} />,
+      image: cloudKitchenImg,
+      path: "/services/cloud-kitchen",
+      color: "from-cyan-600 to-blue-700",
+      textColor: "text-white",
+      descColor: isDarkMode ? "text-slate-300" : "text-cyan-50",
+      accent: isDarkMode ? "text-cyan-400 bg-slate-800/80" : "text-cyan-600 bg-white",
+      btnHover: "hover:bg-white hover:text-cyan-600",
+      btnBg: "bg-cyan-900/50 text-white",
+      badges: ["A-Z Setup", "Brand Scaling"],
     },
   ];
 

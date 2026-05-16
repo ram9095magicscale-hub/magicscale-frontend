@@ -5,6 +5,7 @@ import swiggyImg from "../assets/swiggynew2.png";
 
 import fssaiImg from "../assets/fssai.png";
 import brandingImg from "../assets/branding.png";
+import cloudKitchenImg from "../assets/cloud_kitchen_setup.png";
 
 
 const services = [
@@ -31,6 +32,12 @@ const services = [
     icon: <FaStore size={24} />,
     image: brandingImg,
     description: "Professional logo design and branding strategies to build a premium restaurant identity.",
+  },
+  {
+    title: "Cloud Kitchen Setup",
+    icon: <FaUtensils size={24} />,
+    image: cloudKitchenImg,
+    description: "Complete end-to-end cloud kitchen setup, from zero to a leading digital brand.",
   },
 ];
 
