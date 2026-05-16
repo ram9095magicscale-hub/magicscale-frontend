@@ -84,9 +84,9 @@ const CloudKitchenDetails = () => {
 
   const plans = [
     {
-      name: "Basic",
-      price: "₹25,000",
+      name: "Starter",
       tag: "Get Started",
+      subtitle: "Best for first-time cloud kitchen owners",
       color: "border-gray-200 dark:border-slate-700",
       btnColor: "bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800",
       features: [
@@ -99,14 +99,14 @@ const CloudKitchenDetails = () => {
       ],
     },
     {
-      name: "Standard",
-      price: "₹60,000",
+      name: "Growth",
       tag: "Most Popular",
+      subtitle: "Best for brands ready to scale on platforms",
       color: "border-cyan-500 shadow-2xl shadow-cyan-500/10",
       btnColor: "bg-cyan-600 hover:bg-cyan-700 text-white",
       popular: true,
       features: [
-        "Everything in Basic",
+        "Everything in Starter",
         "Full Brand Identity Package",
         "Kitchen Layout & Setup Guide",
         "Menu Photography Guidance",
@@ -118,12 +118,12 @@ const CloudKitchenDetails = () => {
     },
     {
       name: "Premium",
-      price: "₹1,50,000+",
       tag: "Full Service",
+      subtitle: "End-to-end execution & long-term partnership",
       color: "border-blue-500 dark:border-blue-400",
       btnColor: "bg-blue-600 hover:bg-blue-700 text-white",
       features: [
-        "Everything in Standard",
+        "Everything in Growth",
         "Full Kitchen Setup Execution",
         "Packaging Design",
         "Influencer Outreach Campaign",
@@ -136,8 +136,8 @@ const CloudKitchenDetails = () => {
   ];
 
   const stats = [
-    { val: "2,000+", label: "Kitchens Launched" },
-    { val: "₹40L+", label: "Avg. First-Year Revenue" },
+    { val: "1,000+", label: "Kitchens Launched" },
+    { val: "₹5L+", label: "Avg. First-Year Revenue" },
     { val: "3–4 Wks", label: "Go-Live Timeline" },
     { val: "4.8★", label: "Client Satisfaction" },
   ];
@@ -328,8 +328,8 @@ const CloudKitchenDetails = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <p className="text-xs font-bold tracking-widest text-cyan-600 dark:text-cyan-400 uppercase">Pricing</p>
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white">Simple, Transparent Plans</h2>
-            <p className="text-gray-600 dark:text-slate-400 text-lg">One-time setup fee. No hidden charges. Monthly consulting available.</p>
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white">Choose Your Package</h2>
+            <p className="text-gray-600 dark:text-slate-400 text-lg">Pricing is customised based on your city, kitchen size, and requirements. <br className="hidden md:block" /><strong className="text-gray-800 dark:text-white">Get a free quote — no obligation.</strong></p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {plans.map((plan, i) => (
@@ -344,8 +344,11 @@ const CloudKitchenDetails = () => {
                 )}
                 <div className="mb-8">
                   <h3 className="text-xl font-black text-gray-900 dark:text-white mb-1">{plan.name}</h3>
-                  <div className="text-4xl font-black text-gray-900 dark:text-white mt-4">{plan.price}</div>
-                  <div className="text-sm text-gray-500 dark:text-slate-400 font-medium mt-1">one-time setup</div>
+                  <p className="text-sm text-gray-500 dark:text-slate-400 font-medium mb-4">{plan.subtitle}</p>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-50 dark:bg-cyan-900/20 border border-cyan-200 dark:border-cyan-800/40 rounded-xl">
+                    <FaWhatsapp className="text-cyan-600 dark:text-cyan-400" />
+                    <span className="text-cyan-700 dark:text-cyan-300 font-bold text-sm">Custom Quote on Request</span>
+                  </div>
                 </div>
                 <ul className="space-y-3 flex-1 mb-8">
                   {plan.features.map((f, fi) => (
@@ -355,14 +358,14 @@ const CloudKitchenDetails = () => {
                   ))}
                 </ul>
                 <button onClick={() => handlePlan(plan.name)}
-                  className={`w-full py-4 rounded-2xl font-bold text-base transition-all hover:-translate-y-0.5 ${plan.btnColor}`}>
-                  Get {plan.tag}
+                  className={`w-full py-4 rounded-2xl font-bold text-base transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 ${plan.btnColor}`}>
+                  <FaWhatsapp /> Request Quote for {plan.name}
                 </button>
               </motion.div>
             ))}
           </div>
           <p className="text-center text-gray-500 dark:text-slate-400 mt-8 text-sm font-medium">
-            Also available: Monthly Consulting (₹15k–₹50k/month) & Revenue Share model for high-trust clients.
+            Also available: Monthly Consulting & Revenue Share model. <button onClick={handleConsult} className="text-cyan-600 dark:text-cyan-400 font-bold underline underline-offset-2 hover:text-cyan-700">Talk to us →</button>
           </p>
         </div>
       </section>
