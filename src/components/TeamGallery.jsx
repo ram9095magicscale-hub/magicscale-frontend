@@ -1,16 +1,17 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { culture1, culture2, portrait_vishal, portrait_ananya, portrait_rahul, office_interior, team_meeting, office_reception } from "../assets";
+import { grp1, grp2, sh1, sh2, sh3, sh4, sh5, culture1 } from "../assets";
 
 const TeamGallery = () => {
   const images = [
-    { src: office_reception, span: "md:col-span-2 md:row-span-2", alt: "MagicScale Headquarters" },
-    { src: culture1, span: "md:col-span-2 md:row-span-1", alt: "Team Collaboration" },
-    { src: team_meeting, span: "md:col-span-1 md:row-span-1", alt: "Strategy Session" },
-    { src: office_interior, span: "md:col-span-1 md:row-span-1", alt: "Work Environment" },
-    { src: culture2, span: "md:col-span-2 md:row-span-1", alt: "Cultural Vibes" },
-    { src: portrait_ananya, span: "md:col-span-1 md:row-span-1", alt: "Operations Focus" },
-    { src: portrait_vishal, span: "md:col-span-1 md:row-span-1", alt: "Leadership" },
+    { src: grp1, span: "md:col-span-2 md:row-span-2", alt: "Team Collaboration" },
+    { src: sh1, span: "md:col-span-2 md:row-span-1", alt: "Our Journey" },
+    { src: sh2, span: "md:col-span-1 md:row-span-1", alt: "In Action" },
+    { src: sh3, span: "md:col-span-1 md:row-span-1", alt: "Team Spirit" },
+    { src: grp2, span: "md:col-span-2 md:row-span-2", alt: "Group Photo" },
+    { src: sh4, span: "md:col-span-1 md:row-span-1", alt: "Moments" },
+    { src: sh5, span: "md:col-span-1 md:row-span-1", alt: "Vibes" },
+    { src: culture1, span: "md:col-span-2 md:row-span-1", alt: "Cultural Vibes" },
   ];
 
   return (

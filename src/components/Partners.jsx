@@ -6,17 +6,18 @@ import rowdyLogo from "../assets/partners/Rowdy-Cafe-Logo.png";
 import pizza9Logo from "../assets/partners/pizza9.png";
 import zorkoLogo from "../assets/partners/zorko-new-logo.webp";
 import momoLogo from "../assets/partners/momo-nation-cafe.png";
-
+import mrSandwichLogo from "../assets/partners/mr.sandwich.png";
 export default function Partners() {
   // Real restaurant partner brands that scaled using MagicScale
   const partners = [
     { name: "Zeya Dalchini", src: dalchiniLogo, alt: "Zeya Dalchini Partner Logo", scaleClass: "scale-125" },
     { name: "Kulcha Culture", src: kulchaLogo, alt: "Kulcha Culture Partner Logo" },
-    { name: "Nagpals", src: nagpalsLogo, alt: "Nagpals Partner Logo", multiply: true, scaleClass: "scale-125" },
+    { name: "Nagpals", src: nagpalsLogo, alt: "Nagpals Partner Logo", multiply: true, scaleClass: "scale-150" },
     { name: "Rowdy Cafe", src: rowdyLogo, alt: "Rowdy Cafe Partner Logo", scaleClass: "scale-125" },
     { name: "Pizza 9", src: pizza9Logo, alt: "Pizza 9 Partner Logo", multiply: true },
     { name: "Zorko", src: zorkoLogo, alt: "Zorko Partner Logo" },
-    { name: "Momo Nation Cafe", src: momoLogo, alt: "Momo Nation Cafe Partner Logo", scaleClass: "scale-150" },
+    { name: "Momo Nation Cafe", src: momoLogo, alt: "Momo Nation Cafe Partner Logo", scaleClass: "scale-160" },
+    { name: "Mr. Sandwich", src: mrSandwichLogo, alt: "Mr. Sandwich Partner Logo", scaleClass: "scale-160" },
   ];
 
   // We duplicate the list to ensure the marquee is continuous, long enough, and loops seamlessly.
@@ -35,10 +36,10 @@ export default function Partners() {
   };
 
   return (
-    <div className="w-full bg-gradient-to-br from-indigo-700 via-indigo-600 to-indigo-800 border-y border-indigo-500/20 py-6 md:py-8 overflow-hidden relative z-20 select-none">
+    <div className="w-full bg-gradient-to-br from-indigo-700 via-indigo-600 to-indigo-800 border-y border-indigo-500/20 py-2 md:py-3 overflow-hidden relative z-20 select-none">
       {/* Edge Fades & Scroll Wrapper */}
       <div className="relative w-full overflow-hidden mask-marquee">
-        <div className="flex gap-12 md:gap-16 w-max animate-marquee hover:[animation-play-state:paused] py-2">
+        <div className="flex gap-12 md:gap-16 w-max animate-marquee hover:[animation-play-state:paused] py-6 md:py-8">
           {scrollingList.map((partner, index) => (
             <div
               key={index}
