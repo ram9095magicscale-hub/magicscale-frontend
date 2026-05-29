@@ -26,7 +26,8 @@ export const InfiniteMovingCards = ({
         const duplicatedItem = item.cloneNode(true);
         if (scrollerRef.current) {
           scrollerRef.current.appendChild(duplicatedItem);
-        }
+        }₹   3890[]\
+      
       });
 
       getDirection();

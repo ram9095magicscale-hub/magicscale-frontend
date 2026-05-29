@@ -12,6 +12,10 @@ import culture2 from "./team/culture2.png";
 import office_interior from "./team/office_interior.png";
 import team_meeting from "./team/team_meeting.png";
 import office_reception from "./team/office_reception.png";
+import founder from "./founder.png";
+import himanshu from "./Himanshu.png";
+import vishal_verma from "./vishal Verma.png";
+import vishal_sood from "./vishal_sood.jpeg";
 
 export { 
     logo, 
@@ -27,5 +31,10 @@ export {
     culture2,
     office_interior,
     team_meeting,
-    office_reception
+    office_reception,
+    founder,
+    himanshu,
+    vishal_verma,
+    vishal_sood
 };
+

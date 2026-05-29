@@ -47,6 +47,7 @@ import Hero from "../components/Hero";
 import Testimonial from "../components/Testimonial";
 import Contact from "../components/Contact";
 import About from "../components/About";
+import Partners from "../components/Partners";
 import Footer from "../components/Footer";
 import Video from "../components/Video";
 import HomeWork from "../components/HomeWork";
@@ -80,6 +81,7 @@ const Home = () => {
         {/* <Testimonial /> */}
       
         <About />
+        <Partners />
         <Gallery />
         <FAQ />
         <Contact />
