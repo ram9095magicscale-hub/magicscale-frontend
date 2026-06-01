@@ -25,7 +25,6 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { API_URL } from "../services/api";
 import { useAuth } from "../components/context/AuthContext/useAuth";
-import { load } from "@cashfreepayments/cashfree-js";
 
 
 const SERVICE_THEMES = {
@@ -191,7 +190,6 @@ const Checkout = () => {
   const [duration, setDuration] = useState(queryMonths || 1);
   const [quantity, setQuantity] = useState(parseInt(queryParams.get("quantity"), 10) || 1);
   const [formData, setFormData] = useState({ name: "", email: "", phone: "", address: "" });
-  const [cashfree, setCashfree] = useState(null);
   const [loading, setLoading] = useState(false);
   const [finalPriceFromQuery] = useState(parseInt(queryParams.get("finalPrice"), 10) || 0);
 
@@ -272,17 +270,7 @@ const Checkout = () => {
     fetchPlan();
   }, [id, location.search]);
 
-  useEffect(() => {
-    const initCashfree = async () => {
-      try {
-        const cf = await load({ mode: "production" });
-        setCashfree(cf);
-      } catch (err) {
-        console.error("Failed to load Cashfree SDK:", err);
-      }
-    };
-    initCashfree();
-  }, []);
+
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -301,8 +289,8 @@ const Checkout = () => {
     return Math.max(0, Math.round(total));
   };
 
-  const handleCashfreePayment = async () => {
-    if (!cashfree || !formData.name || !formData.email || !formData.phone) {
+  const handlePayment = async () => {
+    if (!formData.name || !formData.email || !formData.phone) {
       alert("Please fill all required fields.");
       return;
     }
@@ -325,7 +313,7 @@ const Checkout = () => {
       });
 
       const orderData = await res.json();
-      if (!res.ok || !orderData.payment_session_id) throw new Error(orderData.message || "Server error");
+      if (!res.ok || !orderData.link_url) throw new Error(orderData.message || "Server error");
 
       localStorage.setItem("checkout_order", JSON.stringify({
         name: formData.name,
@@ -338,10 +326,7 @@ const Checkout = () => {
         duration: isOneTime ? 1 : duration
       }));
 
-      await cashfree.checkout({
-        paymentSessionId: orderData.payment_session_id,
-        redirectTarget: "_self",
-      });
+      window.location.href = orderData.link_url;
       
     } catch (err) {
       alert(`Payment failed: ${err.message}`);
@@ -569,9 +554,9 @@ const Checkout = () => {
 
                 <div className="mt-auto space-y-4">
                   <button
-                    onClick={handleCashfreePayment}
-                    disabled={!isFormFilled || loading || !cashfree}
-                    className={`w-full py-5 rounded-2xl font-black text-white text-lg shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98] ${isFormFilled && !loading && cashfree ? `bg-gradient-to-r ${theme.payBtn}` : "bg-slate-200 dark:bg-slate-800 cursor-not-allowed text-slate-400"}`}
+                    onClick={handlePayment}
+                    disabled={!isFormFilled || loading}
+                    className={`w-full py-5 rounded-2xl font-black text-white text-lg shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.98] ${isFormFilled && !loading ? `bg-gradient-to-r ${theme.payBtn}` : "bg-slate-200 dark:bg-slate-800 cursor-not-allowed text-slate-400"}`}
                   >
                     {loading ? <Loader2 className="animate-spin" size={22} /> : <>Pay ₹{totalPrice.toLocaleString()} <ArrowRight size={22} /></>}
                   </button>

@@ -414,7 +414,7 @@ const ManagePaymentLinks = () => {
                                    }
                                  }}
                                  className="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 rounded-lg hover:bg-emerald-100 transition-colors"
-                                 title="Refresh Status from Cashfree"
+                                 title="Refresh Status"
                                >
                                  <RefreshCw size={14} />
                                </button>
