@@ -24,11 +24,6 @@ const PricingSummary = () => {
   const navigate = useNavigate();
   const [durations, setDurations] = useState({ basic: 1, premium: 1 });
 
-  const prices = {
-    basic: 8499,
-    premium: 11999,
-  };
-
   const handleMoreInfo = () => {
     navigate(`/pricing`);
     window.scrollTo(0, 0);
@@ -90,28 +85,6 @@ const PricingSummary = () => {
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-baseline gap-1.5 min-w-fit">
-                      <span className={`text-4xl font-black ${isPremium ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
-                        ₹{prices[planKey].toLocaleString()}
-                      </span>
-                      <span className={`text-sm font-medium ${isPremium ? 'text-indigo-300' : 'text-gray-500 dark:text-gray-400'}`}>
-                        /month
-                      </span>
-                    </div>
-
-                    {duration > 1 && (
-                      <div className="flex flex-col items-end animate-in fade-in slide-in-from-right-2 duration-500">
-                        <span className={`text-[9px] font-black uppercase tracking-widest leading-none mb-1 ${isPremium ? 'text-indigo-400' : 'text-gray-400'}`}>
-                          Total Billed
-                        </span>
-                        <span className={`text-2xl font-black tabular-nums transition-colors duration-300 ${isPremium ? 'text-sky-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
-                          ₹{(prices[planKey] * duration).toLocaleString("en-IN")}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
                   <div className="space-y-3 pt-3 border-t border-dashed border-gray-200 dark:border-slate-700">
                     <label className={`block text-[10px] font-bold uppercase tracking-widest ${isPremium ? 'text-indigo-300' : 'text-gray-500 dark:text-gray-400'}`}>
                       Subscription Duration
@@ -130,7 +103,14 @@ const PricingSummary = () => {
                         )
                       })}
                     </div>
+                  </div>
 
+                  <div className="flex items-center justify-between gap-4 pt-4 pb-2">
+                    <a href={`https://wa.me/${companyDetails.phone.whatsappGroup}?text=Hi, I would like to get a custom quote for the ${planType} plan for ${duration} month(s).`} target="_blank" rel="noopener noreferrer" className="flex items-baseline gap-1.5 min-w-fit hover:opacity-80 transition-opacity">
+                      <span className={`text-xl sm:text-2xl font-black ${isPremium ? 'text-white' : 'text-gray-900 dark:text-white'} underline decoration-indigo-500/50 hover:decoration-indigo-500 decoration-2 underline-offset-4`}>
+                        Custom Quote on WhatsApp
+                      </span>
+                    </a>
                   </div>
                   
                   <div className={`pt-4 border-t border-dashed ${isPremium ? 'border-indigo-800/50' : 'border-gray-200 dark:border-slate-800'} space-y-2.5`}>

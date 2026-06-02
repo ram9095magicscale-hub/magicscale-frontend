@@ -44,15 +44,7 @@ const Pricing = () => {
   const navigate = useNavigate();
   const [durations, setDurations] = useState({ basic: 1, premium: 1 });
 
-  const prices = {
-    basic: 8499,
-    premium: 11999,
-  };
 
-  const handleStart = (planSlug, months) => {
-    // Redirect to Growth Course page as requested
-    navigate("/course/growth");
-  };
 
 
   return (
@@ -111,15 +103,6 @@ const Pricing = () => {
                     </p>
                   </div>
 
-                  <div className="flex items-baseline gap-2">
-                    <span className={`text-5xl font-black ${isPremium ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
-                      ₹{prices[planKey].toLocaleString()}
-                    </span>
-                    <span className={`text-lg font-medium ${isPremium ? 'text-indigo-300' : 'text-gray-500 dark:text-gray-400'}`}>
-                      /month
-                    </span>
-                  </div>
-
                   <div className="space-y-4 pt-4 border-t border-dashed border-gray-200 dark:border-slate-700">
                     <label className={`block text-xs font-bold uppercase tracking-widest ${isPremium ? 'text-indigo-300' : 'text-gray-500 dark:text-gray-400'}`}>
                       Subscription Duration
@@ -138,20 +121,16 @@ const Pricing = () => {
                         )
                       })}
                     </div>
-                    <div className={`flex justify-between items-center py-4 px-6 rounded-2xl border ${isPremium ? 'bg-indigo-900/30 border-indigo-800' : 'bg-gray-50 border-gray-100 dark:bg-slate-800/50 dark:border-slate-700'}`}>
-                       <span className={`font-bold ${isPremium ? 'text-indigo-200' : 'text-gray-500 dark:text-gray-400'}`}>Total Billed</span>
-                       <span className={`text-2xl font-black ${isPremium ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'}`}>
-                         ₹{(prices[planKey] * duration).toLocaleString("en-IN")}
-                       </span>
-                    </div>
                   </div>
 
-                  <button
-                    onClick={() => handleStart(planKey, duration)}
-                    className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all duration-300 ${isPremium ? 'bg-white text-indigo-950 hover:bg-gray-50 shadow-xl shadow-white/10 hover:-translate-y-1' : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white hover:-translate-y-1'}`}
+                  <a
+                    href={`https://wa.me/${companyDetails.phone.whatsappGroup}?text=Hi, I would like to get a custom quote for the ${planType} plan for ${duration} month(s).`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`w-full py-5 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all duration-300 mt-6 ${isPremium ? 'bg-white text-indigo-950 hover:bg-gray-50 shadow-xl shadow-white/10 hover:-translate-y-1' : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white hover:-translate-y-1'}`}
                   >
-                    Get Started <Zap size={18} />
-                  </button>
+                    Custom Quote on WhatsApp <ArrowRight size={18} />
+                  </a>
                   
                   <div className={`pt-8 border-t border-dashed ${isPremium ? 'border-indigo-800/50' : 'border-gray-200 dark:border-slate-800'} space-y-4`}>
                     {planFeatures.map((feature, idx) => {
