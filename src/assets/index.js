@@ -16,6 +16,14 @@ import sh2 from "./team/sh2.jpg";
 import sh3 from "./team/sh3.jpg";
 import sh4 from "./team/sh4.jpg";
 import sh5 from "./team/sh5.jpg";
+import o1 from "./team/o1.jpg";
+import o2 from "./team/o2.jpg";
+import o3 from "./team/o3.jpg";
+import o4 from "./team/o4.jpg";
+import o5 from "./team/o5.jpg";
+import o6 from "./team/o6.jpg";
+import o7 from "./team/o7.jpg";
+import o8 from "./team/o8.jpg";
 
 export { 
     logo, 
@@ -35,6 +43,14 @@ export {
     sh2,
     sh3,
     sh4,
-    sh5
+    sh5,
+    o1,
+    o2,
+    o3,
+    o4,
+    o5,
+    o6,
+    o7,
+    o8
 };
 

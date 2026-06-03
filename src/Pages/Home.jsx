@@ -83,7 +83,7 @@ const Home = () => {
         {/* <Testimonial /> */}
 
         <About />
-        <Gallery />
+        {/* <Gallery /> */}
         <FAQ />
         <Contact />
         <Footer />

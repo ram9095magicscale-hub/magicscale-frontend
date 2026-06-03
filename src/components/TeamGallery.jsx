@@ -1,17 +1,24 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { grp1, grp2, sh1, sh2, sh3, sh4, sh5, culture1 } from "../assets";
+import { grp1, grp2, sh1, sh2, sh3, sh4, sh5, o1, o2, o3, o4, o5, o6, o7, o8 } from "../assets";
 
 const TeamGallery = () => {
   const images = [
-    { src: grp1, span: "md:col-span-2 md:row-span-2", alt: "Team Collaboration" },
-    { src: sh1, span: "md:col-span-2 md:row-span-1", alt: "Our Journey" },
-    { src: sh2, span: "md:col-span-1 md:row-span-1", alt: "In Action" },
+    { src: o2, span: "md:col-span-2 md:row-span-2", alt: "Team Celebration" },
     { src: sh3, span: "md:col-span-1 md:row-span-1", alt: "Team Spirit" },
+    { src: grp1, span: "md:col-span-2 md:row-span-1", alt: "Team Collaboration" },
+    { src: o5, span: "md:col-span-1 md:row-span-1", alt: "Memories" },
+    { src: sh1, span: "md:col-span-2 md:row-span-2", alt: "Our Journey" },
+    { src: o7, span: "md:col-span-1 md:row-span-1", alt: "Special Moments" },
+    { src: o1, span: "md:col-span-2 md:row-span-1", alt: "Fun Times" },
+    { src: sh2, span: "md:col-span-1 md:row-span-1", alt: "In Action" },
     { src: grp2, span: "md:col-span-2 md:row-span-2", alt: "Group Photo" },
+    { src: o3, span: "md:col-span-1 md:row-span-1", alt: "Team Outing" },
+    { src: o4, span: "md:col-span-2 md:row-span-1", alt: "Togetherness" },
     { src: sh4, span: "md:col-span-1 md:row-span-1", alt: "Moments" },
     { src: sh5, span: "md:col-span-1 md:row-span-1", alt: "Vibes" },
-    { src: culture1, span: "md:col-span-2 md:row-span-1", alt: "Cultural Vibes" },
+    { src: o8, span: "md:col-span-1 md:row-span-1", alt: "Team Outing" },
+    { src: o6, span: "col-span-2 md:col-span-2 md:row-span-1", alt: "MagicScale Life" },
   ];
 
   return (
@@ -37,7 +44,7 @@ const TeamGallery = () => {
           </motion.h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
+        <div className="grid grid-flow-row-dense grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 auto-rows-[150px] md:auto-rows-[250px]">
           {images.map((img, idx) => (
             <motion.div
               key={idx}
@@ -45,15 +52,15 @@ const TeamGallery = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className={`${img.span} relative rounded-[2rem] overflow-hidden group shadow-xl border border-gray-100 dark:border-white/5 shadow-gray-200/50 dark:shadow-none`}
+              className={`${img.span} relative rounded-[1rem] md:rounded-[2rem] overflow-hidden group shadow-xl border border-gray-100 dark:border-white/5 shadow-gray-200/50 dark:shadow-none`}
             >
               <img
                 src={img.src}
                 alt={img.alt}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-                <p className="text-white font-bold text-sm tracking-wide uppercase">{img.alt}</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-3 md:p-6">
+                <p className="text-white font-bold text-xs md:text-sm tracking-wide uppercase">{img.alt}</p>
               </div>
             </motion.div>
           ))}
