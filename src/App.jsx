@@ -27,6 +27,7 @@ import PhoneOTPLogin from './components/PhoneOTPLogin';
 import ZomatoCoursePage from    './Pages/depthcard/CoursePage/ZomatoCoursePage'; 
 import UserDashboard from './Pages/UserDashboard/UserDashboard';
 import SellerDashboard from './Pages/SellerDashboard/SellerDashboard';
+import RazorpayDashboard from './Pages/RazorpayDashboard/RazorpayDashboard';
 import Profile from './Pages/UserDashboard/Profile'; 
 import Orders from './Pages/UserDashboard/Orders';
 import SwiggyOnboardingCourse from "./Pages/depthcard/SwiggyCoursePage/SwiggyCoursePage";
@@ -61,12 +62,14 @@ function App() {
   const location = useLocation();
 
   const isRedirectPage = location.pathname.startsWith("/p/");
+  const isDashboard = location.pathname.toLowerCase().includes("dashboard");
+  const hideHeader = isRedirectPage || isDashboard;
 
   return (
     <ThemeProvider>
-      {!isRedirectPage && <Header />}
-      {!isRedirectPage && <EnquiryModal />}
-      {!isRedirectPage && <CookieConsent />}
+      {!hideHeader && <Header />}
+      {!hideHeader && <EnquiryModal />}
+      {!hideHeader && <CookieConsent />}
       <div>
         <Routes>
         <Route path="/" element={<Home />} />
@@ -128,6 +131,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['seller', 'admin']}>
               <SellerDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/razorpay-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={['seller', 'admin']}>
+              <RazorpayDashboard />
             </ProtectedRoute>
           }
         />
