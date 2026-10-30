@@ -135,7 +135,12 @@ const Footer = () => {
       {/* Bottom Legal Bar */}
       <div className="border-t border-slate-800/30">
           <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-medium text-slate-500">
-             <p>Copyright © {new Date().getFullYear()} {companyDetails.fullLegalName}. All Rights Reserved.</p>
+             <div>
+                <p>Copyright © {new Date().getFullYear()} {companyDetails.fullLegalName}. All Rights Reserved.</p>
+                {companyDetails.cin && (
+                   <p className="text-[11px] text-slate-500/80 mt-1">CIN: {companyDetails.cin}</p>
+                )}
+             </div>
              <div className="flex flex-col md:flex-row items-center gap-3 md:gap-6">
                 <div className="flex items-center gap-3">
                    <Link to="/privacy-policy" className="hover:text-indigo-400 transition-colors">Privacy Policy</Link> 

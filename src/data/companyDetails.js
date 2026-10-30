@@ -1,14 +1,15 @@
 export const companyDetails = {
   name: "MagicScale",
-  fullLegalName: "Magic Scale Restaurant Consultant",
+  fullLegalName: "MAGIC SCALE CONSULTANT PRIVATE LIMITED",
+  cin: "U70200DL2026PTC469316",
   founder: "Akash Verma",
   address: {
     country: "INDIA",
-    label: "Head Office",
-    line1: "599, 3rd Floor, opp. chandra Garden ",
-    line2: "Near West End Greens, Rajokri, New Delhi 110038",
-    fullAddress: "599, 3rd Floor, opp. chandra Garden, Near West End Greens, Rajokri, Delhi, New Delhi, Delhi 110038",
-    mapLink: "https://maps.app.goo.gl/xLejFDqLj6VtQrqp9"
+    label: "Registered Office",
+    line1: "3rd Floor, Plot in Mustatil No-14, Killa NO - 12/2, 19/1, 20",
+    line2: "Village Samalka, New Delhi 110037",
+    fullAddress: "3rd Floor, Plot in Mustatil No-14, Killa NO - 12/2, 19/1, 20, Village Samalka, New Delhi 110037",
+    mapLink: "https://maps.google.com/?q=Village+Samalka+New+Delhi+110037"
   },
   phone: {
     primary: "+91 93113 30885",
